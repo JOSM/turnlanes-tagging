@@ -50,44 +50,37 @@ public class TagEditorDialog extends JDialog {
     private CancelAction cancelAction = null;
 
     protected void build() {
-
+        //Parameter s for Dialog
         getContentPane().setLayout(new BorderLayout());
-
-        // basic UI prpoperties
         setModal(true);
         setSize(PREFERRED_SIZE);
         setTitle(tr("Turn Lanes Editor"));
 
-        // ===================Panel de Selector preestablecido================
-//              TabularPresetSelector presetSelector = new TabularPresetSelector();
-//                presetSelector.addPresetSelectorListener(
-//                        new IPresetSelectorListener() {
-//                            public void itemSelected(TaggingPreset item) {
-//                                tagEditor.stopEditing();
-//                                tagEditor.getModel().applyPreset(item);
-//                                tagEditor.requestFocusInTopLeftCell();
-//                            }
-//                        }
-//                );
-//        
-//        
+        
+        
+        
+        
         JPanel pnlPresetSelector = new TabularPresetSelector();
-
-        pnlPresetSelector.setLayout(new FlowLayout(FlowLayout.LEADING));
-//               pnlPresetSelector.add(presetSelector, BorderLayout.CENTER);               
-
         pnlPresetSelector.setBorder(BorderFactory.createEmptyBorder(0, 0, 5, 0));
 
         // ==================Panel de Tags================================
         JPanel pnlTagGrid = new JPanel();
+        
         JSplitPane splitPane = new JSplitPane(
                 JSplitPane.VERTICAL_SPLIT,
                 pnlPresetSelector,
                 pnlTagGrid
         );
-
+//        splitPane.setLayout(new BorderLayout());
         splitPane.setOneTouchExpandable(true);
-        splitPane.setDividerLocation(200);
+        splitPane.setDividerLocation(300);
+        
+        
+//        
+//         Dimension minimumSize = new Dimension(100, 50);
+//        pnlPresetSelector.setMinimumSize(minimumSize);
+//        pnlTagGrid.setMinimumSize(minimumSize);
+
         getContentPane().add(splitPane, BorderLayout.CENTER);
         getContentPane().add(buildButtonRow(), BorderLayout.SOUTH);
     }
