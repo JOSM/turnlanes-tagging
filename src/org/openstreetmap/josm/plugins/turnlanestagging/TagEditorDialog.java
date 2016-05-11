@@ -73,7 +73,7 @@ public class TagEditorDialog extends JDialog {
 //        
         JPanel pnlPresetSelector = new TabularPresetSelector();
 
-        pnlPresetSelector.setLayout(new BorderLayout());
+        pnlPresetSelector.setLayout(new FlowLayout(FlowLayout.LEADING));
 //               pnlPresetSelector.add(presetSelector, BorderLayout.CENTER);               
 
         pnlPresetSelector.setBorder(BorderFactory.createEmptyBorder(0, 0, 5, 0));
