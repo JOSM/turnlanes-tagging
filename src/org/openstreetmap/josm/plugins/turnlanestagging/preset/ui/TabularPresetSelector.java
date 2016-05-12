@@ -50,17 +50,12 @@ public class TabularPresetSelector extends JPanel {
         PresetTurnLane presetTurnLane2 = new PresetTurnLane("2", "turn:lanes 2", "left|left|||right");
         listpresetturnlanes.add(presetTurnLane);
         listpresetturnlanes.add(presetTurnLane2);
-
         presetsTableModel = new PresetsTableModel(listpresetturnlanes);
-
         presetsTable = new PresetsTable(presetsTableModel);
-
         scrollPane = new JScrollPane(presetsTable);
-
         scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 //        scrollPane.setSize(new Dimension(50, 150));
-
         scrollPane.addComponentListener(
                 new ComponentAdapter() {
                     @Override
@@ -69,7 +64,6 @@ public class TabularPresetSelector extends JPanel {
                         Dimension d = scrollPane.getViewport().getExtentSize();
                         presetsTable.adjustColumnWidth(d.width);
 //                        presetsTable.adjustColumnWidth(d.height - 200);
-
                     }
                 }
         );
@@ -84,7 +78,7 @@ public class TabularPresetSelector extends JPanel {
         public void mouseClicked(MouseEvent e) {
             if (e.getClickCount() == 1) {
                 int rowNum = presetsTable.rowAtPoint(e.getPoint());
-                System.err.println(getModel().listpresetturnlanes.get(rowNum).getTags());
+                lines(4);
             }
         }
     }
@@ -95,22 +89,31 @@ public class TabularPresetSelector extends JPanel {
 
     //form the tag
     protected JPanel buildPanelGrap() {
-        //add data 
-
         jPanelBuldidTags = new JPanel(new BorderLayout());
-
         JPanel jpScroll = new JPanel(new GridLayout(1, 2));
+        //fill Combo Box
         comboBox = new JComboBox<>();
-        comboBox.addItem(1);
-        comboBox.addItem(2);
-        comboBox.addItem(3);
-        comboBox.addItem(4);
-        comboBox.addItem(5);
-        comboBox.addItem(6);
+        for (int j = 0; j < 10; j++) {
+            comboBox.addItem(j + 1);
+        }
+        //
+        comboBox.setSelectedIndex(2);
         jpScroll.add(new JLabel("Number of Lines"));
         jpScroll.add(comboBox);
-
-        panelGraps = new JPanel();
+        //default Lines
+        panelGraps = new JPanel(new GridLayout(1, 3));
+        for (int i = 0; i < 3; i++) {
+            TurnLanesOptions tlo = new TurnLanesOptions("Line " + (i + 1));
+            panelGraps.add(tlo);
+        }
+        comboBox.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent event) {
+                JComboBox comboBox = (JComboBox) event.getSource();
+                int selected = (int) comboBox.getSelectedItem();
+                System.err.println(selected);
+                lines(selected);
+            }
+        });
 
         jPanelBuldidTags.add(jpScroll, BorderLayout.NORTH);
         jPanelBuldidTags.add(panelGraps, BorderLayout.CENTER);
@@ -118,12 +121,15 @@ public class TabularPresetSelector extends JPanel {
         return jPanelBuldidTags;
     }
 
-    public class Select extends ActionEvent {
-
-        public Select(Object source, int id, String command) {
-            super(source, id, command);
+    protected void lines(int lines) {
+        panelGraps.removeAll();
+        panelGraps.setLayout(new GridLayout(1, lines));
+        for (int i = 0; i < lines; i++) {
+            TurnLanesOptions tlo = new TurnLanesOptions("Line " + (i + 1));
+            panelGraps.add(tlo);
+            panelGraps.revalidate();
+            panelGraps.repaint();
         }
-
     }
 
     protected void build() {
@@ -131,7 +137,6 @@ public class TabularPresetSelector extends JPanel {
         add(new JLabel("Select Preset Turn Lanes"), BorderLayout.NORTH);
         add(buildPresetGrid(), BorderLayout.CENTER);
         add(buildPanelGrap(), BorderLayout.SOUTH);
-
     }
 
 }

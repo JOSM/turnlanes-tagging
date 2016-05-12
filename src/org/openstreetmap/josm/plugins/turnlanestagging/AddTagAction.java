@@ -20,7 +20,7 @@ public class AddTagAction extends JosmAction implements SelectionChangedListener
                 null,
                 tr("Add Turn Lanes Tag"),
                 Shortcut.registerShortcut("turnlanetag", tr("turnlanetag"),
-                        KeyEvent.VK_M, Shortcut.ALT_CTRL), true);
+                        KeyEvent.VK_L, Shortcut.ALT_CTRL), true);
         DataSet.addSelectionListener(this);
         setEnabled(false);
     }
