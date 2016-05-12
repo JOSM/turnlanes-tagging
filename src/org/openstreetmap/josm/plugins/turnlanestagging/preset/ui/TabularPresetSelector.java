@@ -12,7 +12,11 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -20,8 +24,10 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.ScrollPaneConstants;
+import static org.openstreetmap.josm.plugins.turnlanestagging.preset.ui.TurnSelection.jRBLeft_CHANGED;
 
 /**
  *
@@ -39,6 +45,10 @@ public class TabularPresetSelector extends JPanel {
     //panel for create the tags
     JComboBox<Integer> comboBox;
     JPanel panelGraps;
+    JTextField jTF = new JTextField();
+
+    //Array of lines of turnlaes selections
+    List<TurnSelection> listLines = new LinkedList<TurnSelection>();
 
     public TabularPresetSelector() {
         build();
@@ -102,10 +112,7 @@ public class TabularPresetSelector extends JPanel {
         jpScroll.add(comboBox);
         //default Lines
         panelGraps = new JPanel(new GridLayout(1, 3));
-        for (int i = 0; i < 3; i++) {
-            TurnLanesOptions tlo = new TurnLanesOptions("Line " + (i + 1));
-            panelGraps.add(tlo);
-        }
+        lines(3);
         comboBox.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
                 JComboBox comboBox = (JComboBox) event.getSource();
@@ -117,15 +124,28 @@ public class TabularPresetSelector extends JPanel {
 
         jPanelBuldidTags.add(jpScroll, BorderLayout.NORTH);
         jPanelBuldidTags.add(panelGraps, BorderLayout.CENTER);
-        jPanelBuldidTags.add(new JLabel("Buils tag Here"), BorderLayout.SOUTH);
+        jPanelBuldidTags.add(jTF, BorderLayout.SOUTH);
         return jPanelBuldidTags;
     }
 
+    String innerValue = "";
+
     protected void lines(int lines) {
+        comboBox.setSelectedIndex(lines - 1);
         panelGraps.removeAll();
         panelGraps.setLayout(new GridLayout(1, lines));
         for (int i = 0; i < lines; i++) {
-            TurnLanesOptions tlo = new TurnLanesOptions("Line " + (i + 1));
+            final TurnSelection tlo = new TurnSelection("Line " + (i + 1));
+            tlo.addPropertyChangeListener(new PropertyChangeListener() {
+                @Override
+                public void propertyChange(PropertyChangeEvent evt) {
+                    if (evt.getPropertyName().equals(tlo.jRBLeft_CHANGED)) {
+                        innerValue = evt.getNewValue().toString();
+                       jTF.setText(innerValue);
+                    }
+                }
+            });
+            listLines.add(tlo);
             panelGraps.add(tlo);
             panelGraps.revalidate();
             panelGraps.repaint();
