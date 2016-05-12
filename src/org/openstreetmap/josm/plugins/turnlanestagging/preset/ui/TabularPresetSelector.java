@@ -27,7 +27,9 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.ScrollPaneConstants;
+import static org.openstreetmap.josm.plugins.turnlanestagging.preset.ui.TurnSelection.jCBThrough_CHANGED;
 import static org.openstreetmap.josm.plugins.turnlanestagging.preset.ui.TurnSelection.jRBLeft_CHANGED;
+import static org.openstreetmap.josm.plugins.turnlanestagging.preset.ui.TurnSelection.jRBRight_CHANGED;
 
 /**
  *
@@ -140,8 +142,12 @@ public class TabularPresetSelector extends JPanel {
                 @Override
                 public void propertyChange(PropertyChangeEvent evt) {
                     if (evt.getPropertyName().equals(tlo.jRBLeft_CHANGED)) {
-                        innerValue = evt.getNewValue().toString();
-                       jTF.setText(innerValue);
+                        jTF.setText(evt.getNewValue().toString());
+                    } else if (evt.getPropertyName().equals(tlo.jRBRight_CHANGED)) {
+                        jTF.setText(evt.getNewValue().toString());
+                    } else if (evt.getPropertyName().equals(tlo.jCBThrough_CHANGED)) {
+                        jTF.setText(evt.getNewValue().toString());
+
                     }
                 }
             });

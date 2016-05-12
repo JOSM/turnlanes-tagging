@@ -17,6 +17,9 @@ import javax.swing.JRadioButton;
 public class TurnSelection extends JPanel {
 
     public static final String jRBLeft_CHANGED = "jRBLeft Changed";
+    public static final String jRBRight_CHANGED = "jRBRight Changed";
+    public static final String jCBThrough_CHANGED = "jCBThrough Changed";
+
     private ButtonGroup turnLeftRightGroup;
     private JCheckBox jCBThrough;
     private JPanel jPTurnSelection;
@@ -52,26 +55,29 @@ public class TurnSelection extends JPanel {
         jPTurnSelection.add(new JLabel(title));
 
         jRBLeft.setText("L");
-        jRBLeft.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                builturn();
-            }
-        });
-        jRBLeft.addActionListener(new jRBLeftListener());
+//        jRBLeft.addActionListener(new ActionListener() {
+//            public void actionPerformed(ActionEvent evt) {
+//                builturn();
+//            }
+//        });
+        jRBLeft.addActionListener(new LeftListener());
 
         jRBRight.setText("R");
-        jRBRight.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                builturn();
-            }
-        });
+//        jRBRight.addActionListener(new ActionListener() {
+//            public void actionPerformed(ActionEvent evt) {
+//                builturn();
+//            }
+//        });
+        jRBRight.addActionListener(new RightListener());
 
         jCBThrough.setText("T");
-        jCBThrough.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                builturn();
-            }
-        });
+//        jCBThrough.addActionListener(new ActionListener() {
+//            public void actionPerformed(ActionEvent evt) {
+//                builturn();
+//            }
+//        });
+        
+        jCBThrough.addActionListener(new ThroughListener());
 
         turnLeftRightGroup.add(jRBLeft);
         turnLeftRightGroup.add(jRBRight);
@@ -102,17 +108,40 @@ public class TurnSelection extends JPanel {
         if (jRBLeft.isSelected() && jCBThrough.isSelected()) {
             t = "left;through";
         }
-        System.err.println(title + " : " + t);
+//        System.err.println(title + " : " + t);
         setTurn(t);
     }
 
-    private class jRBLeftListener implements ActionListener {
+    private class LeftListener implements ActionListener {
+
         @Override
         public void actionPerformed(ActionEvent ae) {
             builturn();
             String text = getTurn();
             firePropertyChange(jRBLeft_CHANGED, null, text);
-            setTurn(text);           
+            setTurn(text);
+        }
+    }
+
+    private class RightListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            builturn();
+            String text = getTurn();
+            firePropertyChange(jRBRight_CHANGED, null, text);
+            setTurn(text);
+        }
+    }
+
+    private class ThroughListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            builturn();
+            String text = getTurn();
+            firePropertyChange(jCBThrough_CHANGED, null, text);
+            setTurn(text);
         }
     }
 }
