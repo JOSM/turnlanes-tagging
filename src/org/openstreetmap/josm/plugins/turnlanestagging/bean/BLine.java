@@ -8,6 +8,10 @@ public class BLine {
     private int position;
     private String turn;
 
+    public BLine() {
+    }
+
+    
     public BLine(int position, String turn) {
         this.position = position;
         this.turn = turn;

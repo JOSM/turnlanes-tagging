@@ -1,6 +1,10 @@
 package org.openstreetmap.josm.plugins.turnlanestagging.bean;
 
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  *
@@ -31,15 +35,25 @@ public class BRoad {
         return listLines;
     }
 
-    public void setListLines(List<BLine> listLines) {
-        this.listLines = listLines;
+    public void setListLines(List<BLine> newLines) {
+        Map<Integer, BLine> map = new TreeMap<Integer, BLine>();
+        for (int i = 0; i < newLines.size(); i++) {
+            map.put(newLines.get(i).getPosition(), newLines.get(i));
+        }
+        List<BLine> listLs = new LinkedList<>(map.values());
+        map.values();
+        this.listLines = listLs;
     }
 
     public String getTagturns() {
-        int position = listLines.get(0).getPosition();
+        //int position = listLines.get(0).getPosition();
         String tagturns = "";
         for (int i = 0; i < listLines.size(); i++) {
-            tagturns = tagturns + "|" + listLines.get(i).getTurn();
+            if (i == 0) {
+                tagturns = listLines.get(i).getTurn();
+            } else {
+                tagturns = tagturns + "|" + listLines.get(i).getTurn();
+            }
         }
         return tagturns;
     }

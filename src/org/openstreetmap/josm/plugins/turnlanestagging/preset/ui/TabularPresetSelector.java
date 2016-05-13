@@ -56,6 +56,8 @@ public class TabularPresetSelector extends JPanel {
 // Data
     PresetsData presetsData = new PresetsData();
 
+    BRoad bRoad = new BRoad();
+
     Map<String, String> mapLines = new HashMap<String, String>();
 
     //Array of lines of turnlaes selections
@@ -143,34 +145,21 @@ public class TabularPresetSelector extends JPanel {
         panelGraps.removeAll();
         panelGraps.setLayout(new GridLayout(1, lines));
 
+        final List<BLine> listBLines = new LinkedList<>();
         for (int i = 0; i < lines; i++) {
-            final TurnSelection tlo = new TurnSelection("Line " + (i + 1));
-
+            final TurnSelection tlo = new TurnSelection((i + 1), "");
             tlo.addPropertyChangeListener(new PropertyChangeListener() {
                 @Override
                 public void propertyChange(PropertyChangeEvent evt) {
                     if (evt.getPropertyName().equals(tlo.jRBLeft_CHANGED)) {
-
-//                        mapLines.put(i + "", evt.getNewValue().toString());
-                        jTF.setText(evt.getNewValue().toString());
-
+                        listBLines.add((BLine) evt.getNewValue());
                     } else if (evt.getPropertyName().equals(tlo.jRBRight_CHANGED)) {
-//                        mapLines.put(i + "", evt.getNewValue().toString());
-                        jTF.setText(evt.getNewValue().toString());
-
+                        listBLines.add((BLine) evt.getNewValue());
                     } else if (evt.getPropertyName().equals(tlo.jCBThrough_CHANGED)) {
-//                        mapLines.put(i + "", evt.getNewValue().toString());
-                        jTF.setText(evt.getNewValue().toString());
-
+                        listBLines.add((BLine) evt.getNewValue());
                     }
-
-//                    String print = "";
-//                    for (Map.Entry<String, String> mapLines : mapLines.entrySet()) {
-//                        Integer key = mapLines.getKey();
-//                        String value = mapLines.getValue();
-//                        print = print + value;
-//
-//                    }
+                    bRoad.setListLines(listBLines);
+                    jTF.setText(bRoad.getTagturns());
                 }
             });
             listTurnSelection.add(tlo);

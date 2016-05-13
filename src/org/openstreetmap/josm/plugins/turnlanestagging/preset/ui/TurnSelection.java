@@ -9,6 +9,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import org.openstreetmap.josm.plugins.turnlanestagging.bean.BLine;
 
 /**
  *
@@ -26,21 +27,14 @@ public class TurnSelection extends JPanel {
     private JPanel jPOptions;
     private JRadioButton jRBLeft;
     private JRadioButton jRBRight;
-    String turn;
-    String title;
+    BLine bLine;
 
-    public TurnSelection(String title) {
+    public TurnSelection(int position, String turn) {
         super();
-        this.title = title;
+        bLine = new BLine();
+        bLine.setPosition(position);
+        bLine.setTurn(turn);
         init();
-    }
-
-    public void setTurn(String turn) {
-        this.turn = turn;
-    }
-
-    public String getTurn() {
-        return turn;
     }
 
     public void init() {
@@ -52,7 +46,7 @@ public class TurnSelection extends JPanel {
         jCBThrough = new JCheckBox();
         jPTurnSelection.setLayout(new GridLayout(2, 1));
         jPTurnSelection.setBorder(BorderFactory.createEtchedBorder());
-        jPTurnSelection.add(new JLabel(title));
+        jPTurnSelection.add(new JLabel("Line" + bLine.getPosition()));
 
         jRBLeft.setText("L");
 //        jRBLeft.addActionListener(new ActionListener() {
@@ -76,7 +70,7 @@ public class TurnSelection extends JPanel {
 //                builturn();
 //            }
 //        });
-        
+
         jCBThrough.addActionListener(new ThroughListener());
 
         turnLeftRightGroup.add(jRBLeft);
@@ -108,8 +102,7 @@ public class TurnSelection extends JPanel {
         if (jRBLeft.isSelected() && jCBThrough.isSelected()) {
             t = "left;through";
         }
-//        System.err.println(title + " : " + t);
-        setTurn(t);
+        bLine.setTurn(t);
     }
 
     private class LeftListener implements ActionListener {
@@ -117,9 +110,9 @@ public class TurnSelection extends JPanel {
         @Override
         public void actionPerformed(ActionEvent ae) {
             builturn();
-            String text = getTurn();
-            firePropertyChange(jRBLeft_CHANGED, null, text);
-            setTurn(text);
+//            String text = bgetTurn();
+            firePropertyChange(jRBLeft_CHANGED, null, bLine);
+//            setTurn(text);
         }
     }
 
@@ -128,9 +121,9 @@ public class TurnSelection extends JPanel {
         @Override
         public void actionPerformed(ActionEvent ae) {
             builturn();
-            String text = getTurn();
-            firePropertyChange(jRBRight_CHANGED, null, text);
-            setTurn(text);
+//            String text = getTurn();
+            firePropertyChange(jRBRight_CHANGED, null, bLine);
+//            setTurn(text);
         }
     }
 
@@ -139,9 +132,9 @@ public class TurnSelection extends JPanel {
         @Override
         public void actionPerformed(ActionEvent ae) {
             builturn();
-            String text = getTurn();
-            firePropertyChange(jCBThrough_CHANGED, null, text);
-            setTurn(text);
+//            String text = getTurn();
+            firePropertyChange(jCBThrough_CHANGED, null, bLine);
+//            setTurn(text);
         }
     }
 }
