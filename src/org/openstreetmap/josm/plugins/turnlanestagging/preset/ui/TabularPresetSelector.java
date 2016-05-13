@@ -1,5 +1,7 @@
 package org.openstreetmap.josm.plugins.turnlanestagging.preset.ui;
 
+import com.sun.java.swing.plaf.gtk.GTKColorType;
+import org.openstreetmap.josm.plugins.turnlanestagging.bean.BLine;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -15,8 +17,10 @@ import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -27,6 +31,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.ScrollPaneConstants;
+import org.openstreetmap.josm.plugins.turnlanestagging.bean.BRoad;
 import static org.openstreetmap.josm.plugins.turnlanestagging.preset.ui.TurnSelection.jCBThrough_CHANGED;
 import static org.openstreetmap.josm.plugins.turnlanestagging.preset.ui.TurnSelection.jRBLeft_CHANGED;
 import static org.openstreetmap.josm.plugins.turnlanestagging.preset.ui.TurnSelection.jRBRight_CHANGED;
@@ -43,26 +48,26 @@ public class TabularPresetSelector extends JPanel {
     private JScrollPane scrollPane = null;
     private PresetsTable presetsTable = null;
     PresetsTableModel presetsTableModel;
-    ArrayList<PresetTurnLane> listpresetturnlanes = new ArrayList<>();
+    ArrayList<BLine> listpresetturnlanes = new ArrayList<>();
     //panel for create the tags
     JComboBox<Integer> comboBox;
     JPanel panelGraps;
     JTextField jTF = new JTextField();
+// Data
+    PresetsData presetsData = new PresetsData();
+
+    Map<String, String> mapLines = new HashMap<String, String>();
 
     //Array of lines of turnlaes selections
-    List<TurnSelection> listLines = new LinkedList<TurnSelection>();
+    List<TurnSelection> listTurnSelection = new LinkedList<TurnSelection>();
 
     public TabularPresetSelector() {
         build();
     }
 
     protected JScrollPane buildPresetGrid() {
-        //add data        
-        PresetTurnLane presetTurnLane = new PresetTurnLane("1", "turn:lanes 1", "left|through|right");
-        PresetTurnLane presetTurnLane2 = new PresetTurnLane("2", "turn:lanes 2", "left|left|||right");
-        listpresetturnlanes.add(presetTurnLane);
-        listpresetturnlanes.add(presetTurnLane2);
-        presetsTableModel = new PresetsTableModel(listpresetturnlanes);
+        presetsTableModel = new PresetsTableModel(presetsData.data());
+        //print on table
         presetsTable = new PresetsTable(presetsTableModel);
         scrollPane = new JScrollPane(presetsTable);
         scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -133,25 +138,42 @@ public class TabularPresetSelector extends JPanel {
     String innerValue = "";
 
     protected void lines(int lines) {
+        //inicializar
         comboBox.setSelectedIndex(lines - 1);
         panelGraps.removeAll();
         panelGraps.setLayout(new GridLayout(1, lines));
+
         for (int i = 0; i < lines; i++) {
             final TurnSelection tlo = new TurnSelection("Line " + (i + 1));
+
             tlo.addPropertyChangeListener(new PropertyChangeListener() {
                 @Override
                 public void propertyChange(PropertyChangeEvent evt) {
                     if (evt.getPropertyName().equals(tlo.jRBLeft_CHANGED)) {
+
+//                        mapLines.put(i + "", evt.getNewValue().toString());
                         jTF.setText(evt.getNewValue().toString());
+
                     } else if (evt.getPropertyName().equals(tlo.jRBRight_CHANGED)) {
+//                        mapLines.put(i + "", evt.getNewValue().toString());
                         jTF.setText(evt.getNewValue().toString());
+
                     } else if (evt.getPropertyName().equals(tlo.jCBThrough_CHANGED)) {
+//                        mapLines.put(i + "", evt.getNewValue().toString());
                         jTF.setText(evt.getNewValue().toString());
 
                     }
+
+//                    String print = "";
+//                    for (Map.Entry<String, String> mapLines : mapLines.entrySet()) {
+//                        Integer key = mapLines.getKey();
+//                        String value = mapLines.getValue();
+//                        print = print + value;
+//
+//                    }
                 }
             });
-            listLines.add(tlo);
+            listTurnSelection.add(tlo);
             panelGraps.add(tlo);
             panelGraps.revalidate();
             panelGraps.repaint();

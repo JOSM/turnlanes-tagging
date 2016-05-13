@@ -1,23 +1,26 @@
 // License: GPL. For details, see LICENSE file.
 package org.openstreetmap.josm.plugins.turnlanestagging.preset.ui;
 
+import org.openstreetmap.josm.plugins.turnlanestagging.bean.BLine;
 import java.util.ArrayList;
+import java.util.List;
 import javax.swing.table.AbstractTableModel;
+import org.openstreetmap.josm.plugins.turnlanestagging.bean.BRoad;
 
 public class PresetsTableModel extends AbstractTableModel {
 
-    ArrayList<PresetTurnLane> listpresetturnlanes;
+    List<BRoad> listBRoad;
     Class[] columns = {Object.class, Object.class};
     String titles[] = {"Name", "tags"};
 
-    public PresetsTableModel(ArrayList<PresetTurnLane> list) {
+    public PresetsTableModel(List<BRoad> list) {
         super();
-        this.listpresetturnlanes = list;
+        this.listBRoad = list;
     }
 
     @Override
     public int getRowCount() {
-        return listpresetturnlanes.size();
+        return listBRoad.size();
     }
 
     @Override
@@ -30,9 +33,9 @@ public class PresetsTableModel extends AbstractTableModel {
         System.err.println(columnIndex);
         switch (columnIndex) {
             case 0:
-                return listpresetturnlanes.get(rowIndex).getName();
+                return listBRoad.get(rowIndex).getName();
             case 1:
-                return listpresetturnlanes.get(rowIndex).getTags();
+                return listBRoad.get(rowIndex).getTagturns();
             default:
                 return null;
         }
