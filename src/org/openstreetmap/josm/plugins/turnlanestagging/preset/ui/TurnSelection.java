@@ -62,6 +62,7 @@ public class TurnSelection extends JPanel {
         jPOptions.add(jCBThrough);
         jPOptions.add(jRBRight);
         jPTurnSelection.add(jPOptions);
+        setTurn();
         //add on Main Panel
         add(jPTurnSelection);
     }
@@ -85,6 +86,26 @@ public class TurnSelection extends JPanel {
             t = "left;through";
         }
         bLine.setTurn(t);
+    }
+
+    protected void setTurn() {
+        if (bLine.getTurn().equals("left")) {
+            jRBLeft.setSelected(true);
+        }
+        if (bLine.getTurn().equals("right")) {
+            jRBRight.setSelected(true);
+        }
+        if (bLine.getTurn().equals("through")) {
+            jCBThrough.setSelected(true);
+        }
+        if (bLine.getTurn().equals("right;through")) {
+            jRBRight.setSelected(true);
+            jCBThrough.setSelected(true);
+        }
+        if (bLine.getTurn().equals("left;through")) {
+            jRBLeft.setSelected(true);
+            jCBThrough.setSelected(true);
+        }
     }
 
     private class LeftListener implements ActionListener {

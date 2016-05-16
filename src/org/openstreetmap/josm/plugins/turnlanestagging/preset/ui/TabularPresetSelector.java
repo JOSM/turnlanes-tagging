@@ -58,7 +58,7 @@ public class TabularPresetSelector extends JPanel {
     PresetsData presetsData = new PresetsData();
     List<BRoad> listBRoads = presetsData.data();
 
-    BRoad bRoad = new BRoad();
+    final BRoad valBRoad = new BRoad();
 
     //Array of lines of turnlaes selections
     List<TurnSelection> listTurnSelection = new LinkedList<TurnSelection>();
@@ -69,7 +69,11 @@ public class TabularPresetSelector extends JPanel {
     }
 
     protected JScrollPane buildPresetGrid() {
-        presetsTableModel = new PresetsTableModel(listBRoads);
+        PresetsData pd = new PresetsData();
+        List<BRoad> ls = pd.data();
+        listBRoads.clear();
+        listBRoads = new LinkedList<BRoad>(ls);
+        presetsTableModel = new PresetsTableModel(ls);
         //print on table
         presetsTable = new PresetsTable(presetsTableModel);
         scrollPane = new JScrollPane(presetsTable);
@@ -96,11 +100,12 @@ public class TabularPresetSelector extends JPanel {
         public void mouseClicked(MouseEvent e) {
             if (e.getClickCount() == 1) {
                 int rowNum = presetsTable.rowAtPoint(e.getPoint());
-//                lines(rowNum);
-
-                bRoad.setListLines(listBRoads.get(rowNum).getListLines());
-//                turnSelection();
-                lines(bRoad.getLines());
+                //SET ROAD LINES
+                valBRoad.setName("test");
+                valBRoad.setListLines(listBRoads.get(rowNum).getListLines());
+                //= new BRoad(listBRoads.get(rowNum).getName(), listBRoads.get(rowNum).getListLines());
+                jTF.setText(valBRoad.getTagturns());
+                lines(valBRoad.getLines());
             }
         }
     }
@@ -127,17 +132,23 @@ public class TabularPresetSelector extends JPanel {
                 JComboBox comboBox = (JComboBox) event.getSource();
                 int selected = (int) comboBox.getSelectedItem();
                 List<BLine> listbincombo = presetsData.defaultData(selected).getListLines();
-                bRoad.setListLines(listbincombo);
-                Util.print("listbincombo :" + bRoad.getLines());
-                lines(bRoad.getLines());
+                //SET ROAD LINES
+                valBRoad.setName("def");
+                valBRoad.setListLines(listbincombo);
+                jTF.setText(valBRoad.getTagturns());
+                lines(valBRoad.getLines());
             }
         });
 
         //Build default Lines : 3 lines
         panelGraps = new JPanel(new GridLayout(1, 3));
-        bRoad.setListLines(presetsData.defaultData(3).getListLines());
-        lines(3);
+        //SET ROAD LINES
+        valBRoad.setName("defautl2");
+        valBRoad.setListLines(presetsData.defaultData(3).getListLines());
+        jTF.setText(valBRoad.getTagturns());
 
+        // valBRoad = new BRoad("d2", presetsData.defaultData(3).getListLines());
+        lines(valBRoad.getLines());
         jPanelBuldidTags.add(jPContenComboBox, BorderLayout.NORTH);
         jPanelBuldidTags.add(panelGraps, BorderLayout.CENTER);
         jPanelBuldidTags.add(jTF, BorderLayout.SOUTH);
@@ -146,31 +157,31 @@ public class TabularPresetSelector extends JPanel {
 
     protected void lines(int lines) {
         //inicializar
-        Util.print("============== lines :" + lines);
-        comboBox.setSelectedIndex(lines - 1);
+//comboBox.setSelectedIndex(lines - 1);
         panelGraps.removeAll();
         panelGraps.setLayout(new GridLayout(1, lines));
+        final List<BLine> listBLines = valBRoad.getListLines();
 
-        final List<BLine> listBLines = new LinkedList<>();
+//        System.err.println("Lineas en valBRoad : " + valBRoad.getLines());
+        for (int i = 0; i < valBRoad.getLines(); i++) {
 
-        System.err.println("============== bRoad.getLines() : " + bRoad.getLines());
+            BLine b = valBRoad.getListLines().get(i);
 
-        for (int i = 0; i < lines; i++) {
-
-            BLine b = new BLine((i + 1), "left");
             final TurnSelection tlo = new TurnSelection(b);
             tlo.addPropertyChangeListener(new PropertyChangeListener() {
                 @Override
                 public void propertyChange(PropertyChangeEvent evt) {
                     if (evt.getPropertyName().equals(tlo.jRBLeft_CHANGED)) {
                         listBLines.add((BLine) evt.getNewValue());
+                        valBRoad.setListLines(listBLines);
                     } else if (evt.getPropertyName().equals(tlo.jRBRight_CHANGED)) {
                         listBLines.add((BLine) evt.getNewValue());
+                        valBRoad.setListLines(listBLines);
                     } else if (evt.getPropertyName().equals(tlo.jCBThrough_CHANGED)) {
                         listBLines.add((BLine) evt.getNewValue());
+                        valBRoad.setListLines(listBLines);
                     }
-                    bRoad.setListLines(listBLines);
-                    jTF.setText(bRoad.getTagturns());
+                    jTF.setText(valBRoad.getTagturns());
                 }
             });
             listTurnSelection.add(tlo);

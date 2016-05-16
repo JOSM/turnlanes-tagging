@@ -16,12 +16,30 @@ import org.openstreetmap.josm.plugins.turnlanestagging.bean.BRoad;
  */
 public class PresetsData {
 
+    public List<BRoad> dataPreset() {
+        //oneway=yes
+        //lanes=3
+        //turn:lanes=left||
+        //placement=right_of:2
+        List<BRoad> listBRoads = new LinkedList<>();
+        List<BLine> listBLines = new LinkedList<>();
+        listBLines.add(new BLine(1, "left"));
+        listBLines.add(new BLine(2, "through"));
+        listBLines.add(new BLine(3, "through"));
+        BRoad bRoad = new BRoad();
+        bRoad.setName("Most Common turn Lane");
+        bRoad.setListLines(listBLines);
+        listBRoads.add(bRoad);
+        return listBRoads;
+
+    }
+
     public List<BRoad> data() {
         List<BRoad> listBRoads = new LinkedList<>();
         for (int k = 0; k < 10; k++) {
             BRoad bRoad = new BRoad();
             List<BLine> listBLines = new LinkedList<>();
-            for (int m = 0; m < (k+1); m++) {
+            for (int m = 0; m < (k + 1); m++) {
                 BLine bLine = new BLine((m + 1), "left");
                 listBLines.add(bLine);
             }
