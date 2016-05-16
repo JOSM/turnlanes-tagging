@@ -30,7 +30,6 @@ public class PresetsTableModel extends AbstractTableModel {
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        System.err.println(columnIndex);
         switch (columnIndex) {
             case 0:
                 return listBRoad.get(rowIndex).getName();

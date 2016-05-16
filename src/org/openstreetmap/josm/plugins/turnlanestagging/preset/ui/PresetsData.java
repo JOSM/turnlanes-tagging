@@ -21,11 +21,11 @@ public class PresetsData {
         for (int k = 0; k < 10; k++) {
             BRoad bRoad = new BRoad();
             List<BLine> listBLines = new LinkedList<>();
-            for (int m = 0; m < 3; m++) {
+            for (int m = 0; m < (k+1); m++) {
                 BLine bLine = new BLine((m + 1), "left");
                 listBLines.add(bLine);
             }
-            bRoad.setName("Road " + k);
+            bRoad.setName("Road " + (k + 1));
             bRoad.setListLines(listBLines);
             listBRoads.add(bRoad);
         }
@@ -33,4 +33,15 @@ public class PresetsData {
 
     }
 
+    public BRoad defaultData(int lines) {
+        BRoad bRoad = new BRoad();
+        List<BLine> listBLines = new LinkedList<>();
+        for (int m = 0; m < lines; m++) {
+            BLine bLine = new BLine((m + 1), "left");
+            listBLines.add(bLine);
+        }
+        bRoad.setName("Road test");
+        bRoad.setListLines(listBLines);
+        return bRoad;
+    }
 }

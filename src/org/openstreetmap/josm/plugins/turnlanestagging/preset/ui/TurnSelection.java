@@ -29,11 +29,9 @@ public class TurnSelection extends JPanel {
     private JRadioButton jRBRight;
     BLine bLine;
 
-    public TurnSelection(int position, String turn) {
+    public TurnSelection(BLine bl) {
         super();
-        bLine = new BLine();
-        bLine.setPosition(position);
-        bLine.setTurn(turn);
+        this.bLine = bl;
         init();
     }
 
@@ -49,28 +47,12 @@ public class TurnSelection extends JPanel {
         jPTurnSelection.add(new JLabel("Line" + bLine.getPosition()));
 
         jRBLeft.setText("L");
-//        jRBLeft.addActionListener(new ActionListener() {
-//            public void actionPerformed(ActionEvent evt) {
-//                builturn();
-//            }
-//        });
         jRBLeft.addActionListener(new LeftListener());
 
         jRBRight.setText("R");
-//        jRBRight.addActionListener(new ActionListener() {
-//            public void actionPerformed(ActionEvent evt) {
-//                builturn();
-//            }
-//        });
         jRBRight.addActionListener(new RightListener());
 
         jCBThrough.setText("T");
-//        jCBThrough.addActionListener(new ActionListener() {
-//            public void actionPerformed(ActionEvent evt) {
-//                builturn();
-//            }
-//        });
-
         jCBThrough.addActionListener(new ThroughListener());
 
         turnLeftRightGroup.add(jRBLeft);
