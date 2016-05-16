@@ -56,9 +56,9 @@ public class TabularPresetSelector extends JPanel {
 
     // Data to fill  table
     PresetsData presetsData = new PresetsData();
-    List<BRoad> listBRoads = presetsData.data();
+    List<BRoad> listBRoads = new LinkedList<BRoad>(presetsData.data());
 
-    final BRoad valBRoad = new BRoad();
+    BRoad valBRoad = new BRoad();
 
     //Array of lines of turnlaes selections
     List<TurnSelection> listTurnSelection = new LinkedList<TurnSelection>();
@@ -69,11 +69,7 @@ public class TabularPresetSelector extends JPanel {
     }
 
     protected JScrollPane buildPresetGrid() {
-        PresetsData pd = new PresetsData();
-        List<BRoad> ls = pd.data();
-        listBRoads.clear();
-        listBRoads = new LinkedList<BRoad>(ls);
-        presetsTableModel = new PresetsTableModel(ls);
+        presetsTableModel = new PresetsTableModel(listBRoads);
         //print on table
         presetsTable = new PresetsTable(presetsTableModel);
         scrollPane = new JScrollPane(presetsTable);
@@ -100,12 +96,8 @@ public class TabularPresetSelector extends JPanel {
         public void mouseClicked(MouseEvent e) {
             if (e.getClickCount() == 1) {
                 int rowNum = presetsTable.rowAtPoint(e.getPoint());
-                //SET ROAD LINES
-                valBRoad.setName("test");
-                valBRoad.setListLines(listBRoads.get(rowNum).getListLines());
-                //= new BRoad(listBRoads.get(rowNum).getName(), listBRoads.get(rowNum).getListLines());
-                jTF.setText(valBRoad.getTagturns());
-                lines(valBRoad.getLines());
+                comboBox.setSelectedIndex(listBRoads.get(rowNum).getLines() - 1);
+                lines(listBRoads.get(rowNum));
             }
         }
     }
@@ -126,47 +118,34 @@ public class TabularPresetSelector extends JPanel {
         comboBox.setSelectedIndex(2);
         jPContenComboBox.add(new JLabel("Number of Lines"));
         jPContenComboBox.add(comboBox);
-
         comboBox.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
                 JComboBox comboBox = (JComboBox) event.getSource();
                 int selected = (int) comboBox.getSelectedItem();
-                List<BLine> listbincombo = presetsData.defaultData(selected).getListLines();
                 //SET ROAD LINES
-                valBRoad.setName("def");
-                valBRoad.setListLines(listbincombo);
-                jTF.setText(valBRoad.getTagturns());
-                lines(valBRoad.getLines());
+                lines(presetsData.defaultData(selected));
             }
         });
 
         //Build default Lines : 3 lines
         panelGraps = new JPanel(new GridLayout(1, 3));
         //SET ROAD LINES
-        valBRoad.setName("defautl2");
-        valBRoad.setListLines(presetsData.defaultData(3).getListLines());
-        jTF.setText(valBRoad.getTagturns());
-
-        // valBRoad = new BRoad("d2", presetsData.defaultData(3).getListLines());
-        lines(valBRoad.getLines());
+        lines(presetsData.defaultData(3));
         jPanelBuldidTags.add(jPContenComboBox, BorderLayout.NORTH);
         jPanelBuldidTags.add(panelGraps, BorderLayout.CENTER);
         jPanelBuldidTags.add(jTF, BorderLayout.SOUTH);
         return jPanelBuldidTags;
     }
 
-    protected void lines(int lines) {
+    protected void lines(BRoad road) {
         //inicializar
-//comboBox.setSelectedIndex(lines - 1);
+        valBRoad = road;
         panelGraps.removeAll();
-        panelGraps.setLayout(new GridLayout(1, lines));
+        panelGraps.setLayout(new GridLayout(1, valBRoad.getLines()));
+        jTF.setText(valBRoad.getTagturns());
         final List<BLine> listBLines = valBRoad.getListLines();
-
-//        System.err.println("Lineas en valBRoad : " + valBRoad.getLines());
         for (int i = 0; i < valBRoad.getLines(); i++) {
-
             BLine b = valBRoad.getListLines().get(i);
-
             final TurnSelection tlo = new TurnSelection(b);
             tlo.addPropertyChangeListener(new PropertyChangeListener() {
                 @Override

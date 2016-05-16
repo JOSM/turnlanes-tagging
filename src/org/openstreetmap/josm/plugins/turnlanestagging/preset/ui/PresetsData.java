@@ -55,11 +55,12 @@ public class PresetsData {
         BRoad bRoad = new BRoad();
         List<BLine> listBLines = new LinkedList<>();
         for (int m = 0; m < lines; m++) {
-            BLine bLine = new BLine((m + 1), "left");
+            BLine bLine = new BLine((m + 1), "");
             listBLines.add(bLine);
         }
         bRoad.setName("Road test");
         bRoad.setListLines(listBLines);
         return bRoad;
     }
+
 }

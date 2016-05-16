@@ -10,7 +10,7 @@ import java.util.TreeMap;
  *
  * @author ruben
  */
-public class BRoad {
+public class BRoad implements Cloneable {
 
     String name;
     List<BLine> listLines;
@@ -46,7 +46,6 @@ public class BRoad {
     }
 
     public String getTagturns() {
-        //int position = listLines.get(0).getPosition();
         String tagturns = "";
         for (int i = 0; i < listLines.size(); i++) {
             if (i == 0) {
@@ -60,5 +59,10 @@ public class BRoad {
 
     public int getLines() {
         return listLines.size();
+    }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 }
