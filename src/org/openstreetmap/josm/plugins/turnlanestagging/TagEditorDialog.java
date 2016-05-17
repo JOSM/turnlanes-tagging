@@ -22,6 +22,10 @@ import javax.swing.JTabbedPane;
 import javax.swing.KeyStroke;
 import org.openstreetmap.josm.Main;
 import org.openstreetmap.josm.data.osm.DataSet;
+import org.openstreetmap.josm.gui.tagging.TagEditorModel;
+import org.openstreetmap.josm.gui.tagging.ac.AutoCompletionList;
+import org.openstreetmap.josm.gui.tagging.ac.AutoCompletionManager;
+import org.openstreetmap.josm.plugins.turnlanestagging.editor.TagEditor;
 import org.openstreetmap.josm.plugins.turnlanestagging.preset.ui.TabularPresetSelector;
 import static org.openstreetmap.josm.tools.I18n.tr;
 import org.openstreetmap.josm.tools.ImageProvider;
@@ -33,60 +37,55 @@ public class TagEditorDialog extends JDialog {
      */
     static private TagEditorDialog instance = null;
 
+    //constructor
+    protected TagEditorDialog() {
+        build();
+    }
+
     static public TagEditorDialog getInstance() {
         if (instance == null) {
             instance = new TagEditorDialog();
         }
         return instance;
     }
+
     static public final Dimension PREFERRED_SIZE = new Dimension(700, 500);
 
-    //constructor
-    protected TagEditorDialog() {
-        build();
-    }
-
+    private TagEditor tagEditor = null;
+    private AutoCompletionManager autocomplete = null;
+    private TabularPresetSelector tabularPresetSelector = null;
     private OKAction okAction = null;
     private CancelAction cancelAction = null;
 
     protected void build() {
-        //Parameter s for Dialog
+        //Parameters for Dialog
         getContentPane().setLayout(new BorderLayout());
         setModal(true);
         setSize(PREFERRED_SIZE);
         setTitle(tr("Turn Lanes Editor"));
 
-        
-        
-        
-        
-        JPanel pnlPresetSelector = new TabularPresetSelector();
-        pnlPresetSelector.setBorder(BorderFactory.createEmptyBorder(0, 0, 5, 0));
+        // Preset Panel
+        JPanel pnlPresetGrid = buildPresetGridPanel();
+        pnlPresetGrid.setBorder(BorderFactory.createEmptyBorder(0, 0, 5, 0));
 
-        // ==================Panel de Tags================================
-        JPanel pnlTagGrid = new JPanel();
-        
+        // Tag Panel
+        JPanel pnlTagGrid = buildTagGridPanel();
+
+        //Split the Preset an dTag panel
         JSplitPane splitPane = new JSplitPane(
                 JSplitPane.VERTICAL_SPLIT,
-                pnlPresetSelector,
+                pnlPresetGrid,
                 pnlTagGrid
         );
-//        splitPane.setLayout(new BorderLayout());
-        splitPane.setOneTouchExpandable(true);
-        splitPane.setDividerLocation(300);
-        
-        
-//        
-//         Dimension minimumSize = new Dimension(100, 50);
-//        pnlPresetSelector.setMinimumSize(minimumSize);
-//        pnlTagGrid.setMinimumSize(minimumSize);
 
+        splitPane.setOneTouchExpandable(true);
+        splitPane.setDividerLocation(250);
         getContentPane().add(splitPane, BorderLayout.CENTER);
-        getContentPane().add(buildButtonRow(), BorderLayout.SOUTH);
+        getContentPane().add(buildButtonRowPanel(), BorderLayout.SOUTH);
     }
 
-    // ==================Build Buttons================================
-    protected JPanel buildButtonRow() {
+    //Build Buttons
+    protected JPanel buildButtonRowPanel() {
         JPanel pnl = new JPanel(new FlowLayout(FlowLayout.CENTER));
         pnl.add(new JButton(okAction = new OKAction()));
         // getModel().addPropertyChangeListener(okAction);
@@ -94,6 +93,32 @@ public class TagEditorDialog extends JDialog {
         return pnl;
     }
 
+    // Build tag grid
+    protected JPanel buildTagGridPanel() {
+        tagEditor = new TagEditor();
+        return tagEditor;
+    }
+
+    // Build preset grid
+    protected JPanel buildPresetGridPanel() {
+        tabularPresetSelector = new TabularPresetSelector();
+        return tabularPresetSelector;
+    }
+    
+    
+    public TagEditorModel getModel() {
+        return tagEditor.getModel();
+    }
+
+    public void startEditSession() {
+        tagEditor.getModel().clearAppliedPresets();
+        tagEditor.getModel().initFromJOSMSelection();
+        autocomplete = Main.main.getEditLayer().data.getAutoCompletionManager();
+        tagEditor.setAutoCompletionManager(autocomplete);
+        getModel().ensureOneTag();
+    }
+
+    //Buton Actions
     class CancelAction extends AbstractAction {
 
         public CancelAction() {
@@ -125,7 +150,6 @@ public class TagEditorDialog extends JDialog {
         public void propertyChange(PropertyChangeEvent evt) {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
-
     }
 
 }

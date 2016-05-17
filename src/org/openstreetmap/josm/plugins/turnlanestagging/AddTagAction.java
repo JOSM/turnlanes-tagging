@@ -15,6 +15,7 @@ import org.openstreetmap.josm.tools.Shortcut;
  * @author ruben
  */
 public class AddTagAction extends JosmAction implements SelectionChangedListener {
+
     public AddTagAction() {
         super(tr("Add Turn Lanes Tag"),
                 null,
@@ -30,7 +31,7 @@ public class AddTagAction extends JosmAction implements SelectionChangedListener
             return;
         }
         TagEditorDialog dialog = TagEditorDialog.getInstance();
-//        dialog.startEditSession();
+        dialog.startEditSession();
         dialog.setVisible(true);
     }
 
