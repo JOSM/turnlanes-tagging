@@ -18,15 +18,17 @@ import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
-import javax.swing.JTabbedPane;
 import javax.swing.KeyStroke;
 import org.openstreetmap.josm.Main;
 import org.openstreetmap.josm.data.osm.DataSet;
 import org.openstreetmap.josm.gui.tagging.TagEditorModel;
-import org.openstreetmap.josm.gui.tagging.ac.AutoCompletionList;
 import org.openstreetmap.josm.gui.tagging.ac.AutoCompletionManager;
+import org.openstreetmap.josm.plugins.turnlanestagging.bean.BLine;
+import org.openstreetmap.josm.plugins.turnlanestagging.bean.BRoad;
 import org.openstreetmap.josm.plugins.turnlanestagging.editor.TagEditor;
-import org.openstreetmap.josm.plugins.turnlanestagging.preset.ui.TabularPresetSelector;
+import org.openstreetmap.josm.plugins.turnlanestagging.editor.ac.KeyValuePair;
+import org.openstreetmap.josm.plugins.turnlanestagging.preset.ui.PresetsTableModel;
+import org.openstreetmap.josm.plugins.turnlanestagging.preset.ui.PresetSelector;
 import static org.openstreetmap.josm.tools.I18n.tr;
 import org.openstreetmap.josm.tools.ImageProvider;
 
@@ -53,7 +55,7 @@ public class TagEditorDialog extends JDialog {
 
     private TagEditor tagEditor = null;
     private AutoCompletionManager autocomplete = null;
-    private TabularPresetSelector tabularPresetSelector = null;
+    private PresetSelector presetSelector = null;
     private OKAction okAction = null;
     private CancelAction cancelAction = null;
 
@@ -99,15 +101,32 @@ public class TagEditorDialog extends JDialog {
         return tagEditor;
     }
 
-    // Build preset grid
-    protected JPanel buildPresetGridPanel() {
-        tabularPresetSelector = new TabularPresetSelector();
-        return tabularPresetSelector;
-    }
-    
-    
     public TagEditorModel getModel() {
         return tagEditor.getModel();
+    }
+
+    // Build preset grid
+    protected JPanel buildPresetGridPanel() {
+        presetSelector = new PresetSelector();
+        presetSelector.addPropertyChangeListener(new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                if (evt.getPropertyName().equals(presetSelector.jTF_CHANGED)) {
+                    BRoad b = (BRoad) evt.getNewValue();
+                    tagEditor.getModel().applyKeyValuePair(new KeyValuePair("turn:lanes", b.getTagturns()));
+                    tagEditor.getModel().applyKeyValuePair(new KeyValuePair("lanes", String.valueOf(b.getLines())));
+                    tagEditor.repaint();
+                }
+
+            }
+        });
+
+        return presetSelector;
+
+    }
+
+    public PresetsTableModel getPressetTableModel() {
+        return presetSelector.getModel();
     }
 
     public void startEditSession() {
@@ -116,6 +135,8 @@ public class TagEditorDialog extends JDialog {
         autocomplete = Main.main.getEditLayer().data.getAutoCompletionManager();
         tagEditor.setAutoCompletionManager(autocomplete);
         getModel().ensureOneTag();
+
+        //
     }
 
     //Buton Actions
@@ -143,13 +164,29 @@ public class TagEditorDialog extends JDialog {
         }
 
         public void actionPerformed(ActionEvent e) {
-            JOptionPane.showConfirmDialog(null, "Aceptar");
+            run();
         }
 
-        @Override
-        public void propertyChange(PropertyChangeEvent evt) {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        public void run() {
+            tagEditor.stopEditing();
+            setVisible(false);
+            tagEditor.getModel().updateJOSMSelection();
+            DataSet ds = Main.main.getCurrentDataSet();
+            ds.fireSelectionChanged();
+            Main.parent.repaint(); // repaint all - drawing could have been changed
         }
+
+        public void propertyChange(PropertyChangeEvent evt) {
+            if (!evt.getPropertyName().equals(TagEditorModel.PROP_DIRTY)) {
+                return;
+            }
+            if (!evt.getNewValue().getClass().equals(Boolean.class)) {
+                return;
+            }
+            boolean dirty = (Boolean) evt.getNewValue();
+            setEnabled(dirty);
+        }
+
     }
 
 }

@@ -22,6 +22,7 @@ public class PresetsData {
         //turn:lanes=left||
         //placement=right_of:2
         List<BRoad> listBRoads = new LinkedList<>();
+        //Road 1
         List<BLine> listBLines = new LinkedList<>();
         listBLines.add(new BLine(1, "left"));
         listBLines.add(new BLine(2, "through"));
@@ -30,6 +31,16 @@ public class PresetsData {
         bRoad.setName("Most Common turn Lane");
         bRoad.setListLines(listBLines);
         listBRoads.add(bRoad);
+        //Road 2
+        List<BLine> listBLines2 = new LinkedList<>();
+        listBLines2.add(new BLine(1, "left"));
+        listBLines2.add(new BLine(2, "right"));
+        listBLines2.add(new BLine(3, "through"));
+        BRoad bRoad2 = new BRoad();
+        bRoad2.setName("Tunn Lane 2");
+        bRoad2.setListLines(listBLines2);
+        listBRoads.add(bRoad2);
+
         return listBRoads;
 
     }

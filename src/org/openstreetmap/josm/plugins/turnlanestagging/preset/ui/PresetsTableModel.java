@@ -56,4 +56,8 @@ public class PresetsTableModel extends AbstractTableModel {
     public boolean isCellEditable(int rowIndex, int columnIndex) {
         return false;
     }
+
+    public void clear() {
+        listBRoad.clear();
+    }
 }

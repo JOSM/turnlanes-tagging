@@ -27,6 +27,7 @@ public class TagEditor extends JPanel implements IAutoCompletionListListener {
     private TagTable tblTagEditor;
     //private PresetManager presetManager;
 
+    
     /**
      * builds the panel with the button row
      *
@@ -142,6 +143,7 @@ public class TagEditor extends JPanel implements IAutoCompletionListListener {
         tblTagEditor.setAutoCompletionManager(autocomplete);
     }
 
+    @Override
     public void autoCompletionItemSelected(String item) {
         logger.info("autocompletion item selected ...");
         TagSpecificationAwareTagCellEditor editor = (TagSpecificationAwareTagCellEditor) tblTagEditor.getCellEditor();
