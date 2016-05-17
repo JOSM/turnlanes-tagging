@@ -31,39 +31,5 @@ public class BLine {
 
     public void setTurn(String turn) {
         this.turn = turn;
-    }
-    
-    
-
-//    public BLine(String id, String name, String tags) {
-//        this.id = id;
-//        this.name = name;
-//        this.turn = tags;
-//    }
-//
-//    
-//    public String getId() {
-//        return id;
-//    }
-//
-//    public void setId(String id) {
-//        this.id = id;
-//    }
-//
-//    public String getName() {
-//        return name;
-//    }
-//
-//    public void setName(String name) {
-//        this.name = name;
-//    }
-//
-//    public String getTags() {
-//        return turn;
-//    }
-//
-//    public void setTags(String tags) {
-//        this.turn = tags;
-//    }
-    
+    }   
 }

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.openstreetmap.josm.plugins.turnlanestagging.preset.ui;
 
 import javax.swing.JTable;
@@ -19,7 +14,7 @@ public class PresetsTable extends JTable {
         setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         setRowSelectionAllowed(true);
         setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        setRowHeight(18); // icon height (=16) + minimal border
+        setRowHeight(18);
     }
 
     public PresetsTable(PresetsTableModel model) {
@@ -27,16 +22,6 @@ public class PresetsTable extends JTable {
         init();
     }
 
-    /**
-     * adjusts the width of the columns for the tag name and the tag value to
-     * the width of the scroll panes viewport.
-     *
-     * Note: {
-     *
-     * @see #getPreferredScrollableViewportSize()} did not work as expected
-     *
-     * @param scrollPaneWidth the width of the scroll panes viewport
-     */
     public void adjustColumnWidth(int scrollPaneWidth) {
         TableColumnModel tcm = getColumnModel();
         int width = scrollPaneWidth;

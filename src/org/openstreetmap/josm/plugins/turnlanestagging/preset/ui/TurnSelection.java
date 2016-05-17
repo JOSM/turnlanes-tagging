@@ -44,7 +44,7 @@ public class TurnSelection extends JPanel {
         jCBThrough = new JCheckBox();
         jPTurnSelection.setLayout(new GridLayout(2, 1));
         jPTurnSelection.setBorder(BorderFactory.createEtchedBorder());
-        jPTurnSelection.add(new JLabel("Line" + bLine.getPosition()));
+        jPTurnSelection.add(new JLabel("Lane" + bLine.getPosition()));
 
         jRBLeft.setText("L");
         jRBLeft.addActionListener(new LeftListener());
@@ -113,9 +113,7 @@ public class TurnSelection extends JPanel {
         @Override
         public void actionPerformed(ActionEvent ae) {
             builturn();
-//            String text = bgetTurn();
             firePropertyChange(jRBLeft_CHANGED, null, bLine);
-//            setTurn(text);
         }
     }
 
@@ -124,9 +122,7 @@ public class TurnSelection extends JPanel {
         @Override
         public void actionPerformed(ActionEvent ae) {
             builturn();
-//            String text = getTurn();
             firePropertyChange(jRBRight_CHANGED, null, bLine);
-//            setTurn(text);
         }
     }
 
@@ -135,9 +131,7 @@ public class TurnSelection extends JPanel {
         @Override
         public void actionPerformed(ActionEvent ae) {
             builturn();
-//            String text = getTurn();
             firePropertyChange(jCBThrough_CHANGED, null, bLine);
-//            setTurn(text);
         }
     }
 }

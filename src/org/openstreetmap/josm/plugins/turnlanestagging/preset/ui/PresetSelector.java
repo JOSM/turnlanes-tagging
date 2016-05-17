@@ -23,7 +23,6 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import org.openstreetmap.josm.plugins.turnlanestagging.bean.BRoad;
-import static org.openstreetmap.josm.plugins.turnlanestagging.preset.ui.TurnSelection.jCBThrough_CHANGED;
 
 /**
  *
@@ -106,8 +105,10 @@ public class PresetSelector extends JPanel {
         for (int j = 0; j < 10; j++) {
             comboBox.addItem(j + 1);
         }
+        //default
         comboBox.setSelectedIndex(2);
-        jPContenComboBox.add(new JLabel("Number of Lines"));
+
+        jPContenComboBox.add(new JLabel("Number of lanes"));
         jPContenComboBox.add(comboBox);
         comboBox.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
@@ -118,10 +119,7 @@ public class PresetSelector extends JPanel {
             }
         });
 
-        //Build default Lines : 3 lines
-        pnlGraps = new JPanel(new GridLayout(1, 3));
-        //SET ROAD LINES
-        lines(presetsData.defaultData(3));
+        pnlGraps = new JPanel();
         pnlBuldLines.add(jPContenComboBox, BorderLayout.NORTH);
         pnlBuldLines.add(pnlGraps, BorderLayout.CENTER);
         pnlBuldLines.add(jTF, BorderLayout.SOUTH);
@@ -165,8 +163,10 @@ public class PresetSelector extends JPanel {
         add(new JLabel("Select Preset Turn Lanes"), BorderLayout.NORTH);
         add(buildPresetGrid(), BorderLayout.CENTER);
         add(buildPanelGrap(), BorderLayout.SOUTH);
+        //Event to ad in tag
         jTF.getDocument().addDocumentListener(new SetTagTurnListener());
-
+        //Add Default the the common turn lane
+        lines(listBRoads.get(0));
     }
 
     private class SetTagTurnListener implements DocumentListener {
