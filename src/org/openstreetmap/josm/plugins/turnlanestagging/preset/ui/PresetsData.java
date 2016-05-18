@@ -1,6 +1,6 @@
 package org.openstreetmap.josm.plugins.turnlanestagging.preset.ui;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import org.openstreetmap.josm.plugins.turnlanestagging.bean.BLine;
 import org.openstreetmap.josm.plugins.turnlanestagging.bean.BRoad;
@@ -16,9 +16,9 @@ public class PresetsData {
         //lanes=3
         //turn:lanes=left||
         //placement=right_of:2
-        List<BRoad> listBRoads = new LinkedList<>();
+        List<BRoad> listBRoads = new ArrayList<>();
         //Road 1
-        List<BLine> listBLines = new LinkedList<>();
+        List<BLine> listBLines = new ArrayList<>();
         listBLines.add(new BLine(1, "left"));
         listBLines.add(new BLine(2, "through"));
         listBLines.add(new BLine(3, "through"));
@@ -27,7 +27,7 @@ public class PresetsData {
         bRoad.setListLines(listBLines);
         listBRoads.add(bRoad);
         //Road 2
-        List<BLine> listBLines2 = new LinkedList<>();
+        List<BLine> listBLines2 = new ArrayList<>();
         listBLines2.add(new BLine(1, "left"));
         listBLines2.add(new BLine(2, "right"));
         listBLines2.add(new BLine(3, "through"));
@@ -41,10 +41,10 @@ public class PresetsData {
     }
 
     public List<BRoad> data() {
-        List<BRoad> listBRoads = new LinkedList<>();
+        List<BRoad> listBRoads = new ArrayList<>();
         for (int k = 0; k < 10; k++) {
             BRoad bRoad = new BRoad();
-            List<BLine> listBLines = new LinkedList<>();
+            List<BLine> listBLines = new ArrayList<>();
             for (int m = 0; m < (k + 1); m++) {
                 BLine bLine = new BLine((m + 1), "left");
                 listBLines.add(bLine);
@@ -59,7 +59,7 @@ public class PresetsData {
 
     public BRoad defaultData(int lines) {
         BRoad bRoad = new BRoad();
-        List<BLine> listBLines = new LinkedList<>();
+        List<BLine> listBLines = new ArrayList<>();
         for (int m = 0; m < lines; m++) {
             BLine bLine = new BLine((m + 1), "");
             listBLines.add(bLine);

@@ -5,11 +5,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import org.openstreetmap.josm.plugins.turnlanestagging.bean.BLine;
+import org.openstreetmap.josm.tools.ImageProvider;
 
 /**
  *
@@ -20,13 +22,11 @@ public class TurnSelection extends JPanel {
     public static final String jRBLeft_CHANGED = "jRBLeft Changed";
     public static final String jRBRight_CHANGED = "jRBRight Changed";
     public static final String jCBThrough_CHANGED = "jCBThrough Changed";
-
-    private ButtonGroup turnLeftRightGroup;
     private JCheckBox jCBThrough;
     private JPanel jPTurnSelection;
     private JPanel jPOptions;
-    private JRadioButton jRBLeft;
-    private JRadioButton jRBRight;
+    private JCheckBox jCBLeft;
+    private JCheckBox jCBRight;
     BLine bLine;
 
     public TurnSelection(BLine bl) {
@@ -36,31 +36,34 @@ public class TurnSelection extends JPanel {
     }
 
     public void init() {
-        turnLeftRightGroup = new ButtonGroup();
         jPTurnSelection = new JPanel();
         jPOptions = new JPanel();
-        jRBLeft = new JRadioButton();
-        jRBRight = new JRadioButton();
+        jCBLeft = new JCheckBox();
+        jCBRight = new JCheckBox();
         jCBThrough = new JCheckBox();
         jPTurnSelection.setLayout(new GridLayout(2, 1));
         jPTurnSelection.setBorder(BorderFactory.createEtchedBorder());
-        jPTurnSelection.add(new JLabel("Lane" + bLine.getPosition()));
+        jPTurnSelection.add(new JLabel("Lane " + bLine.getPosition()));
 
-        jRBLeft.setText("L");
-        jRBLeft.addActionListener(new LeftListener());
+//        jCBLeft.setText("L");
+        jCBLeft.setIcon(ImageProvider.get("types", "empty.png"));
+        jCBLeft.setSelectedIcon(ImageProvider.get("types", "left.png"));
+        jCBLeft.addActionListener(new LeftListener());
 
-        jRBRight.setText("R");
-        jRBRight.addActionListener(new RightListener());
+//        jCBRight.setText("R");
+        jCBRight.setIcon(ImageProvider.get("types", "empty.png"));
+        jCBRight.setSelectedIcon(ImageProvider.get("types", "right.png"));
+        jCBRight.addActionListener(new RightListener());
 
-        jCBThrough.setText("T");
+//        jCBThrough.setText("T");
+        jCBThrough.setIcon(ImageProvider.get("types", "empty.png"));
+        jCBThrough.setSelectedIcon(ImageProvider.get("types", "through.png"));
         jCBThrough.addActionListener(new ThroughListener());
 
-        turnLeftRightGroup.add(jRBLeft);
-        turnLeftRightGroup.add(jRBRight);
         jPOptions = new JPanel(new GridLayout(1, 3));
-        jPOptions.add(jRBLeft);
+        jPOptions.add(jCBLeft);
         jPOptions.add(jCBThrough);
-        jPOptions.add(jRBRight);
+        jPOptions.add(jCBRight);
         jPTurnSelection.add(jPOptions);
         setTurn();
         //add on Main Panel
@@ -73,38 +76,54 @@ public class TurnSelection extends JPanel {
         if (jCBThrough.isSelected()) {
             t = "through";
         }
-        if (jRBLeft.isSelected()) {
+        if (jCBLeft.isSelected()) {
             t = "left";
         }
-        if (jRBRight.isSelected()) {
+        if (jCBRight.isSelected()) {
             t = "right";
         }
-        if (jRBRight.isSelected() && jCBThrough.isSelected()) {
-            t = "right;through";
+        if (jCBThrough.isSelected() && jCBRight.isSelected()) {
+            t = "through;right";
         }
-        if (jRBLeft.isSelected() && jCBThrough.isSelected()) {
+        if (jCBLeft.isSelected() && jCBThrough.isSelected()) {
             t = "left;through";
         }
+        if (jCBLeft.isSelected() && jCBRight.isSelected()) {
+            t = "left;right";
+        }
+        if (jCBLeft.isSelected() && jCBThrough.isSelected() && jCBRight.isSelected()) {
+            t = "left;through;right";
+        }
+
         bLine.setTurn(t);
     }
 
     protected void setTurn() {
         if (bLine.getTurn().equals("left")) {
-            jRBLeft.setSelected(true);
+            jCBLeft.setSelected(true);
         }
         if (bLine.getTurn().equals("right")) {
-            jRBRight.setSelected(true);
+            jCBRight.setSelected(true);
         }
         if (bLine.getTurn().equals("through")) {
             jCBThrough.setSelected(true);
         }
-        if (bLine.getTurn().equals("right;through")) {
-            jRBRight.setSelected(true);
+        if (bLine.getTurn().equals("through;right")) {
+            jCBRight.setSelected(true);
             jCBThrough.setSelected(true);
         }
         if (bLine.getTurn().equals("left;through")) {
-            jRBLeft.setSelected(true);
+            jCBLeft.setSelected(true);
             jCBThrough.setSelected(true);
+        }
+        if (bLine.getTurn().equals("left;right")) {
+            jCBLeft.setSelected(true);
+            jCBRight.setSelected(true);
+        }
+        if (bLine.getTurn().equals("left;through;right")) {
+            jCBLeft.setSelected(true);
+            jCBThrough.setSelected(true);
+            jCBRight.setSelected(true);
         }
     }
 

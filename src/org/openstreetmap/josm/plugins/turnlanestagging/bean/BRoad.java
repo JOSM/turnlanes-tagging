@@ -1,6 +1,6 @@
 package org.openstreetmap.josm.plugins.turnlanestagging.bean;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -39,8 +39,7 @@ public class BRoad implements Cloneable {
         for (int i = 0; i < newLines.size(); i++) {
             map.put(newLines.get(i).getPosition(), newLines.get(i));
         }
-        List<BLine> listLs = new LinkedList<>(map.values());
-        map.values();
+        List<BLine> listLs = new ArrayList<>(map.values());
         this.listLines = listLs;
     }
 

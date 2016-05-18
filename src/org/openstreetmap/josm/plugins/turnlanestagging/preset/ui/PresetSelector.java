@@ -12,6 +12,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import javax.swing.JComboBox;
@@ -57,7 +58,7 @@ public class PresetSelector extends JPanel {
     }
 
     protected JScrollPane buildPresetGrid() {
-        listBRoads = new LinkedList<>(presetsData.dataPreset());
+        listBRoads = new ArrayList<>(presetsData.dataPreset());
 
         presetsTableModel = new PresetsTableModel(listBRoads);
         //print on table
@@ -127,8 +128,15 @@ public class PresetSelector extends JPanel {
     }
 
     protected void lines(BRoad road) {
-        //inicializar
-        valBRoad = road;
+        //Clone objtects
+        valBRoad.setName(new String(road.getName()));
+        List<BLine> listbl = new ArrayList<>();
+        for (int k = 0; k < road.getLines(); k++) {
+            BLine bl = new BLine(new Integer(road.getListLines().get(k).getPosition()), new String(road.getListLines().get(k).getTurn()));
+            listbl.add(bl);
+        }
+
+        valBRoad.setListLines(listbl);
         pnlGraps.removeAll();
         pnlGraps.setLayout(new GridLayout(1, valBRoad.getLines()));
         jTF.setText(valBRoad.getTagturns());
