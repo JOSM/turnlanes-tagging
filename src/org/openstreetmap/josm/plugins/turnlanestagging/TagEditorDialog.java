@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.Collection;
 import javax.swing.AbstractAction;
 import static javax.swing.Action.ACCELERATOR_KEY;
 import static javax.swing.Action.NAME;
@@ -18,9 +19,12 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.KeyStroke;
+import javax.swing.text.html.HTML;
 import org.openstreetmap.josm.Main;
 import org.openstreetmap.josm.data.osm.DataSet;
+import org.openstreetmap.josm.data.osm.OsmPrimitive;
 import org.openstreetmap.josm.gui.tagging.TagEditorModel;
+import org.openstreetmap.josm.gui.tagging.ac.AutoCompletionListItem;
 import org.openstreetmap.josm.gui.tagging.ac.AutoCompletionManager;
 import org.openstreetmap.josm.plugins.turnlanestagging.bean.BRoad;
 import org.openstreetmap.josm.plugins.turnlanestagging.editor.TagEditor;
@@ -134,7 +138,24 @@ public class TagEditorDialog extends JDialog {
         tagEditor.setAutoCompletionManager(autocomplete);
         getModel().ensureOneTag();
 
-        //
+        BRoad bRoad = new BRoad();
+        Collection<OsmPrimitive> selection = Main.main.getCurrentDataSet().getSelected();
+        for (OsmPrimitive element : selection) {
+            for (String key : element.keySet()) {
+                Util.print(key + ": " + element.get(key));
+                if (key.equals("turn:lanes")) {
+                    String value = element.get(key);
+                    bRoad.setLanes(value);
+                }
+                bRoad.setName("selectRoad");
+            }
+        }
+        Util.print(bRoad.getLines());
+        Util.print(bRoad.getListLines().toString());
+
+        Util.print(bRoad.getTagturns());
+
+        presetSelector.lanes(bRoad);
     }
 
     //Buton Actions

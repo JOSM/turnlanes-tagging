@@ -42,6 +42,11 @@ public class AddTagAction extends JosmAction implements SelectionChangedListener
 
     @Override
     public void selectionChanged(Collection<? extends OsmPrimitive> newSelection) {
+        
+        for (OsmPrimitive osmPrimitive: newSelection) {
+//            osmPrimitive.getDataSet().get
+        }
+   
         setEnabled(newSelection != null && newSelection.size() > 0);
     }
 }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import org.openstreetmap.josm.plugins.turnlanestagging.Util;
 
 /**
  *
@@ -62,5 +63,18 @@ public class BRoad implements Cloneable {
     @Override
     protected Object clone() throws CloneNotSupportedException {
         return super.clone();
+    }
+
+    public void setLanes(String turnLanes) {
+        Util.print("========"+turnLanes);
+        String turns[] = turnLanes.split("\\|");
+                Util.print("========"+turns.toString());
+
+        List<BLine> lst = new ArrayList<>();
+        for (int i = 0; i < turns.length; i++) {
+            BLine bLine = new BLine((i + 1), turns[i]);
+            lst.add(bLine);
+        }
+        this.listLines = lst;
     }
 }

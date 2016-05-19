@@ -88,7 +88,7 @@ public class PresetSelector extends JPanel {
             if (e.getClickCount() == 1) {
                 int rowNum = presetsTable.rowAtPoint(e.getPoint());
                 comboBox.setSelectedIndex(listBRoads.get(rowNum).getLines() - 1);
-                lines(listBRoads.get(rowNum));
+                lanes(listBRoads.get(rowNum));
             }
         }
     }
@@ -116,7 +116,7 @@ public class PresetSelector extends JPanel {
                 JComboBox comboBox = (JComboBox) event.getSource();
                 int selected = (int) comboBox.getSelectedItem();
                 //SET ROAD LINES
-                lines(presetsData.defaultData(selected));
+                lanes(presetsData.defaultData(selected));
             }
         });
 
@@ -127,7 +127,7 @@ public class PresetSelector extends JPanel {
         return pnlBuldLines;
     }
 
-    protected void lines(BRoad road) {
+    public void lanes(BRoad road) {
         //Clone objtects
         valBRoad.setName(new String(road.getName()));
         List<BLine> listbl = new ArrayList<>();
@@ -174,7 +174,7 @@ public class PresetSelector extends JPanel {
         //Event to ad in tag
         jTF.getDocument().addDocumentListener(new SetTagTurnListener());
         //Add Default the the common turn lane
-        lines(listBRoads.get(0));
+        lanes(listBRoads.get(0));
     }
 
     private class SetTagTurnListener implements DocumentListener {
