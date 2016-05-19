@@ -1,9 +1,12 @@
 package org.openstreetmap.josm.plugins.turnlanestagging.preset.ui;
 
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
+import static org.openstreetmap.josm.gui.mappaint.mapcss.ExpressionFactory.Functions.tr;
 import org.openstreetmap.josm.plugins.turnlanestagging.bean.BLine;
 import org.openstreetmap.josm.plugins.turnlanestagging.bean.BRoad;
+import org.openstreetmap.josm.tools.Shortcut;
 
 /**
  *
@@ -26,6 +29,8 @@ public class PresetsData {
         bRoad.setName("Most Common turn Lane");
         bRoad.setListLines(listBLines);
         listBRoads.add(bRoad);
+
+
         //Road 2
         List<BLine> listBLines2 = new ArrayList<>();
         listBLines2.add(new BLine(1, "left"));
