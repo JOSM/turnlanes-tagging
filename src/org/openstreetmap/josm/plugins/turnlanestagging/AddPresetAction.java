@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.openstreetmap.josm.plugins.turnlanestagging;
 
 import java.awt.event.ActionEvent;
@@ -29,11 +24,16 @@ import org.openstreetmap.josm.tools.Shortcut;
  */
 public class AddPresetAction extends JosmAction implements SelectionChangedListener {
 
-    public AddPresetAction(String turnslanes, Integer num) {
+    private String turnslanes;
+    private Integer numLanes;
+
+    public AddPresetAction(Integer numLanes, String turnslanes, Integer numKey) {
         super(tr(turnslanes),
                 null,
                 tr(turnslanes),
-                Shortcut.registerShortcut("turnlanetag:" + turnslanes, tr("turnlanetag:" + turnslanes), num, Shortcut.ALT_CTRL_SHIFT), true);
+                Shortcut.registerShortcut("turnlanetag:" + "(" + numLanes + ") " + turnslanes, tr("turnlanetag:" + "(" + numLanes + ") " + turnslanes), numKey, Shortcut.ALT_CTRL_SHIFT), true);
+        this.turnslanes = turnslanes;
+        this.numLanes = numLanes;
         DataSet.addSelectionListener(this);
         setEnabled(false);
     }
@@ -48,8 +48,8 @@ public class AddPresetAction extends JosmAction implements SelectionChangedListe
         List<Command> commands = new ArrayList<>();
         LinkedList<Way> ways = new LinkedList<>(Main.main.getCurrentDataSet().getSelectedWays());
         if (ways.size() == 1) {
-            commands.add(new ChangePropertyCommand(ways, "lanes", "3"));
-            commands.add(new ChangePropertyCommand(ways, "turn:lanes", "right|left|right"));
+            commands.add(new ChangePropertyCommand(ways, "lanes", getNumLanes().toString()));
+            commands.add(new ChangePropertyCommand(ways, "turn:lanes", getTurnslanes()));
         }
         if (!commands.isEmpty()) {
             String title1 = trn("Pasting {0} tag", "Pasting {0} tags", 2, 2);
@@ -64,7 +64,7 @@ public class AddPresetAction extends JosmAction implements SelectionChangedListe
 
     @Override
     public void selectionChanged(Collection<? extends OsmPrimitive> newSelection) {
-        setEnabled(newSelection != null && newSelection.size() == 1 && isRoad());
+        setEnabled(newSelection != null && newSelection.size() > 0 && isRoad());
     }
 
     public boolean isRoad() {
@@ -78,4 +78,21 @@ public class AddPresetAction extends JosmAction implements SelectionChangedListe
         }
         return false;
     }
+
+    public String getTurnslanes() {
+        return turnslanes;
+    }
+
+    public void setTurnslanes(String turnslanes) {
+        this.turnslanes = turnslanes;
+    }
+
+    public Integer getNumLanes() {
+        return numLanes;
+    }
+
+    public void setNumLanes(Integer numLanes) {
+        this.numLanes = numLanes;
+    }
+
 }

@@ -29,7 +29,7 @@ public class TurnLanesTaggingPlugin extends Plugin {
         List<BRoad> listpresets = presetsData.dataPreset();
 
         for (int i = 0; i < listpresets.size(); i++) {
-            menu.add(new AddPresetAction(listpresets.get(i).getName(), (i + 1)));
+            menu.add(new AddPresetAction(listpresets.get(i).getNumLanes(), listpresets.get(i).getTagturns(), (i + 1)));
         }
 
         Main.main.menu.editMenu.add(menu);
