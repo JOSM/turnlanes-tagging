@@ -9,7 +9,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import javax.swing.AbstractAction;
 import static javax.swing.Action.ACCELERATOR_KEY;
 import static javax.swing.Action.NAME;
@@ -21,12 +20,10 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.KeyStroke;
-import javax.swing.text.html.HTML;
 import org.openstreetmap.josm.Main;
 import org.openstreetmap.josm.data.osm.DataSet;
 import org.openstreetmap.josm.data.osm.OsmPrimitive;
 import org.openstreetmap.josm.gui.tagging.TagEditorModel;
-import org.openstreetmap.josm.gui.tagging.ac.AutoCompletionListItem;
 import org.openstreetmap.josm.gui.tagging.ac.AutoCompletionManager;
 import org.openstreetmap.josm.plugins.turnlanestagging.bean.BLine;
 import org.openstreetmap.josm.plugins.turnlanestagging.bean.BRoad;
@@ -95,7 +92,7 @@ public class TagEditorDialog extends JDialog {
     protected JPanel buildButtonRowPanel() {
         JPanel pnl = new JPanel(new FlowLayout(FlowLayout.CENTER));
         pnl.add(new JButton(okAction = new OKAction()));
-        // getModel().addPropertyChangeListener(okAction);
+        getModel().addPropertyChangeListener(okAction);
         pnl.add(new JButton(cancelAction = new CancelAction()));
         return pnl;
     }
