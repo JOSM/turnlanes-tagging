@@ -45,9 +45,8 @@ public class AddPresetAction extends JosmAction implements SelectionChangedListe
     }
 
     protected Command addTurnLanesTag() {
-        List<Command> commands = new ArrayList<Command>();
-
-        LinkedList<Way> ways = new LinkedList<Way>(Main.main.getCurrentDataSet().getSelectedWays());
+        List<Command> commands = new ArrayList<>();
+        LinkedList<Way> ways = new LinkedList<>(Main.main.getCurrentDataSet().getSelectedWays());
         if (ways.size() == 1) {
             commands.add(new ChangePropertyCommand(ways, "lanes", "3"));
             commands.add(new ChangePropertyCommand(ways, "turn:lanes", "right|left|right"));
@@ -65,7 +64,7 @@ public class AddPresetAction extends JosmAction implements SelectionChangedListe
 
     @Override
     public void selectionChanged(Collection<? extends OsmPrimitive> newSelection) {
-        setEnabled(newSelection != null && newSelection.size() > 0 && isRoad());
+        setEnabled(newSelection != null && newSelection.size() == 1 && isRoad());
     }
 
     public boolean isRoad() {

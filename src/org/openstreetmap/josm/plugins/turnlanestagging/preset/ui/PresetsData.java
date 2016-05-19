@@ -1,12 +1,9 @@
 package org.openstreetmap.josm.plugins.turnlanestagging.preset.ui;
 
-import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
-import static org.openstreetmap.josm.gui.mappaint.mapcss.ExpressionFactory.Functions.tr;
 import org.openstreetmap.josm.plugins.turnlanestagging.bean.BLine;
 import org.openstreetmap.josm.plugins.turnlanestagging.bean.BRoad;
-import org.openstreetmap.josm.tools.Shortcut;
 
 /**
  *
@@ -41,23 +38,6 @@ public class PresetsData {
         bRoad2.setListLines(listBLines2);
         listBRoads.add(bRoad2);
 
-        return listBRoads;
-
-    }
-
-    public List<BRoad> data() {
-        List<BRoad> listBRoads = new ArrayList<>();
-        for (int k = 0; k < 10; k++) {
-            BRoad bRoad = new BRoad();
-            List<BLine> listBLines = new ArrayList<>();
-            for (int m = 0; m < (k + 1); m++) {
-                BLine bLine = new BLine((m + 1), "left");
-                listBLines.add(bLine);
-            }
-            bRoad.setName("Road " + (k + 1));
-            bRoad.setListLines(listBLines);
-            listBRoads.add(bRoad);
-        }
         return listBRoads;
 
     }

@@ -116,7 +116,7 @@ public class TagEditorDialog extends JDialog {
                 if (evt.getPropertyName().equals(presetSelector.jTF_CHANGED)) {
                     BRoad b = (BRoad) evt.getNewValue();
                     tagEditor.getModel().applyKeyValuePair(new KeyValuePair("turn:lanes", b.getTagturns()));
-                    tagEditor.getModel().applyKeyValuePair(new KeyValuePair("lanes", String.valueOf(b.getLines())));
+                    tagEditor.getModel().applyKeyValuePair(new KeyValuePair("lanes", String.valueOf(b.getNumLanes())));
                     tagEditor.repaint();
                 }
 
@@ -150,7 +150,7 @@ public class TagEditorDialog extends JDialog {
                 }
             }
         }
-        if (bRoad.getLines() > 0) {
+        if (bRoad.getNumLanes() > 0) {
             presetSelector.lanes(bRoad);
         } else {
             presetSelector.setDefaultLanes();

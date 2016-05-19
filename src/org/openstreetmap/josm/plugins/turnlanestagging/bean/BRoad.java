@@ -56,7 +56,7 @@ public class BRoad implements Cloneable {
         return tagturns;
     }
 
-    public int getLines() {
+    public int getNumLanes() {
         return listLines.size();
     }
 
@@ -66,10 +66,7 @@ public class BRoad implements Cloneable {
     }
 
     public void setLanes(String turnLanes) {
-        Util.print("========"+turnLanes);
         String turns[] = turnLanes.split("\\|");
-                Util.print("========"+turns.toString());
-
         List<BLine> lst = new ArrayList<>();
         for (int i = 0; i < turns.length; i++) {
             BLine bLine = new BLine((i + 1), turns[i]);

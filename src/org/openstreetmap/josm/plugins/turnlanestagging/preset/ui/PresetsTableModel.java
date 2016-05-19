@@ -9,7 +9,7 @@ public class PresetsTableModel extends AbstractTableModel {
 
     List<BRoad> listBRoad;
     Class[] columns = {Object.class, Object.class};
-    String titles[] = {"Name", "tags"};
+    String titles[] = {"Num Lanes", "Turn lanes"};
 
     public PresetsTableModel(List<BRoad> list) {
         super();
@@ -30,7 +30,7 @@ public class PresetsTableModel extends AbstractTableModel {
     public Object getValueAt(int rowIndex, int columnIndex) {
         switch (columnIndex) {
             case 0:
-                return listBRoad.get(rowIndex).getName();
+                return String.valueOf(listBRoad.get(rowIndex).getNumLanes());
             case 1:
                 return listBRoad.get(rowIndex).getTagturns();
             default:

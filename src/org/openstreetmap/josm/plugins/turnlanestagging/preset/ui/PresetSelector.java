@@ -163,19 +163,19 @@ public class PresetSelector extends JPanel {
         //Clone objtects
         valBRoad.setName(new String(road.getName()));
         List<BLine> listbl = new ArrayList<>();
-        for (int k = 0; k < road.getLines(); k++) {
+        for (int k = 0; k < road.getNumLanes(); k++) {
             BLine bl = new BLine(new Integer(road.getListLines().get(k).getPosition()), new String(road.getListLines().get(k).getTurn()));
             listbl.add(bl);
         }
         valBRoad.setListLines(listbl);
         clickLanesAction = false;
-        comboBox.setSelectedIndex(valBRoad.getLines()-1);
+        comboBox.setSelectedIndex(valBRoad.getNumLanes()-1);
 
         pnlGraps.removeAll();
-        pnlGraps.setLayout(new GridLayout(1, valBRoad.getLines()));
+        pnlGraps.setLayout(new GridLayout(1, valBRoad.getNumLanes()));
         jTF.setText(valBRoad.getTagturns());
         final List<BLine> listBLines = valBRoad.getListLines();
-        for (int i = 0; i < valBRoad.getLines(); i++) {
+        for (int i = 0; i < valBRoad.getNumLanes(); i++) {
             BLine b = valBRoad.getListLines().get(i);
             tlo = new TurnSelection(b);
             tlo.addPropertyChangeListener(new PropertyChangeListener() {
