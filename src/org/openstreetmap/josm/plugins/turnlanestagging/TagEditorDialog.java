@@ -7,7 +7,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import javax.swing.AbstractAction;
 import static javax.swing.Action.ACCELERATOR_KEY;
 import static javax.swing.Action.NAME;
@@ -26,6 +28,7 @@ import org.openstreetmap.josm.data.osm.OsmPrimitive;
 import org.openstreetmap.josm.gui.tagging.TagEditorModel;
 import org.openstreetmap.josm.gui.tagging.ac.AutoCompletionListItem;
 import org.openstreetmap.josm.gui.tagging.ac.AutoCompletionManager;
+import org.openstreetmap.josm.plugins.turnlanestagging.bean.BLine;
 import org.openstreetmap.josm.plugins.turnlanestagging.bean.BRoad;
 import org.openstreetmap.josm.plugins.turnlanestagging.editor.TagEditor;
 import org.openstreetmap.josm.plugins.turnlanestagging.editor.ac.KeyValuePair;
@@ -137,25 +140,24 @@ public class TagEditorDialog extends JDialog {
         autocomplete = Main.main.getEditLayer().data.getAutoCompletionManager();
         tagEditor.setAutoCompletionManager(autocomplete);
         getModel().ensureOneTag();
-
-        BRoad bRoad = new BRoad();
+        
+        //Set the selection Roads
+        BRoad bRoad = new BRoad("selectRoad", new ArrayList<BLine>());
         Collection<OsmPrimitive> selection = Main.main.getCurrentDataSet().getSelected();
         for (OsmPrimitive element : selection) {
             for (String key : element.keySet()) {
-                Util.print(key + ": " + element.get(key));
                 if (key.equals("turn:lanes")) {
                     String value = element.get(key);
                     bRoad.setLanes(value);
+                    bRoad.setName("selectRoad");
                 }
-                bRoad.setName("selectRoad");
             }
         }
-        Util.print(bRoad.getLines());
-        Util.print(bRoad.getListLines().toString());
-
-        Util.print(bRoad.getTagturns());
-
-        presetSelector.lanes(bRoad);
+        if (bRoad.getLines() > 0) {
+            presetSelector.lanes(bRoad);
+        } else {
+            presetSelector.setDefaultLanes();
+        }
     }
 
     //Buton Actions

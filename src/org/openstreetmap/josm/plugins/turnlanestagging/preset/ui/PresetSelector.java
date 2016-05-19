@@ -13,7 +13,6 @@ import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -31,14 +30,15 @@ import org.openstreetmap.josm.plugins.turnlanestagging.bean.BRoad;
  */
 public class PresetSelector extends JPanel {
 
+    public static final String jTF_CHANGED = "jTF Changed";
+
     //Table
     private JPanel pnlBuldLines = null;
     private JScrollPane scrollPane = null;
     private PresetsTable presetsTable = null;
-
     private PresetsTableModel presetsTableModel = null;
 
-    //Panel for create the number of lines
+    //Panel for create the number of lines.
     JPanel pnlGraps = null;
     JComboBox<Integer> comboBox = null;
     JTextField jTF = new JTextField();
@@ -47,10 +47,14 @@ public class PresetSelector extends JPanel {
     List<BRoad> listBRoads = null;
     PresetsData presetsData = new PresetsData();
 
-    BRoad valBRoad = new BRoad();
-
-    public static final String jTF_CHANGED = "jTF Changed";
+    // Panel for turn selection
     TurnSelection tlo = null;
+
+    // check if the selection was clicked or not
+    boolean clickLanesAction = true;
+   
+    //Value Road
+    BRoad valBRoad = new BRoad();
 
     //Constructor
     public PresetSelector() {
@@ -59,7 +63,6 @@ public class PresetSelector extends JPanel {
 
     protected JScrollPane buildPresetGrid() {
         listBRoads = new ArrayList<>(presetsData.dataPreset());
-
         presetsTableModel = new PresetsTableModel(listBRoads);
         //print on table
         presetsTable = new PresetsTable(presetsTableModel);
@@ -87,7 +90,6 @@ public class PresetSelector extends JPanel {
         public void mouseClicked(MouseEvent e) {
             if (e.getClickCount() == 1) {
                 int rowNum = presetsTable.rowAtPoint(e.getPoint());
-                comboBox.setSelectedIndex(listBRoads.get(rowNum).getLines() - 1);
                 lanes(listBRoads.get(rowNum));
             }
         }
@@ -97,8 +99,8 @@ public class PresetSelector extends JPanel {
         return (PresetsTableModel) presetsTable.getModel();
     }
 
-    //form the tag
-    protected JPanel buildPanelGrap() {
+    //Build pannel for   lanes
+    protected JPanel buildPanelLanes() {
         //fill Combo Box
         pnlBuldLines = new JPanel(new BorderLayout());
         JPanel jPContenComboBox = new JPanel(new GridLayout(1, 2));
@@ -106,17 +108,17 @@ public class PresetSelector extends JPanel {
         for (int j = 0; j < 10; j++) {
             comboBox.addItem(j + 1);
         }
-        //default
-        comboBox.setSelectedIndex(2);
-
         jPContenComboBox.add(new JLabel("Number of lanes"));
         jPContenComboBox.add(comboBox);
         comboBox.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
                 JComboBox comboBox = (JComboBox) event.getSource();
                 int selected = (int) comboBox.getSelectedItem();
-                //SET ROAD LINES
-                lanes(presetsData.defaultData(selected));
+                if (clickLanesAction) {
+                    lanes(presetsData.defaultData(selected));
+                } else {
+                    clickLanesAction = true;
+                }
             }
         });
 
@@ -127,6 +129,37 @@ public class PresetSelector extends JPanel {
         return pnlBuldLines;
     }
 
+    protected void build() {
+        setLayout(new BorderLayout());
+        add(new JLabel("Select Preset Turn Lanes"), BorderLayout.NORTH);
+        add(buildPresetGrid(), BorderLayout.CENTER);
+        add(buildPanelLanes(), BorderLayout.SOUTH);
+        //Event to ad in tag
+        jTF.getDocument().addDocumentListener(new SetTagTurnListener());
+        setDefaultLanes();
+    }
+
+    private class SetTagTurnListener implements DocumentListener {
+
+        @Override
+        public void insertUpdate(DocumentEvent e) {
+            firePropertyChange(jTF_CHANGED, null, valBRoad);
+        }
+
+        @Override
+        public void removeUpdate(DocumentEvent e) {
+        }
+
+        @Override
+        public void changedUpdate(DocumentEvent e) {
+        }
+
+    }
+
+    public void setDefaultLanes() {
+        lanes(listBRoads.get(0));
+    }
+
     public void lanes(BRoad road) {
         //Clone objtects
         valBRoad.setName(new String(road.getName()));
@@ -135,8 +168,10 @@ public class PresetSelector extends JPanel {
             BLine bl = new BLine(new Integer(road.getListLines().get(k).getPosition()), new String(road.getListLines().get(k).getTurn()));
             listbl.add(bl);
         }
-
         valBRoad.setListLines(listbl);
+        clickLanesAction = false;
+        comboBox.setSelectedIndex(valBRoad.getLines());
+
         pnlGraps.removeAll();
         pnlGraps.setLayout(new GridLayout(1, valBRoad.getLines()));
         jTF.setText(valBRoad.getTagturns());
@@ -165,33 +200,4 @@ public class PresetSelector extends JPanel {
             pnlGraps.repaint();
         }
     }
-
-    protected void build() {
-        setLayout(new BorderLayout());
-        add(new JLabel("Select Preset Turn Lanes"), BorderLayout.NORTH);
-        add(buildPresetGrid(), BorderLayout.CENTER);
-        add(buildPanelGrap(), BorderLayout.SOUTH);
-        //Event to ad in tag
-        jTF.getDocument().addDocumentListener(new SetTagTurnListener());
-        //Add Default the the common turn lane
-        lanes(listBRoads.get(0));
-    }
-
-    private class SetTagTurnListener implements DocumentListener {
-
-        @Override
-        public void insertUpdate(DocumentEvent e) {
-            firePropertyChange(jTF_CHANGED, null, valBRoad);
-        }
-
-        @Override
-        public void removeUpdate(DocumentEvent e) {
-        }
-
-        @Override
-        public void changedUpdate(DocumentEvent e) {
-        }
-
-    }
-
 }

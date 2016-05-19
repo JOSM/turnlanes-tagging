@@ -3,6 +3,7 @@ package org.openstreetmap.josm.plugins.turnlanestagging;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.Collection;
+import org.openstreetmap.josm.Main;
 import org.openstreetmap.josm.actions.JosmAction;
 import org.openstreetmap.josm.data.SelectionChangedListener;
 import org.openstreetmap.josm.data.osm.DataSet;
@@ -42,11 +43,18 @@ public class AddTagAction extends JosmAction implements SelectionChangedListener
 
     @Override
     public void selectionChanged(Collection<? extends OsmPrimitive> newSelection) {
-        
-        for (OsmPrimitive osmPrimitive: newSelection) {
-//            osmPrimitive.getDataSet().get
+        setEnabled(newSelection != null && newSelection.size() > 0 && isRoad());
+    }
+
+    public boolean isRoad() {
+        Collection<OsmPrimitive> selection = Main.main.getCurrentDataSet().getSelected();
+        for (OsmPrimitive element : selection) {
+            for (String key : element.keySet()) {
+                if (key.equals("highway")) {
+                    return true;
+                }
+            }
         }
-   
-        setEnabled(newSelection != null && newSelection.size() > 0);
+        return false;
     }
 }
