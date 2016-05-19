@@ -52,7 +52,7 @@ public class PresetSelector extends JPanel {
 
     // check if the selection was clicked or not
     boolean clickLanesAction = true;
-   
+
     //Value Road
     BRoad valBRoad = new BRoad();
 
@@ -116,9 +116,8 @@ public class PresetSelector extends JPanel {
                 int selected = (int) comboBox.getSelectedItem();
                 if (clickLanesAction) {
                     lanes(presetsData.defaultData(selected));
-                } else {
-                    clickLanesAction = true;
                 }
+                clickLanesAction = true;
             }
         });
 
@@ -170,7 +169,7 @@ public class PresetSelector extends JPanel {
         }
         valBRoad.setListLines(listbl);
         clickLanesAction = false;
-        comboBox.setSelectedIndex(valBRoad.getLines());
+        comboBox.setSelectedIndex(valBRoad.getLines()-1);
 
         pnlGraps.removeAll();
         pnlGraps.setLayout(new GridLayout(1, valBRoad.getLines()));
