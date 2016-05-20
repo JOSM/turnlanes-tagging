@@ -105,7 +105,7 @@ public class PresetSelector extends JPanel {
         pnlBuldLines = new JPanel(new BorderLayout());
         JPanel jPContenComboBox = new JPanel(new GridLayout(1, 2));
         comboBox = new JComboBox<>();
-        for (int j = 0; j < 10; j++) {
+        for (int j = 0; j < 20; j++) {
             comboBox.addItem(j + 1);
         }
         jPContenComboBox.add(new JLabel("Number of lanes"));
