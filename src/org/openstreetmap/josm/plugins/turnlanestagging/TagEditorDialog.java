@@ -10,12 +10,14 @@ import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Collection;
 import javax.swing.AbstractAction;
+import javax.swing.Action;
 import static javax.swing.Action.ACCELERATOR_KEY;
 import static javax.swing.Action.NAME;
 import static javax.swing.Action.SHORT_DESCRIPTION;
 import static javax.swing.Action.SMALL_ICON;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
@@ -36,9 +38,7 @@ import org.openstreetmap.josm.tools.ImageProvider;
 
 public class TagEditorDialog extends JDialog {
 
-    /**
-     * the unique instance
-     */
+    // Unique instance      
     static private TagEditorDialog instance = null;
 
     //constructor
@@ -53,7 +53,7 @@ public class TagEditorDialog extends JDialog {
         return instance;
     }
 
-    static public final Dimension PREFERRED_SIZE = new Dimension(700, 500);
+    static public final Dimension PREFERRED_SIZE = new Dimension(800, 500);
 
     private TagEditor tagEditor = null;
     private AutoCompletionManager autocomplete = null;
@@ -86,13 +86,16 @@ public class TagEditorDialog extends JDialog {
         splitPane.setDividerLocation(250);
         getContentPane().add(splitPane, BorderLayout.CENTER);
         getContentPane().add(buildButtonRowPanel(), BorderLayout.SOUTH);
+        getRootPane().registerKeyboardAction(cancelAction, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
     }
 
     //Build Buttons
     protected JPanel buildButtonRowPanel() {
         JPanel pnl = new JPanel(new FlowLayout(FlowLayout.CENTER));
+
         pnl.add(new JButton(okAction = new OKAction()));
         getModel().addPropertyChangeListener(okAction);
+
         pnl.add(new JButton(cancelAction = new CancelAction()));
         return pnl;
     }
@@ -138,8 +141,6 @@ public class TagEditorDialog extends JDialog {
     public void startEditSession() {
         tagEditor.getModel().clearAppliedPresets();
         tagEditor.getModel().initFromJOSMSelection();
-        autocomplete = Main.main.getEditLayer().data.getAutoCompletionManager();
-        tagEditor.setAutoCompletionManager(autocomplete);
         getModel().ensureOneTag();
 
         //Set the selection Roads
@@ -195,7 +196,7 @@ public class TagEditorDialog extends JDialog {
             tagEditor.getModel().updateJOSMSelection();
             DataSet ds = Main.main.getCurrentDataSet();
             ds.fireSelectionChanged();
-            Main.parent.repaint(); // repaint all - drawing could have been changed
+            Main.parent.repaint(); // repaint all
         }
 
         public void propertyChange(PropertyChangeEvent evt) {

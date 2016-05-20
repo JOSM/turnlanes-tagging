@@ -15,24 +15,13 @@ import javax.swing.JScrollPane;
 import javax.swing.table.TableCellEditor;
 
 import org.openstreetmap.josm.gui.tagging.TagTable;
-import org.openstreetmap.josm.gui.tagging.ac.AutoCompletionList;
-import org.openstreetmap.josm.gui.tagging.ac.AutoCompletionManager;
-import org.openstreetmap.josm.plugins.turnlanestagging.editor.ac.IAutoCompletionListListener;
 
-public class TagEditor extends JPanel implements IAutoCompletionListListener {
+public class TagEditor extends JPanel {
 
     private static final Logger logger = Logger.getLogger(TagEditor.class.getName());
-
     private TagEditorModel tagEditorModel;
     private TagTable tblTagEditor;
-    //private PresetManager presetManager;
 
-    
-    /**
-     * builds the panel with the button row
-     *
-     * @return the panel
-     */
     protected JPanel buildButtonsPanel() {
         JPanel pnl = new JPanel();
         pnl.setLayout(new BoxLayout(pnl, BoxLayout.Y_AXIS));
@@ -54,21 +43,14 @@ public class TagEditor extends JPanel implements IAutoCompletionListListener {
         tblTagEditor.addComponentNotStoppingCellEditing(c);
     }
 
-    /**
-     * builds the GUI
-     */
     protected JPanel buildTagEditorPanel() {
         JPanel pnl = new JPanel(new GridBagLayout());
-
         DefaultListSelectionModel rowSelectionModel = new DefaultListSelectionModel();
         DefaultListSelectionModel colSelectionModel = new DefaultListSelectionModel();
 
         tagEditorModel = new TagEditorModel(rowSelectionModel, colSelectionModel);
-
         // build the scrollable table for editing tag names and tag values
-        //
         tblTagEditor = new TagTable(tagEditorModel, 0);
-        tblTagEditor.setTagCellEditor(new TagSpecificationAwareTagCellEditor());
         TagTableCellRenderer renderer = new TagTableCellRenderer();
         tblTagEditor.getColumnModel().getColumn(0).setCellRenderer(renderer);
         tblTagEditor.getColumnModel().getColumn(1).setCellRenderer(renderer);
@@ -79,16 +61,14 @@ public class TagEditor extends JPanel implements IAutoCompletionListListener {
 
         GridBagConstraints gc = new GridBagConstraints();
 
-        // -- buttons panel
-        //
+        //buttons panel
         gc.fill = GridBagConstraints.VERTICAL;
         gc.weightx = 0.0;
         gc.weighty = 1.0;
         gc.anchor = GridBagConstraints.NORTHWEST;
         pnl.add(buildButtonsPanel(), gc);
 
-        // -- the panel with the editor table
-        //
+        // the panel with the editor table
         gc.gridx = 1;
         gc.fill = GridBagConstraints.BOTH;
         gc.weightx = 1.0;
@@ -99,27 +79,15 @@ public class TagEditor extends JPanel implements IAutoCompletionListListener {
         return pnl;
     }
 
-    /**
-     * builds the GUI
-     *
-     */
     protected void build() {
         setLayout(new BorderLayout());
         add(buildTagEditorPanel(), BorderLayout.CENTER);
     }
 
-    /**
-     * constructor
-     */
     public TagEditor() {
         build();
     }
 
-    /**
-     * replies the tag editor model
-     *
-     * @return the tag editor model
-     */
     public TagEditorModel getTagEditorModel() {
         return tagEditorModel;
     }
@@ -132,23 +100,6 @@ public class TagEditor extends JPanel implements IAutoCompletionListListener {
         TableCellEditor editor = tblTagEditor.getCellEditor();
         if (editor != null) {
             editor.stopCellEditing();
-        }
-    }
-
-    public void setAutoCompletionList(AutoCompletionList autoCompletionList) {
-        tblTagEditor.setAutoCompletionList(autoCompletionList);
-    }
-
-    public void setAutoCompletionManager(AutoCompletionManager autocomplete) {
-        tblTagEditor.setAutoCompletionManager(autocomplete);
-    }
-
-    @Override
-    public void autoCompletionItemSelected(String item) {
-        logger.info("autocompletion item selected ...");
-        TagSpecificationAwareTagCellEditor editor = (TagSpecificationAwareTagCellEditor) tblTagEditor.getCellEditor();
-        if (editor != null) {
-            editor.autoCompletionItemSelected(item);
         }
     }
 
