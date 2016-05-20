@@ -14,15 +14,20 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.border.EmptyBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import static org.openstreetmap.josm.gui.mappaint.mapcss.ExpressionFactory.Functions.tr;
 import org.openstreetmap.josm.plugins.turnlanestagging.bean.BRoad;
+import static org.openstreetmap.josm.plugins.turnlanestagging.preset.ui.TurnSelection.jCBThrough_CHANGED;
+import org.openstreetmap.josm.plugins.turnlanestagging.util.Util;
 
 /**
  *
@@ -39,9 +44,9 @@ public class PresetSelector extends JPanel {
     private PresetsTableModel presetsTableModel = null;
 
     //Panel for create the number of lines.
-    JPanel pnlGraps = null;
-    JComboBox<Integer> comboBox = null;
-    JTextField jTF = new JTextField();
+    private JPanel pnlGraps = null;
+    private JComboBox<Integer> jCBNumLanes = null;
+    private JTextField jTF = new JTextField();
 
     // Data to fill  table
     List<BRoad> listBRoads = null;
@@ -55,6 +60,9 @@ public class PresetSelector extends JPanel {
 
     //Value Road
     BRoad valBRoad = new BRoad();
+
+    // bidirectional Selection
+    private JCheckBox jCBidirectional = null;
 
     //Constructor
     public PresetSelector() {
@@ -103,26 +111,25 @@ public class PresetSelector extends JPanel {
     protected JPanel buildPanelLanes() {
         //fill Combo Box
         pnlBuldLines = new JPanel(new BorderLayout());
-        JPanel jPContenComboBox = new JPanel(new GridLayout(1, 2));
-        comboBox = new JComboBox<>();
+        JPanel jPContenCombBidirec = new JPanel(new GridLayout(1, 3));
+        jCBNumLanes = new JComboBox<>();
         for (int j = 0; j < 20; j++) {
-            comboBox.addItem(j + 1);
+            jCBNumLanes.addItem(j + 1);
         }
-        jPContenComboBox.add(new JLabel("Number of lanes"));
-        jPContenComboBox.add(comboBox);
-        comboBox.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent event) {
-                JComboBox comboBox = (JComboBox) event.getSource();
-                int selected = (int) comboBox.getSelectedItem();
-                if (clickLanesAction) {
-                    lanes(presetsData.defaultData(selected));
-                }
-                clickLanesAction = true;
-            }
-        });
+        jPContenCombBidirec.add(new JLabel(tr("Number of lanes")));
+        jPContenCombBidirec.add(jCBNumLanes);
+        jCBNumLanes.addActionListener(new JCBNumLanesListener());
+        // bidirectional Selection
+        JPanel pnlBidirectional = new JPanel(new GridLayout(1, 2));
+        pnlBidirectional.setBorder(new EmptyBorder(0, 20, 0, 0));
+        jCBidirectional = new JCheckBox();
+        jCBidirectional.addActionListener(new JCBidirectionalListener());
+        pnlBidirectional.add(new JLabel(tr("Bidirectional")));
+        pnlBidirectional.add(jCBidirectional);
 
+        jPContenCombBidirec.add(pnlBidirectional);
         pnlGraps = new JPanel();
-        pnlBuldLines.add(jPContenComboBox, BorderLayout.NORTH);
+        pnlBuldLines.add(jPContenCombBidirec, BorderLayout.NORTH);
         pnlBuldLines.add(pnlGraps, BorderLayout.CENTER);
         pnlBuldLines.add(jTF, BorderLayout.SOUTH);
         return pnlBuldLines;
@@ -169,7 +176,7 @@ public class PresetSelector extends JPanel {
         }
         valBRoad.setListLines(listbl);
         clickLanesAction = false;
-        comboBox.setSelectedIndex(valBRoad.getNumLanes()-1);
+        jCBNumLanes.setSelectedIndex(valBRoad.getNumLanes() - 1);
 
         pnlGraps.removeAll();
         pnlGraps.setLayout(new GridLayout(1, valBRoad.getNumLanes()));
@@ -199,4 +206,26 @@ public class PresetSelector extends JPanel {
             pnlGraps.repaint();
         }
     }
+
+    private class JCBNumLanesListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent event) {
+            JComboBox comboBox = (JComboBox) event.getSource();
+            int selected = (int) comboBox.getSelectedItem();
+            if (clickLanesAction) {
+                lanes(presetsData.defaultData(selected));
+            }
+            clickLanesAction = true;
+        }
+    }
+
+    private class JCBidirectionalListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent event) {
+            Util.notification("Bidirectional does not work yet");
+        }
+    }
+
 }
