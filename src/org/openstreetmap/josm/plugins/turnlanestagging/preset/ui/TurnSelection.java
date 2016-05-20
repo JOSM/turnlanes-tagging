@@ -54,8 +54,7 @@ public class TurnSelection extends JPanel {
         jCBThrough.addActionListener(new ThroughListener());
 
         jPOptions = new JPanel(new GridLayout(1, 3));
-//        jPOptions.setBorder(BorderFactory.createTitledBorder("Lane " + bLine.getPosition(),javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION,new java.awt.Font("Abyssinica SIL", 0, 8), new java.awt.Color(153, 153, 153)));
-        jPOptions.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Lane " + bLine.getPosition(), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, new java.awt.Color(102,102,102)));
+        jPOptions.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Lane " + bLine.getPosition(), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, new java.awt.Color(102, 102, 102)));
 
         jPOptions.add(jCBLeft);
         jPOptions.add(jCBThrough);
@@ -104,19 +103,22 @@ public class TurnSelection extends JPanel {
         if (bLine.getTurn().equals("through")) {
             jCBThrough.setSelected(true);
         }
-        if (bLine.getTurn().equals("through;right")) {
+        if (bLine.getTurn().equals("through;right") || bLine.getTurn().equals("right;through")) {
             jCBRight.setSelected(true);
             jCBThrough.setSelected(true);
         }
-        if (bLine.getTurn().equals("left;through")) {
+        if (bLine.getTurn().equals("left;through") || bLine.getTurn().equals("through;left")) {
             jCBLeft.setSelected(true);
             jCBThrough.setSelected(true);
         }
-        if (bLine.getTurn().equals("left;right")) {
+        if (bLine.getTurn().equals("left;right") || bLine.getTurn().equals("right;left")) {
             jCBLeft.setSelected(true);
             jCBRight.setSelected(true);
         }
-        if (bLine.getTurn().equals("left;through;right")) {
+        if (bLine.getTurn().equals("left;through;right") || bLine.getTurn().equals("left;right;through")
+                || bLine.getTurn().equals("through;right;left") || bLine.getTurn().equals("through;left;right")
+                || bLine.getTurn().equals("right;left;through") || bLine.getTurn().equals("right;through;left")) {
+
             jCBLeft.setSelected(true);
             jCBThrough.setSelected(true);
             jCBRight.setSelected(true);

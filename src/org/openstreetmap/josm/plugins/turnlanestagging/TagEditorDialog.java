@@ -9,6 +9,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.regex.Pattern;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import static javax.swing.Action.ACCELERATOR_KEY;
@@ -33,6 +34,7 @@ import org.openstreetmap.josm.plugins.turnlanestagging.editor.TagEditor;
 import org.openstreetmap.josm.plugins.turnlanestagging.editor.ac.KeyValuePair;
 import org.openstreetmap.josm.plugins.turnlanestagging.preset.ui.PresetsTableModel;
 import org.openstreetmap.josm.plugins.turnlanestagging.preset.ui.PresetSelector;
+import org.openstreetmap.josm.plugins.turnlanestagging.util.Util;
 import static org.openstreetmap.josm.tools.I18n.tr;
 import org.openstreetmap.josm.tools.ImageProvider;
 
@@ -146,6 +148,7 @@ public class TagEditorDialog extends JDialog {
         //Set the selection Roads
         BRoad bRoad = new BRoad("selectRoad", new ArrayList<BLine>());
         Collection<OsmPrimitive> selection = Main.main.getCurrentDataSet().getSelected();
+        int numLanes = 0;
         for (OsmPrimitive element : selection) {
             for (String key : element.keySet()) {
                 if (key.equals("turn:lanes")) {
@@ -153,10 +156,18 @@ public class TagEditorDialog extends JDialog {
                     bRoad.setLanes(value);
                     bRoad.setName("selectRoad");
                 }
+                if (key.equals("lanes") && Util.isInt(element.get(key))) {
+                    numLanes = Integer.valueOf(element.get(key));
+                }
             }
         }
         if (bRoad.getNumLanes() > 0) {
             presetSelector.lanes(bRoad);
+            if (numLanes == 0) {
+                Util.notification(tr("Tag lanes is missing"));
+            } else if (bRoad.getNumLanes() != numLanes) {
+                Util.notification(tr("Number of lanes doesn't match with turn lanes"));
+            }
         } else {
             presetSelector.setDefaultLanes();
         }
