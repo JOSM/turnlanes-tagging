@@ -117,6 +117,10 @@ public class TagEditorDialog extends JDialog {
                     BRoad b = (BRoad) evt.getNewValue();
                     tagEditor.getModel().applyKeyValuePair(new KeyValuePair("turn:lanes", b.getTagturns()));
                     tagEditor.getModel().applyKeyValuePair(new KeyValuePair("lanes", String.valueOf(b.getNumLanes())));
+                    //Add oneway =yes if missing on road
+                    if (addOneway()) {
+                        tagEditor.getModel().applyKeyValuePair(new KeyValuePair("oneway", "yes"));
+                    }
                     tagEditor.repaint();
                 }
 
@@ -137,7 +141,7 @@ public class TagEditorDialog extends JDialog {
         autocomplete = Main.main.getEditLayer().data.getAutoCompletionManager();
         tagEditor.setAutoCompletionManager(autocomplete);
         getModel().ensureOneTag();
-        
+
         //Set the selection Roads
         BRoad bRoad = new BRoad("selectRoad", new ArrayList<BLine>());
         Collection<OsmPrimitive> selection = Main.main.getCurrentDataSet().getSelected();
@@ -204,6 +208,18 @@ public class TagEditorDialog extends JDialog {
             setEnabled(true);
         }
 
+    }
+
+    public boolean addOneway() {
+        Collection<OsmPrimitive> selection = Main.main.getCurrentDataSet().getSelected();
+        for (OsmPrimitive element : selection) {
+            for (String key : element.keySet()) {
+                if (key.equals("oneway")) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
 }
