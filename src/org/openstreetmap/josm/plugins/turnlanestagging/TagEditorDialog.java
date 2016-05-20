@@ -201,8 +201,7 @@ public class TagEditorDialog extends JDialog {
             if (!evt.getNewValue().getClass().equals(Boolean.class)) {
                 return;
             }
-            boolean dirty = (Boolean) evt.getNewValue();
-            setEnabled(dirty);
+            setEnabled(true);
         }
 
     }

@@ -23,7 +23,7 @@ public class TurnSelection extends JPanel {
     public static final String jRBRight_CHANGED = "jRBRight Changed";
     public static final String jCBThrough_CHANGED = "jCBThrough Changed";
     private JCheckBox jCBThrough;
-    private JPanel jPTurnSelection;
+//    private JPanel jPTurnSelection;
     private JPanel jPOptions;
     private JCheckBox jCBLeft;
     private JCheckBox jCBRight;
@@ -36,38 +36,34 @@ public class TurnSelection extends JPanel {
     }
 
     public void init() {
-        jPTurnSelection = new JPanel();
         jPOptions = new JPanel();
         jCBLeft = new JCheckBox();
         jCBRight = new JCheckBox();
         jCBThrough = new JCheckBox();
-        jPTurnSelection.setLayout(new GridLayout(2, 1));
-        jPTurnSelection.setBorder(BorderFactory.createEtchedBorder());
-        jPTurnSelection.add(new JLabel("Lane " + bLine.getPosition()));
 
-//        jCBLeft.setText("L");
         jCBLeft.setIcon(ImageProvider.get("types", "empty.png"));
         jCBLeft.setSelectedIcon(ImageProvider.get("types", "left.png"));
         jCBLeft.addActionListener(new LeftListener());
 
-//        jCBRight.setText("R");
         jCBRight.setIcon(ImageProvider.get("types", "empty.png"));
         jCBRight.setSelectedIcon(ImageProvider.get("types", "right.png"));
         jCBRight.addActionListener(new RightListener());
 
-//        jCBThrough.setText("T");
         jCBThrough.setIcon(ImageProvider.get("types", "empty.png"));
         jCBThrough.setSelectedIcon(ImageProvider.get("types", "through.png"));
         jCBThrough.addActionListener(new ThroughListener());
 
         jPOptions = new JPanel(new GridLayout(1, 3));
+//        jPOptions.setBorder(BorderFactory.createTitledBorder("Lane " + bLine.getPosition(),javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION,new java.awt.Font("Abyssinica SIL", 0, 8), new java.awt.Color(153, 153, 153)));
+        jPOptions.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Lane " + bLine.getPosition(), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, new java.awt.Color(102,102,102)));
+
         jPOptions.add(jCBLeft);
         jPOptions.add(jCBThrough);
         jPOptions.add(jCBRight);
-        jPTurnSelection.add(jPOptions);
+
         setTurn();
         //add on Main Panel
-        add(jPTurnSelection);
+        add(jPOptions);
     }
 
     //left|left;through||…|right

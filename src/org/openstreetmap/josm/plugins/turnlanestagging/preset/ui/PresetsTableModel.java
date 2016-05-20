@@ -9,7 +9,7 @@ public class PresetsTableModel extends AbstractTableModel {
 
     List<BRoad> listBRoad;
     Class[] columns = {Object.class, Object.class};
-    String titles[] = {"Num Lanes", "Turn lanes"};
+    String titles[] = {"Number of lanes", "Turn lanes"};
 
     public PresetsTableModel(List<BRoad> list) {
         super();
