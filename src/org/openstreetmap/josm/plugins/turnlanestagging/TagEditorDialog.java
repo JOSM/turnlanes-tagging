@@ -123,9 +123,9 @@ public class TagEditorDialog extends JDialog {
                     tagEditor.getModel().applyKeyValuePair(new KeyValuePair("turn:lanes", b.getTagturns()));
                     tagEditor.getModel().applyKeyValuePair(new KeyValuePair("lanes", String.valueOf(b.getNumLanes())));
                     //Add oneway =yes if missing on road
-                    if (addOneway()) {
-                        tagEditor.getModel().applyKeyValuePair(new KeyValuePair("oneway", "yes"));
-                    }
+                    //                    if (addOneway()) {
+                    //                        tagEditor.getModel().applyKeyValuePair(new KeyValuePair("oneway", "yes"));
+                    //                    }
                     tagEditor.repaint();
                 }
 
