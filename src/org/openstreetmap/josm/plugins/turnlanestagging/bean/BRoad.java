@@ -66,7 +66,7 @@ public class BRoad implements Cloneable {
     }
 
     public void setLanes(String turnLanes) {
-        String turns[] = turnLanes.split("\\|");
+        String turns[] = turnLanes.split("\\|", -1);
         List<BLine> lst = new ArrayList<>();
         for (int i = 0; i < turns.length; i++) {
             BLine bLine = new BLine((i + 1), turns[i]);
