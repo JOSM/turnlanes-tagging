@@ -27,6 +27,7 @@ import javax.swing.event.DocumentListener;
 import static org.openstreetmap.josm.gui.mappaint.mapcss.ExpressionFactory.Functions.tr;
 import org.openstreetmap.josm.plugins.turnlanestagging.bean.BRoad;
 import static org.openstreetmap.josm.plugins.turnlanestagging.preset.ui.TurnSelection.jCBThrough_CHANGED;
+import org.openstreetmap.josm.plugins.turnlanestagging.preset.ui.bidirectional.TurnSelectionBidirectional;
 import org.openstreetmap.josm.plugins.turnlanestagging.util.Util;
 
 /**
@@ -63,6 +64,7 @@ public class PresetSelector extends JPanel {
 
     // bidirectional Selection
     private JCheckBox jCBidirectional = null;
+    TurnSelectionBidirectional bidirectional = null;
 
     //Constructor
     public PresetSelector() {
@@ -225,7 +227,20 @@ public class PresetSelector extends JPanel {
         @Override
         public void actionPerformed(ActionEvent event) {
             Util.notification("Bidirectional does not work yet");
+
+            lanesBidirectional();
+
         }
+    }
+
+    public void lanesBidirectional() {
+
+        pnlGraps.removeAll();
+        pnlGraps.setLayout(new BorderLayout());
+        bidirectional = new TurnSelectionBidirectional();
+        pnlGraps.add(bidirectional);
+        pnlGraps.revalidate();
+        pnlGraps.repaint();
     }
 
 }
