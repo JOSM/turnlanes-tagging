@@ -1,26 +1,22 @@
 package org.openstreetmap.josm.plugins.turnlanestagging.preset.ui.bidirectional;
 
+import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import javax.swing.JSlider;
 import javax.swing.JSpinner;
-import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.SoftBevelBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import org.openstreetmap.josm.gui.oauth.AbstractAuthorizationUI;
 import org.openstreetmap.josm.plugins.turnlanestagging.bean.BLine;
 import org.openstreetmap.josm.plugins.turnlanestagging.preset.ui.TurnSelection;
-import org.openstreetmap.josm.plugins.turnlanestagging.util.Util;
 
 /**
  *
@@ -29,6 +25,9 @@ import org.openstreetmap.josm.plugins.turnlanestagging.util.Util;
 public class TurnSelectionBidirectional extends JPanel {
 
     JPanel jpanelcontent = null;
+
+    JPanel jpanelcontentSelections = null;
+    JPanel jpanelcontentTurns = null;
 
     //A
     JPanel jpanelcontentA = null;
@@ -69,13 +68,18 @@ public class TurnSelectionBidirectional extends JPanel {
 
     public void init() {
         //add on Main Panel
-        add(buildselect());
+        setLayout(new BorderLayout());
+        add(new JLabel("Bidirectional Road"), BorderLayout.NORTH);
+        add(buildselect(), BorderLayout.CENTER);
+        add(buildturn(), BorderLayout.SOUTH);
     }
 
     public JPanel buildselect() {
-        jpanelcontent = new JPanel(new GridLayout(1, 3, 50, 10));
+
+        jpanelcontent = new JPanel(new GridLayout(2, 1));
+        jpanelcontentSelections = new JPanel(new GridLayout(1, 3, 10, 10));
         // A
-        jpanelcontentA = new JPanel(new GridLayout(2, 1));
+        jpanelcontentA = new JPanel(new GridLayout(1, 1));
         jpnlSelectWardA = new JPanel(new GridLayout(1, 3));
         bgWardA = new ButtonGroup();
         jrbLaneForwardA = new JRadioButton("Forward");
@@ -98,11 +102,9 @@ public class TurnSelectionBidirectional extends JPanel {
 
         jpnlturnsA = new JPanel();
         jpanelcontentA.add(jpnlSelectWardA);
-//        jpanelcontentA.add(jpnContentSpinnerA);
-        jpanelcontentA.add(jpnlturnsA);
 
         //B
-        jpanelcontentB = new JPanel(new GridLayout(2, 1));
+        jpanelcontentB = new JPanel(new GridLayout(1, 1));
         jpnlSelectWardB = new JPanel(new GridLayout(1, 3));
         jchbothwayB = new JCheckBox();
         jchbothwayB.addActionListener(actionListenerB);
@@ -119,11 +121,9 @@ public class TurnSelectionBidirectional extends JPanel {
 
         jpnlturnsB = new JPanel();
         jpanelcontentB.add(jpnlSelectWardB);
-//        jpanelcontentB.add(jpnContentSpinnerB);
-        jpanelcontentB.add(jpnlturnsB);
 
         // C
-        jpanelcontentC = new JPanel(new GridLayout(2, 1));
+        jpanelcontentC = new JPanel(new GridLayout(1, 1));
         jpnlSelectWardC = new JPanel(new GridLayout(1, 3));
         bgWardC = new ButtonGroup();
         jrbLaneForwardC = new JRadioButton("Forward");
@@ -147,15 +147,27 @@ public class TurnSelectionBidirectional extends JPanel {
 
         jpnlturnsC = new JPanel();
         jpanelcontentC.add(jpnlSelectWardC);
-//        jpanelcontentC.add(jpnContentSpinnerC);
-        jpanelcontentC.add(jpnlturnsC);
 
-        //Add ALL Panels
-        jpanelcontent.add(jpanelcontentA);
-        jpanelcontent.add(jpanelcontentB);
-        jpanelcontent.add(jpanelcontentC);
+        //Add ALL Selection panels
+        jpanelcontentSelections.add(jpanelcontentA);
+        jpanelcontentSelections.add(jpanelcontentB);
+        jpanelcontentSelections.add(jpanelcontentC);
+
+        //Add All turns lanes
+        jpanelcontent.add(jpanelcontentSelections);
 
         return jpanelcontent;
+
+    }
+
+    public JPanel buildturn() {
+        jpanelcontentTurns = new JPanel();
+        jpanelcontentTurns.setLayout(new BorderLayout());
+
+        jpanelcontentTurns.add(jpnlturnsA, BorderLayout.WEST);
+//        jpanelcontentTurns.add(jpnlturnsB, BorderLayout.CENTER);
+        jpanelcontentTurns.add(jpnlturnsC, BorderLayout.EAST);
+        return jpanelcontentTurns;
 
     }
 
@@ -163,8 +175,11 @@ public class TurnSelectionBidirectional extends JPanel {
 
         @Override
         public void stateChanged(ChangeEvent e) {
-            Util.print("value changed: " + spinnerA.getValue());
-            lanesA("back", Integer.valueOf(spinnerA.getValue().toString()));
+            if (jrbLaneForwardA.isSelected()) {
+                lanesA("Forward Lanes", Integer.valueOf(spinnerA.getValue().toString()));
+            } else {
+                lanesA("Backward Lanes", Integer.valueOf(spinnerA.getValue().toString()));
+            }
         }
     }
 
@@ -172,7 +187,15 @@ public class TurnSelectionBidirectional extends JPanel {
 
         @Override
         public void stateChanged(ChangeEvent e) {
-            lanesB("back", Integer.valueOf(spinnerB.getValue().toString()));
+
+            if (jchbothwayB.isSelected()) {
+                lanesB("Both Ways Lanes", Integer.valueOf(spinnerB.getValue().toString()));
+            } else {
+                jpnlturnsB.setBorder(null);
+                jpnlturnsB.removeAll();
+                jpnlturnsB.revalidate();
+                jpnlturnsB.repaint();
+            }
         }
     }
 
@@ -180,32 +203,54 @@ public class TurnSelectionBidirectional extends JPanel {
 
         @Override
         public void stateChanged(ChangeEvent e) {
-            lanesC("back", Integer.valueOf(spinnerC.getValue().toString()));
+            if (jrbLaneForwardC.isSelected()) {
+                lanesC("Forward Lanes", Integer.valueOf(spinnerC.getValue().toString()));
+            } else {
+                lanesC("Backward Lanes", Integer.valueOf(spinnerC.getValue().toString()));
+            }
         }
     }
 
     ActionListener actionListenerA = new ActionListener() {
+        @Override
         public void actionPerformed(ActionEvent actionEvent) {
-            AbstractButton aButton = (AbstractButton) actionEvent.getSource();
-            System.out.println("Selected A: " + aButton.getText());
+            if (jrbLaneForwardA.isSelected()) {
+                lanesA("Forward Lanes", Integer.valueOf(spinnerA.getValue().toString()));
+            } else {
+                lanesA("Backward Lanes", Integer.valueOf(spinnerA.getValue().toString()));
+            }
+
         }
     };
 
     ActionListener actionListenerB = new ActionListener() {
+        @Override
         public void actionPerformed(ActionEvent actionEvent) {
-            AbstractButton aButton = (AbstractButton) actionEvent.getSource();
-            System.out.println("Selected A: " + aButton.getText());
+            if (jchbothwayB.isSelected()) {
+                 jpanelcontentTurns.add(jpnlturnsB, BorderLayout.CENTER);
+                lanesB("Both Ways Lanes", Integer.valueOf(spinnerB.getValue().toString()));
+            } else {
+                jpnlturnsB.setBorder(null);
+                jpnlturnsB.removeAll();
+                jpnlturnsB.revalidate();
+                jpnlturnsB.repaint();
+            }
         }
     };
 
     ActionListener actionListenerC = new ActionListener() {
+        @Override
         public void actionPerformed(ActionEvent actionEvent) {
-            AbstractButton aButton = (AbstractButton) actionEvent.getSource();
-            System.out.println("Selected C: " + aButton.getText());
+            if (jrbLaneForwardC.isSelected()) {
+                lanesC("Forward Lanes", Integer.valueOf(spinnerC.getValue().toString()));
+            } else {
+                lanesC("Backward Lanes", Integer.valueOf(spinnerC.getValue().toString()));
+            }
         }
     };
 
     public void lanesA(String type, int numLanes) {
+        jpnlturnsA.setBorder(javax.swing.BorderFactory.createTitledBorder(null, type, javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, new java.awt.Color(102, 102, 102)));
         jpnlturnsA.removeAll();
         jpnlturnsA.setLayout(new GridLayout(1, numLanes));
         for (int i = 0; i < numLanes; i++) {
@@ -218,6 +263,7 @@ public class TurnSelectionBidirectional extends JPanel {
     }
 
     public void lanesB(String type, int numLanes) {
+        jpnlturnsB.setBorder(javax.swing.BorderFactory.createTitledBorder(null, type, javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, new java.awt.Color(102, 102, 102)));
         jpnlturnsB.removeAll();
         jpnlturnsB.setLayout(new GridLayout(1, numLanes));
         for (int i = 0; i < numLanes; i++) {
@@ -230,6 +276,7 @@ public class TurnSelectionBidirectional extends JPanel {
     }
 
     public void lanesC(String type, int numLanes) {
+        jpnlturnsC.setBorder(javax.swing.BorderFactory.createTitledBorder(null, type, javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, new java.awt.Color(102, 102, 102)));
         jpnlturnsC.removeAll();
         jpnlturnsC.setLayout(new GridLayout(1, numLanes));
         for (int i = 0; i < numLanes; i++) {
