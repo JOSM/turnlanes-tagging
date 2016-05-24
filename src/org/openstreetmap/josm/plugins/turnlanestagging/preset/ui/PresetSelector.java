@@ -64,7 +64,9 @@ public class PresetSelector extends JPanel {
 
     // bidirectional Selection
     private JCheckBox jCBidirectional = null;
-    TurnSelectionBidirectional bidirectional = null;
+    TurnSelectionBidirectional bidirectionalA = null;
+    TurnSelectionBidirectional bidirectionalB = null;
+    TurnSelectionBidirectional bidirectionalC = null;
 
     //Constructor
     public PresetSelector() {
@@ -234,13 +236,18 @@ public class PresetSelector extends JPanel {
     }
 
     public void lanesBidirectional() {
-
         pnlGraps.removeAll();
-        pnlGraps.setLayout(new BorderLayout());
-        bidirectional = new TurnSelectionBidirectional();
-        pnlGraps.add(bidirectional);
-        pnlGraps.revalidate();
+        pnlGraps.setLayout(new GridLayout(1, 3));
+        bidirectionalA = new TurnSelectionBidirectional();
+        pnlGraps.add(bidirectionalA);
+//        bidirectionalB = new TurnSelectionBidirectional();
+//        pnlGraps.add(bidirectionalB);
+//        bidirectionalC = new TurnSelectionBidirectional();
+//        pnlGraps.add(bidirectionalC);
+        pnlGraps.revalidate();           
         pnlGraps.repaint();
+        
+      
     }
 
 }
