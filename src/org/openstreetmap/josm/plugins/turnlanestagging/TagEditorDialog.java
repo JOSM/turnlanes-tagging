@@ -33,7 +33,7 @@ import org.openstreetmap.josm.plugins.turnlanestagging.bean.BRoad;
 import org.openstreetmap.josm.plugins.turnlanestagging.editor.TagEditor;
 import org.openstreetmap.josm.plugins.turnlanestagging.editor.ac.KeyValuePair;
 import org.openstreetmap.josm.plugins.turnlanestagging.preset.ui.PresetsTableModel;
-import org.openstreetmap.josm.plugins.turnlanestagging.preset.ui.PresetSelector;
+import org.openstreetmap.josm.plugins.turnlanestagging.preset.ui.BuildTurnLanes;
 import org.openstreetmap.josm.plugins.turnlanestagging.util.Util;
 import static org.openstreetmap.josm.tools.I18n.tr;
 import org.openstreetmap.josm.tools.ImageProvider;
@@ -58,8 +58,8 @@ public class TagEditorDialog extends JDialog {
     static public final Dimension PREFERRED_SIZE = new Dimension(800, 500);
 
     private TagEditor tagEditor = null;
-    private AutoCompletionManager autocomplete = null;
-    private PresetSelector presetSelector = null;
+//    private AutoCompletionManager autocomplete = null;
+    private BuildTurnLanes buildTurnLanes = null;
     private OKAction okAction = null;
     private CancelAction cancelAction = null;
 
@@ -114,30 +114,31 @@ public class TagEditorDialog extends JDialog {
 
     // Build preset grid
     protected JPanel buildPresetGridPanel() {
-        presetSelector = new PresetSelector();
-        presetSelector.addPropertyChangeListener(new PropertyChangeListener() {
+        buildTurnLanes = new BuildTurnLanes();
+//        buildTurnLanes.getTurnSelectionUnidirectional().addPropertyChangeListener(okAction);
+        buildTurnLanes.addPropertyChangeListener(new PropertyChangeListener() {
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
-                if (evt.getPropertyName().equals(presetSelector.jTF_CHANGED)) {
-                    BRoad b = (BRoad) evt.getNewValue();
-                    tagEditor.getModel().applyKeyValuePair(new KeyValuePair("turn:lanes", b.getTagturns()));
-                    tagEditor.getModel().applyKeyValuePair(new KeyValuePair("lanes", String.valueOf(b.getNumLanes())));
-                    //Add oneway =yes if missing on road
-                    //                    if (addOneway()) {
-                    //                        tagEditor.getModel().applyKeyValuePair(new KeyValuePair("oneway", "yes"));
-                    //                    }
-                    tagEditor.repaint();
-                }
+//                if (evt.getPropertyName().equals(buildTurnLanes.jTF_CHANGED)) {
+//                    BRoad b = (BRoad) evt.getNewValue();
+//                    tagEditor.getModel().applyKeyValuePair(new KeyValuePair("turn:lanes", b.getTagturns()));
+//                    tagEditor.getModel().applyKeyValuePair(new KeyValuePair("lanes", String.valueOf(b.getNumLanes())));
+//                    //Add oneway =yes if missing on road
+//                    //                    if (addOneway()) {
+//                    //                        tagEditor.getModel().applyKeyValuePair(new KeyValuePair("oneway", "yes"));
+//                    //                    }
+//                    tagEditor.repaint();
+//                }
 
             }
         });
 
-        return presetSelector;
+        return buildTurnLanes;
 
     }
 
     public PresetsTableModel getPressetTableModel() {
-        return presetSelector.getModel();
+        return buildTurnLanes.getModel();
     }
 
     public void startEditSession() {
@@ -162,14 +163,14 @@ public class TagEditorDialog extends JDialog {
             }
         }
         if (bRoad.getNumLanes() > 0) {
-            presetSelector.lanes(bRoad);
+            buildTurnLanes.lanes(bRoad);
             if (numLanes == 0) {
                 Util.notification(tr("Tag lanes is missing"));
             } else if (bRoad.getNumLanes() != numLanes) {
                 Util.notification(tr("Number of lanes doesn't match with turn lanes"));
             }
         } else {
-            presetSelector.setDefaultLanes();
+            buildTurnLanes.setDefaultLanes();
         }
     }
 
@@ -233,5 +234,7 @@ public class TagEditorDialog extends JDialog {
         }
         return true;
     }
+    
+  
 
 }

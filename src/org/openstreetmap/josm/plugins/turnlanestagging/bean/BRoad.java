@@ -1,5 +1,7 @@
 package org.openstreetmap.josm.plugins.turnlanestagging.bean;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -10,7 +12,7 @@ import org.openstreetmap.josm.plugins.turnlanestagging.util.Util;
  *
  * @author ruben
  */
-public class BRoad implements Cloneable {
+public class BRoad {
 
     String name;
     List<BLine> listLines;
@@ -36,7 +38,8 @@ public class BRoad implements Cloneable {
     }
 
     public void setListLines(List<BLine> newLines) {
-        Map<Integer, BLine> map = new TreeMap<Integer, BLine>();
+
+        Map<Integer, BLine> map = new TreeMap<>();
         for (int i = 0; i < newLines.size(); i++) {
             map.put(newLines.get(i).getPosition(), newLines.get(i));
         }
@@ -58,11 +61,6 @@ public class BRoad implements Cloneable {
 
     public int getNumLanes() {
         return listLines.size();
-    }
-
-    @Override
-    protected Object clone() throws CloneNotSupportedException {
-        return super.clone();
     }
 
     public void setLanes(String turnLanes) {

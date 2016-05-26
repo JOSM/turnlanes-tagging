@@ -24,7 +24,6 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import org.openstreetmap.josm.plugins.turnlanestagging.bean.BLine;
 import org.openstreetmap.josm.plugins.turnlanestagging.bean.BRoad;
-import static org.openstreetmap.josm.plugins.turnlanestagging.preset.ui.PresetSelector.jTF_CHANGED;
 import org.openstreetmap.josm.plugins.turnlanestagging.preset.ui.TurnSelection;
 
 /**
@@ -85,10 +84,9 @@ public class TurnSelectionBidirectional extends JPanel {
     public void init() {
         //add on Main Panel
         setLayout(new BorderLayout());
-        add(new JLabel("Bidirectional Road"), BorderLayout.NORTH);
-        add(buildselect(), BorderLayout.CENTER);
-        add(buildturn(), BorderLayout.SOUTH);
-        add(jTextField, BorderLayout.NORTH);
+        add(buildselect(), BorderLayout.NORTH);
+        add(buildturn(), BorderLayout.CENTER);
+        add(jTextField, BorderLayout.SOUTH);
 
         jTextField.getDocument().addDocumentListener(new SetTagTurnListenerBidirectional());
     }
