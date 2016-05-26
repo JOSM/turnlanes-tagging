@@ -31,9 +31,6 @@ import org.openstreetmap.josm.plugins.turnlanestagging.editor.TagEditor;
 import org.openstreetmap.josm.plugins.turnlanestagging.editor.ac.KeyValuePair;
 import org.openstreetmap.josm.plugins.turnlanestagging.preset.ui.PresetsTableModel;
 import org.openstreetmap.josm.plugins.turnlanestagging.preset.ui.BuildTurnLanes;
-import static org.openstreetmap.josm.plugins.turnlanestagging.preset.ui.BuildTurnLanes.bRoad;
-import static org.openstreetmap.josm.plugins.turnlanestagging.preset.ui.BuildTurnLanes.jtfChangeRoad;
-import org.openstreetmap.josm.plugins.turnlanestagging.preset.ui.unidirectional.TurnSelectionUnidirectional;
 import org.openstreetmap.josm.plugins.turnlanestagging.util.Util;
 import static org.openstreetmap.josm.tools.I18n.tr;
 import org.openstreetmap.josm.tools.ImageProvider;
@@ -158,14 +155,14 @@ public class TagEditorDialog extends JDialog {
             }
         }
         if (bRoad.getNumLanes() > 0) {
-            buildTurnLanes.lanes(bRoad);
+            buildTurnLanes.SetLanesByRoadUnidirectional(bRoad);
             if (numLanes == 0) {
                 Util.notification(tr("Tag lanes is missing"));
             } else if (bRoad.getNumLanes() != numLanes) {
                 Util.notification(tr("Number of lanes doesn't match with turn lanes"));
             }
         } else {
-            buildTurnLanes.setDefaultLanes();
+            buildTurnLanes.startDefaultUnidirectional();
         }
     }
 

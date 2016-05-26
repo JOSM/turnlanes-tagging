@@ -17,6 +17,7 @@ import javax.swing.event.DocumentListener;
 import static org.openstreetmap.josm.gui.mappaint.mapcss.ExpressionFactory.Functions.tr;
 import org.openstreetmap.josm.plugins.turnlanestagging.bean.BLine;
 import org.openstreetmap.josm.plugins.turnlanestagging.bean.BRoad;
+import org.openstreetmap.josm.plugins.turnlanestagging.preset.ui.PresetsData;
 import org.openstreetmap.josm.plugins.turnlanestagging.preset.ui.TurnSelection;
 
 /**
@@ -41,6 +42,9 @@ public class TurnSelectionUnidirectional extends JPanel {
 
     //Road    
     BRoad valBRoad = new BRoad();
+
+    //Preset Data
+    PresetsData presetsData = new PresetsData();
 
     //Constructor
     public TurnSelectionUnidirectional() {
@@ -80,21 +84,35 @@ public class TurnSelectionUnidirectional extends JPanel {
         public void actionPerformed(ActionEvent event) {
             int selected = (int) jcbNumLanes.getSelectedItem();
             if (clickLanesAction) {
-                lanes(selected);
+
+                lanes(presetsData.defaultData(selected));
             }
             clickLanesAction = true;
         }
     }
 
-    public void lanes(int numLanes) {
+    public void lanes(BRoad road) {
+
         jpanelcontentTurns.removeAll();
-        jpanelcontentTurns.setLayout(new GridLayout(1, numLanes));
-        
-        
-        final List<BLine> listBLines = new ArrayList<>();
-        
+
+        //Clone objtects
+        valBRoad.setName(new String(road.getName()));
+        List<BLine> listbl = new ArrayList<>();
+        for (int k = 0; k < road.getNumLanes(); k++) {
+            BLine bl = new BLine(new Integer(road.getListLines().get(k).getPosition()), new String(road.getListLines().get(k).getTurn()));
+            listbl.add(bl);
+        }
+        valBRoad.setListLines(listbl);
+
+        jpanelcontentTurns.setLayout(new GridLayout(1, valBRoad.getNumLanes()));
+        int numLanes = valBRoad.getNumLanes();
+
+        clickLanesAction = false;
+        jcbNumLanes.setSelectedIndex(numLanes - 1);
+
+        final List<BLine> listBLines = valBRoad.getListLines();
         for (int i = 0; i < numLanes; i++) {
-            BLine bLine = new BLine((i + 1), "");
+            BLine bLine = listBLines.get(i);
             final TurnSelection turnSelection = new TurnSelection(bLine);
             turnSelection.addPropertyChangeListener(new PropertyChangeListener() {
                 @Override
@@ -119,8 +137,14 @@ public class TurnSelectionUnidirectional extends JPanel {
             });
             jpanelcontentTurns.add(turnSelection);
         }
+        jtfChangeR.setText(valBRoad.getTagturns());
+
         jpanelcontentTurns.revalidate();
         jpanelcontentTurns.repaint();
+    }
+
+    public void setDefault(BRoad bRoad) {
+        lanes(bRoad);
     }
 
     public BRoad getValBRoad() {

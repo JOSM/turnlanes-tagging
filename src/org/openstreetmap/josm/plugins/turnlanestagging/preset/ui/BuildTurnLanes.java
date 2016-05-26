@@ -74,6 +74,8 @@ public class BuildTurnLanes extends JPanel {
 
     //Constructor
     public BuildTurnLanes() {
+        turnSelectionUnidirectional = new TurnSelectionUnidirectional();
+        turnSelectionUnidirectional.addPropertyChangeListener(new LinesChangeListener());
         build();
     }
 
@@ -107,7 +109,8 @@ public class BuildTurnLanes extends JPanel {
         public void mouseClicked(MouseEvent e) {
             if (e.getClickCount() == 1) {
                 int rowNum = presetsTable.rowAtPoint(e.getPoint());
-                lanes(listBRoads.get(rowNum));
+
+                turnSelectionUnidirectional.lanes(listBRoads.get(rowNum));
             }
         }
     }
@@ -136,14 +139,7 @@ public class BuildTurnLanes extends JPanel {
     ActionListener actionListenerUnidirectional = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent actionEvent) {
-            pnlContentDirectional.removeAll();
-            pnlContentDirectional.setLayout(new GridLayout(1, 1));
-            turnSelectionUnidirectional = new TurnSelectionUnidirectional();
-            turnSelectionUnidirectional.addPropertyChangeListener(new LinesChangeListener());
-
-            pnlContentDirectional.add(turnSelectionUnidirectional);
-            pnlContentDirectional.revalidate();
-            pnlContentDirectional.repaint();
+            startDefaultUnidirectional();
         }
     };
 
@@ -178,13 +174,10 @@ public class BuildTurnLanes extends JPanel {
         //road change event
         jtfChangeRoad.getDocument().addDocumentListener(new SetRoadChangeListener());
 
-    }
+        //Start Default 
+        jrbUnidirectional.setSelected(true);
+        startDefaultUnidirectional();
 
-    public void setDefaultLanes() {
-        lanes(listBRoads.get(0));
-    }
-
-    public void lanes(BRoad road) {
     }
 
     public static class LinesChangeListener implements PropertyChangeListener {
@@ -216,4 +209,19 @@ public class BuildTurnLanes extends JPanel {
 
     }
 
+    //Start
+    public void startDefaultUnidirectional() {
+        pnlContentDirectional.removeAll();
+        pnlContentDirectional.setLayout(new GridLayout(1, 1));
+        //add default road when clicked unidirectional
+        turnSelectionUnidirectional.setDefault(listBRoads.get(0));
+        pnlContentDirectional.add(turnSelectionUnidirectional);
+        pnlContentDirectional.revalidate();
+        pnlContentDirectional.repaint();
+    }
+
+    public void SetLanesByRoadUnidirectional(BRoad road) {
+        turnSelectionUnidirectional.setDefault(road);
+
+    }
 }
