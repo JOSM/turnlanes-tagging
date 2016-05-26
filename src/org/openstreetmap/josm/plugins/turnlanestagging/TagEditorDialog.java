@@ -9,9 +9,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.regex.Pattern;
 import javax.swing.AbstractAction;
-import javax.swing.Action;
 import static javax.swing.Action.ACCELERATOR_KEY;
 import static javax.swing.Action.NAME;
 import static javax.swing.Action.SHORT_DESCRIPTION;
@@ -27,13 +25,15 @@ import org.openstreetmap.josm.Main;
 import org.openstreetmap.josm.data.osm.DataSet;
 import org.openstreetmap.josm.data.osm.OsmPrimitive;
 import org.openstreetmap.josm.gui.tagging.TagEditorModel;
-import org.openstreetmap.josm.gui.tagging.ac.AutoCompletionManager;
 import org.openstreetmap.josm.plugins.turnlanestagging.bean.BLine;
 import org.openstreetmap.josm.plugins.turnlanestagging.bean.BRoad;
 import org.openstreetmap.josm.plugins.turnlanestagging.editor.TagEditor;
 import org.openstreetmap.josm.plugins.turnlanestagging.editor.ac.KeyValuePair;
 import org.openstreetmap.josm.plugins.turnlanestagging.preset.ui.PresetsTableModel;
 import org.openstreetmap.josm.plugins.turnlanestagging.preset.ui.BuildTurnLanes;
+import static org.openstreetmap.josm.plugins.turnlanestagging.preset.ui.BuildTurnLanes.bRoad;
+import static org.openstreetmap.josm.plugins.turnlanestagging.preset.ui.BuildTurnLanes.jtfChangeRoad;
+import org.openstreetmap.josm.plugins.turnlanestagging.preset.ui.unidirectional.TurnSelectionUnidirectional;
 import org.openstreetmap.josm.plugins.turnlanestagging.util.Util;
 import static org.openstreetmap.josm.tools.I18n.tr;
 import org.openstreetmap.josm.tools.ImageProvider;
@@ -58,7 +58,6 @@ public class TagEditorDialog extends JDialog {
     static public final Dimension PREFERRED_SIZE = new Dimension(800, 500);
 
     private TagEditor tagEditor = null;
-//    private AutoCompletionManager autocomplete = null;
     private BuildTurnLanes buildTurnLanes = null;
     private OKAction okAction = null;
     private CancelAction cancelAction = null;
@@ -115,26 +114,22 @@ public class TagEditorDialog extends JDialog {
     // Build preset grid
     protected JPanel buildPresetGridPanel() {
         buildTurnLanes = new BuildTurnLanes();
-//        buildTurnLanes.getTurnSelectionUnidirectional().addPropertyChangeListener(okAction);
         buildTurnLanes.addPropertyChangeListener(new PropertyChangeListener() {
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
-//                if (evt.getPropertyName().equals(buildTurnLanes.jTF_CHANGED)) {
-//                    BRoad b = (BRoad) evt.getNewValue();
-//                    tagEditor.getModel().applyKeyValuePair(new KeyValuePair("turn:lanes", b.getTagturns()));
-//                    tagEditor.getModel().applyKeyValuePair(new KeyValuePair("lanes", String.valueOf(b.getNumLanes())));
-//                    //Add oneway =yes if missing on road
-//                    //                    if (addOneway()) {
-//                    //                        tagEditor.getModel().applyKeyValuePair(new KeyValuePair("oneway", "yes"));
-//                    //                    }
-//                    tagEditor.repaint();
-//                }
-
+                if (evt.getPropertyName().equals(BuildTurnLanes.ROADCHANGED)) {
+                    BRoad b = (BRoad) evt.getNewValue();
+                    tagEditor.getModel().applyKeyValuePair(new KeyValuePair("turn:lanes", b.getTagturns()));
+                    tagEditor.getModel().applyKeyValuePair(new KeyValuePair("lanes", String.valueOf(b.getNumLanes())));
+                    //Add oneway =yes if missing on road
+                    //                    if (addOneway()) {
+                    //                        tagEditor.getModel().applyKeyValuePair(new KeyValuePair("oneway", "yes"));
+                    //                    }
+                    tagEditor.repaint();
+                }
             }
         });
-
         return buildTurnLanes;
-
     }
 
     public PresetsTableModel getPressetTableModel() {
@@ -234,7 +229,5 @@ public class TagEditorDialog extends JDialog {
         }
         return true;
     }
-    
-  
 
 }

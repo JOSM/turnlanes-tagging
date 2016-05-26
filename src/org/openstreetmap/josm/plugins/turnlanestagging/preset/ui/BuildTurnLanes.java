@@ -22,10 +22,13 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import org.openstreetmap.josm.plugins.turnlanestagging.bean.BLine;
 import org.openstreetmap.josm.plugins.turnlanestagging.bean.BRoad;
 import org.openstreetmap.josm.plugins.turnlanestagging.preset.ui.bidirectional.TurnSelectionBidirectional;
 import org.openstreetmap.josm.plugins.turnlanestagging.preset.ui.unidirectional.TurnSelectionUnidirectional;
+import static org.openstreetmap.josm.plugins.turnlanestagging.preset.ui.unidirectional.TurnSelectionUnidirectional.LINESCHANGED;
 import org.openstreetmap.josm.plugins.turnlanestagging.util.Util;
 
 /**
@@ -52,20 +55,22 @@ public class BuildTurnLanes extends JPanel {
     private JPanel pnlContentDirectional = null;
 
     // Jtext for add the changes
-    public static JTextField jTextField = new JTextField();
+    public static JTextField jtfChangeRoad = new JTextField();
 
     // Data to fill  the  table
     List<BRoad> listBRoads = null;
     PresetsData presetsData = new PresetsData();
 
-    //Value Road
-//    BRoad valBRoad = new BRoad();
-    //Event
+    //Road
+    public static BRoad bRoad = new BRoad();
     // Bidirectional
     TurnSelectionBidirectional turnSelectionBidirectional = null;
 
     //Unidirection
     public TurnSelectionUnidirectional turnSelectionUnidirectional = null;
+
+    // Event Changed
+    public static final String ROADCHANGED = "RoadChanged";
 
     //Constructor
     public BuildTurnLanes() {
@@ -134,7 +139,7 @@ public class BuildTurnLanes extends JPanel {
             pnlContentDirectional.removeAll();
             pnlContentDirectional.setLayout(new GridLayout(1, 1));
             turnSelectionUnidirectional = new TurnSelectionUnidirectional();
-            turnSelectionUnidirectional.addPropertyChangeListener(new RoadChangeListener());
+            turnSelectionUnidirectional.addPropertyChangeListener(new LinesChangeListener());
 
             pnlContentDirectional.add(turnSelectionUnidirectional);
             pnlContentDirectional.revalidate();
@@ -166,11 +171,13 @@ public class BuildTurnLanes extends JPanel {
         pnlBuildTurnLanes.add(buildDirectionalOptions(), BorderLayout.NORTH);
         pnlContentDirectional = new JPanel();
         pnlBuildTurnLanes.add(pnlContentDirectional, BorderLayout.CENTER);
-        pnlBuildTurnLanes.add(jTextField, BorderLayout.SOUTH);
+        pnlBuildTurnLanes.add(jtfChangeRoad, BorderLayout.SOUTH);
 
         add(pnlBuildTurnLanes, BorderLayout.SOUTH);
 
         //road change event
+        jtfChangeRoad.getDocument().addDocumentListener(new SetRoadChangeListener());
+
     }
 
     public void setDefaultLanes() {
@@ -180,14 +187,31 @@ public class BuildTurnLanes extends JPanel {
     public void lanes(BRoad road) {
     }
 
-    public static class RoadChangeListener implements PropertyChangeListener {
+    public static class LinesChangeListener implements PropertyChangeListener {
 
         @Override
         public void propertyChange(PropertyChangeEvent evt) {
-            if (evt.getPropertyName().equals(TurnSelectionUnidirectional.ROADCHANGED)) {
-                BRoad bRoad = (BRoad) evt.getNewValue();
-                jTextField.setText(bRoad.getTagturns());
+            if (evt.getPropertyName().equals(TurnSelectionUnidirectional.LINESCHANGED)) {
+                bRoad = (BRoad) evt.getNewValue();
+                jtfChangeRoad.setText(bRoad.getTagturns());
             }
+        }
+
+    }
+
+    private class SetRoadChangeListener implements DocumentListener {
+
+        @Override
+        public void insertUpdate(DocumentEvent e) {
+            firePropertyChange(ROADCHANGED, null, bRoad);
+        }
+
+        @Override
+        public void removeUpdate(DocumentEvent e) {
+        }
+
+        @Override
+        public void changedUpdate(DocumentEvent e) {
         }
 
     }

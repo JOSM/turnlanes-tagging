@@ -6,22 +6,18 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.border.EmptyBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import static org.openstreetmap.josm.gui.mappaint.mapcss.ExpressionFactory.Functions.tr;
 import org.openstreetmap.josm.plugins.turnlanestagging.bean.BLine;
 import org.openstreetmap.josm.plugins.turnlanestagging.bean.BRoad;
 import org.openstreetmap.josm.plugins.turnlanestagging.preset.ui.TurnSelection;
-import org.openstreetmap.josm.plugins.turnlanestagging.preset.ui.bidirectional.TurnSelectionBidirectional;
 
 /**
  *
@@ -35,10 +31,10 @@ public class TurnSelectionUnidirectional extends JPanel {
     //Panel for create the number of lines.
     JPanel jpanelcontentSelections = null;
     private JComboBox<Integer> jcbNumLanes = null;
-    private final JTextField jTextField = new JTextField();
+    private final JTextField jtfChangeR = new JTextField();
 
     // Event Changed
-    public static final String ROADCHANGED = "RoadChanged";
+    public static final String LINESCHANGED = "LinesChanged";
 
     //To avoid automatic changes
     boolean clickLanesAction = true;
@@ -58,10 +54,10 @@ public class TurnSelectionUnidirectional extends JPanel {
         add(buildselect(), BorderLayout.NORTH);
         jpanelcontentTurns = new JPanel();
         add(jpanelcontentTurns, BorderLayout.CENTER);
-        add(jTextField, BorderLayout.SOUTH);
+        add(jtfChangeR, BorderLayout.SOUTH);
 
         //Event Road Listenr
-        jTextField.getDocument().addDocumentListener(new SetTagTurnListener());
+        jtfChangeR.getDocument().addDocumentListener(new SetLinesChangeListener());
     }
 
     //Build pannel for   lanes
@@ -93,7 +89,10 @@ public class TurnSelectionUnidirectional extends JPanel {
     public void lanes(int numLanes) {
         jpanelcontentTurns.removeAll();
         jpanelcontentTurns.setLayout(new GridLayout(1, numLanes));
+        
+        
         final List<BLine> listBLines = new ArrayList<>();
+        
         for (int i = 0; i < numLanes; i++) {
             BLine bLine = new BLine((i + 1), "");
             final TurnSelection turnSelection = new TurnSelection(bLine);
@@ -103,17 +102,17 @@ public class TurnSelectionUnidirectional extends JPanel {
                     if (evt.getPropertyName().equals(turnSelection.jRBLeft_CHANGED)) {
                         listBLines.add((BLine) evt.getNewValue());
                         valBRoad.setListLines(listBLines);
-                        jTextField.setText(valBRoad.getTagturns());
+                        jtfChangeR.setText(valBRoad.getTagturns());
 
                     } else if (evt.getPropertyName().equals(turnSelection.jRBRight_CHANGED)) {
                         listBLines.add((BLine) evt.getNewValue());
                         valBRoad.setListLines(listBLines);
-                        jTextField.setText(valBRoad.getTagturns());
+                        jtfChangeR.setText(valBRoad.getTagturns());
 
                     } else if (evt.getPropertyName().equals(turnSelection.jCBThrough_CHANGED)) {
                         listBLines.add((BLine) evt.getNewValue());
                         valBRoad.setListLines(listBLines);
-                        jTextField.setText(valBRoad.getTagturns());
+                        jtfChangeR.setText(valBRoad.getTagturns());
 
                     }
                 }
@@ -128,11 +127,11 @@ public class TurnSelectionUnidirectional extends JPanel {
         return valBRoad;
     }
 
-    private class SetTagTurnListener implements DocumentListener {
+    private class SetLinesChangeListener implements DocumentListener {
 
         @Override
         public void insertUpdate(DocumentEvent e) {
-            firePropertyChange(ROADCHANGED, null, getValBRoad());
+            firePropertyChange(LINESCHANGED, null, getValBRoad());
         }
 
         @Override
