@@ -182,7 +182,7 @@ public class TurnSelectionBidirectional extends JPanel {
         jpnlturnsC = new JPanel();
         jpanelcontentC.add(jpnlSelectWardC);
 
-        //Add ALL Selection panels
+        //Add all Selection panels
         jpanelcontentSelections.add(jpanelcontentA);
         jpanelcontentSelections.add(jpanelcontentB);
         jpanelcontentSelections.add(jpanelcontentC);
@@ -324,11 +324,6 @@ public class TurnSelectionBidirectional extends JPanel {
         jpnlturnsB.setBorder(javax.swing.BorderFactory.createTitledBorder(null, type, javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, new java.awt.Color(102, 102, 102)));
         jpnlturnsB.removeAll();
         jpnlturnsB.setLayout(new GridLayout(1, numLanes));
-//        for (int i = 0; i < numLanes; i++) {
-//            BLine bLine = new BLine((i + 1), "");
-//            TurnSelection turnSelection = new TurnSelection(bLine);
-//            jpnlturnsB.add(turnSelection);
-//        }
 
         final List<BLine> listBLines = new ArrayList<>();
         for (int i = 0; i < numLanes; i++) {

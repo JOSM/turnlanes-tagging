@@ -23,10 +23,9 @@ public class PresetsData {
         listBLines.add(new BLine(2, "through"));
         listBLines.add(new BLine(3, "through"));
         BRoad bRoad = new BRoad();
-        bRoad.setName("Most Common turn Lane");
+        bRoad.setName("Unidirectional");
         bRoad.setListLines(listBLines);
         listBRoads.add(bRoad);
-
 
         //Road 2
         List<BLine> listBLines2 = new ArrayList<>();
@@ -34,7 +33,7 @@ public class PresetsData {
         listBLines2.add(new BLine(2, "right"));
         listBLines2.add(new BLine(3, "through"));
         BRoad bRoad2 = new BRoad();
-        bRoad2.setName("Tunn Lane 2");
+        bRoad2.setName("Unidirectional");
         bRoad2.setListLines(listBLines2);
         listBRoads.add(bRoad2);
 

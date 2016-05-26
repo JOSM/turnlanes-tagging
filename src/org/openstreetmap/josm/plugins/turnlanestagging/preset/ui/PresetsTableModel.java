@@ -8,8 +8,8 @@ import org.openstreetmap.josm.plugins.turnlanestagging.bean.BRoad;
 public class PresetsTableModel extends AbstractTableModel {
 
     List<BRoad> listBRoad;
-    Class[] columns = {Object.class, Object.class};
-    String titles[] = {"Number of lanes", "Turn lanes"};
+    Class[] columns = {Object.class, Object.class, Object.class};
+    String titles[] = {"Directional", "Number of lanes", "Turn lanes"};
 
     public PresetsTableModel(List<BRoad> list) {
         super();
@@ -30,8 +30,10 @@ public class PresetsTableModel extends AbstractTableModel {
     public Object getValueAt(int rowIndex, int columnIndex) {
         switch (columnIndex) {
             case 0:
-                return String.valueOf(listBRoad.get(rowIndex).getNumLanes());
+                return listBRoad.get(rowIndex).getName();
             case 1:
+                return String.valueOf(listBRoad.get(rowIndex).getNumLanes());
+            case 2:
                 return listBRoad.get(rowIndex).getTagturns();
             default:
                 return null;

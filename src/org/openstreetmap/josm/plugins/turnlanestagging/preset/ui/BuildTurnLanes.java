@@ -3,7 +3,6 @@ package org.openstreetmap.josm.plugins.turnlanestagging.preset.ui;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.awt.Panel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
@@ -12,7 +11,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.ButtonGroup;
@@ -22,14 +20,13 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.SoftBevelBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import org.openstreetmap.josm.plugins.turnlanestagging.bean.BLine;
 import org.openstreetmap.josm.plugins.turnlanestagging.bean.BRoad;
 import org.openstreetmap.josm.plugins.turnlanestagging.preset.ui.bidirectional.TurnSelectionBidirectional;
 import org.openstreetmap.josm.plugins.turnlanestagging.preset.ui.unidirectional.TurnSelectionUnidirectional;
-import static org.openstreetmap.josm.plugins.turnlanestagging.preset.ui.unidirectional.TurnSelectionUnidirectional.LINESCHANGED;
-import org.openstreetmap.josm.plugins.turnlanestagging.util.Util;
 
 /**
  *
@@ -123,6 +120,8 @@ public class BuildTurnLanes extends JPanel {
     protected JPanel buildDirectionalOptions() {
         //Directional options
         pnlDirectionalOptions = new JPanel(new GridLayout(1, 2));
+        pnlDirectionalOptions.setBorder(new SoftBevelBorder(BevelBorder.RAISED));
+        
         btdirectional = new ButtonGroup();
         jrbUnidirectional = new JRadioButton("Unidirectional");
         jrbBidirectional = new JRadioButton("Bidirectional");
