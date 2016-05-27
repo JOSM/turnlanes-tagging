@@ -32,9 +32,19 @@ public class PresetsTableModel extends AbstractTableModel {
             case 0:
                 return listBRoad.get(rowIndex).getName();
             case 1:
-                return String.valueOf(listBRoad.get(rowIndex).getNumLanes());
+                if (listBRoad.get(rowIndex).getName().equals("Unidirectional")) {
+                    return String.valueOf(listBRoad.get(rowIndex).getNumLanes());
+                } else {
+                    return String.valueOf(listBRoad.get(rowIndex).getNumLanesBidirectional());
+                }
             case 2:
-                return listBRoad.get(rowIndex).getTagturns();
+                if (listBRoad.get(rowIndex).getName().equals("Unidirectional")) {
+                    return listBRoad.get(rowIndex).getTagturns();
+                } else {
+
+                    return listBRoad.get(rowIndex).getLanesA().getTagturns();
+                }
+
             default:
                 return null;
         }

@@ -15,12 +15,15 @@ import org.openstreetmap.josm.plugins.turnlanestagging.util.Util;
 public class BRoad {
 
     String name;
-    List<BLine> listLines;
+    List<BLane> listLines;
+    BLanes lanesA;
+    BLanes lanesB;
+    BLanes lanesC;
 
     public BRoad() {
     }
 
-    public BRoad(String name, List<BLine> listLines) {
+    public BRoad(String name, List<BLane> listLines) {
         this.name = name;
         this.listLines = listLines;
     }
@@ -33,17 +36,17 @@ public class BRoad {
         this.name = name;
     }
 
-    public List<BLine> getListLines() {
+    public List<BLane> getListLines() {
         return listLines;
     }
 
-    public void setListLines(List<BLine> newLines) {
+    public void setListLines(List<BLane> newLines) {
 
-        Map<Integer, BLine> map = new TreeMap<>();
+        Map<Integer, BLane> map = new TreeMap<>();
         for (int i = 0; i < newLines.size(); i++) {
             map.put(newLines.get(i).getPosition(), newLines.get(i));
         }
-        List<BLine> listLs = new ArrayList<>(map.values());
+        List<BLane> listLs = new ArrayList<>(map.values());
         this.listLines = listLs;
     }
 
@@ -65,11 +68,40 @@ public class BRoad {
 
     public void setLanes(String turnLanes) {
         String turns[] = turnLanes.split("\\|", -1);
-        List<BLine> lst = new ArrayList<>();
+        List<BLane> lst = new ArrayList<>();
         for (int i = 0; i < turns.length; i++) {
-            BLine bLine = new BLine((i + 1), turns[i]);
+            BLane bLine = new BLane((i + 1), turns[i]);
             lst.add(bLine);
         }
         this.listLines = lst;
     }
+
+    public int getNumLanesBidirectional() {
+        return (lanesA.getLanes().size() + lanesB.getLanes().size() + lanesC.getLanes().size());
+    }
+
+    public BLanes getLanesA() {
+        return lanesA;
+    }
+
+    public void setLanesA(BLanes lanesA) {
+        this.lanesA = lanesA;
+    }
+
+    public BLanes getLanesB() {
+        return lanesB;
+    }
+
+    public void setLanesB(BLanes lanesB) {
+        this.lanesB = lanesB;
+    }
+
+    public BLanes getLanesC() {
+        return lanesC;
+    }
+
+    public void setLanesC(BLanes lanesC) {
+        this.lanesC = lanesC;
+    }
+
 }

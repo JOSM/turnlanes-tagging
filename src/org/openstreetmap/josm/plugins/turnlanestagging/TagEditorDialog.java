@@ -25,7 +25,7 @@ import org.openstreetmap.josm.Main;
 import org.openstreetmap.josm.data.osm.DataSet;
 import org.openstreetmap.josm.data.osm.OsmPrimitive;
 import org.openstreetmap.josm.gui.tagging.TagEditorModel;
-import org.openstreetmap.josm.plugins.turnlanestagging.bean.BLine;
+import org.openstreetmap.josm.plugins.turnlanestagging.bean.BLane;
 import org.openstreetmap.josm.plugins.turnlanestagging.bean.BRoad;
 import org.openstreetmap.josm.plugins.turnlanestagging.editor.TagEditor;
 import org.openstreetmap.josm.plugins.turnlanestagging.editor.ac.KeyValuePair;
@@ -52,7 +52,7 @@ public class TagEditorDialog extends JDialog {
         return instance;
     }
 
-    static public final Dimension PREFERRED_SIZE = new Dimension(800, 500);
+    static public final Dimension PREFERRED_SIZE = new Dimension(800, 550);
 
     private TagEditor tagEditor = null;
     private BuildTurnLanes buildTurnLanes = null;
@@ -81,7 +81,7 @@ public class TagEditorDialog extends JDialog {
         );
 
         splitPane.setOneTouchExpandable(true);
-        splitPane.setDividerLocation(250);
+        splitPane.setDividerLocation(300);
         getContentPane().add(splitPane, BorderLayout.CENTER);
         getContentPane().add(buildButtonRowPanel(), BorderLayout.SOUTH);
         getRootPane().registerKeyboardAction(cancelAction, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
@@ -139,7 +139,7 @@ public class TagEditorDialog extends JDialog {
         getModel().ensureOneTag();
 
         //Set the selection Roads
-        BRoad bRoad = new BRoad("selectRoad", new ArrayList<BLine>());
+        BRoad bRoad = new BRoad("selectRoad", new ArrayList<BLane>());
         Collection<OsmPrimitive> selection = Main.main.getCurrentDataSet().getSelected();
         int numLanes = 0;
         for (OsmPrimitive element : selection) {

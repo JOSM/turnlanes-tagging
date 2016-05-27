@@ -3,14 +3,9 @@ package org.openstreetmap.josm.plugins.turnlanestagging.preset.ui;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.BorderFactory;
-import javax.swing.ButtonGroup;
-import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import org.openstreetmap.josm.plugins.turnlanestagging.bean.BLine;
+import org.openstreetmap.josm.plugins.turnlanestagging.bean.BLane;
 import org.openstreetmap.josm.tools.ImageProvider;
 
 /**
@@ -27,9 +22,9 @@ public class TurnSelection extends JPanel {
     private JPanel jPOptions;
     private JCheckBox jCBLeft;
     private JCheckBox jCBRight;
-    BLine bLine;
+    BLane bLine;
 
-    public TurnSelection(BLine bl) {
+    public TurnSelection(BLane bl) {
         super();
         this.bLine = bl;
         init();

@@ -15,7 +15,7 @@ import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import static org.openstreetmap.josm.gui.mappaint.mapcss.ExpressionFactory.Functions.tr;
-import org.openstreetmap.josm.plugins.turnlanestagging.bean.BLine;
+import org.openstreetmap.josm.plugins.turnlanestagging.bean.BLane;
 import org.openstreetmap.josm.plugins.turnlanestagging.bean.BRoad;
 import org.openstreetmap.josm.plugins.turnlanestagging.preset.ui.PresetsData;
 import org.openstreetmap.josm.plugins.turnlanestagging.preset.ui.TurnSelection;
@@ -97,9 +97,9 @@ public class TurnSelectionUnidirectional extends JPanel {
 
         //Clone objtects
         valBRoad.setName(new String(road.getName()));
-        List<BLine> listbl = new ArrayList<>();
+        List<BLane> listbl = new ArrayList<>();
         for (int k = 0; k < road.getNumLanes(); k++) {
-            BLine bl = new BLine(new Integer(road.getListLines().get(k).getPosition()), new String(road.getListLines().get(k).getTurn()));
+            BLane bl = new BLane(new Integer(road.getListLines().get(k).getPosition()), new String(road.getListLines().get(k).getTurn()));
             listbl.add(bl);
         }
         valBRoad.setListLines(listbl);
@@ -110,25 +110,25 @@ public class TurnSelectionUnidirectional extends JPanel {
         clickLanesAction = false;
         jcbNumLanes.setSelectedIndex(numLanes - 1);
 
-        final List<BLine> listBLines = valBRoad.getListLines();
+        final List<BLane> listBLines = valBRoad.getListLines();
         for (int i = 0; i < numLanes; i++) {
-            BLine bLine = listBLines.get(i);
+            BLane bLine = listBLines.get(i);
             final TurnSelection turnSelection = new TurnSelection(bLine);
             turnSelection.addPropertyChangeListener(new PropertyChangeListener() {
                 @Override
                 public void propertyChange(PropertyChangeEvent evt) {
                     if (evt.getPropertyName().equals(turnSelection.jRBLeft_CHANGED)) {
-                        listBLines.add((BLine) evt.getNewValue());
+                        listBLines.add((BLane) evt.getNewValue());
                         valBRoad.setListLines(listBLines);
                         jtfChangeR.setText(valBRoad.getTagturns());
 
                     } else if (evt.getPropertyName().equals(turnSelection.jRBRight_CHANGED)) {
-                        listBLines.add((BLine) evt.getNewValue());
+                        listBLines.add((BLane) evt.getNewValue());
                         valBRoad.setListLines(listBLines);
                         jtfChangeR.setText(valBRoad.getTagturns());
 
                     } else if (evt.getPropertyName().equals(turnSelection.jCBThrough_CHANGED)) {
-                        listBLines.add((BLine) evt.getNewValue());
+                        listBLines.add((BLane) evt.getNewValue());
                         valBRoad.setListLines(listBLines);
                         jtfChangeR.setText(valBRoad.getTagturns());
 
