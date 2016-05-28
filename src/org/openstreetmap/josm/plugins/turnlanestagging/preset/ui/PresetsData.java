@@ -73,36 +73,6 @@ public class PresetsData {
 
     }
 
-    public List<BRoad> dataPresetBidirectional() {
-        //oneway=yes
-        //lanes=3
-        //turn:lanes=left||
-        //placement=right_of:2
-        List<BRoad> listBRoads = new ArrayList<>();
-        //Road 1
-        List<BLane> listBLines = new ArrayList<>();
-        listBLines.add(new BLane(1, "left"));
-        listBLines.add(new BLane(2, "through"));
-        listBLines.add(new BLane(3, "through"));
-        BRoad bRoad = new BRoad();
-        bRoad.setName("Unidirectional");
-        bRoad.setListLines(listBLines);
-        listBRoads.add(bRoad);
-
-        //Road 2
-        List<BLane> listBLines2 = new ArrayList<>();
-        listBLines2.add(new BLane(1, "left"));
-        listBLines2.add(new BLane(2, "right"));
-        listBLines2.add(new BLane(3, "through"));
-        BRoad bRoad2 = new BRoad();
-        bRoad2.setName("Unidirectional");
-        bRoad2.setListLines(listBLines2);
-        listBRoads.add(bRoad2);
-
-        return listBRoads;
-
-    }
-
     public BRoad defaultData(int lines) {
         BRoad bRoad = new BRoad();
         List<BLane> listBLines = new ArrayList<>();
@@ -110,7 +80,7 @@ public class PresetsData {
             BLane bLine = new BLane((m + 1), "");
             listBLines.add(bLine);
         }
-        bRoad.setName("Road test");
+        bRoad.setName("Unidirectional");
         bRoad.setListLines(listBLines);
         return bRoad;
     }

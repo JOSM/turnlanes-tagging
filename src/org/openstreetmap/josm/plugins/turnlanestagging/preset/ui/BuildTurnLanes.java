@@ -61,16 +61,13 @@ public class BuildTurnLanes extends JPanel {
     //Road
     public static BRoad bRoad = new BRoad();
     // Bidirectional
-    TurnSelectionBidirectional turnSelectionBidirectional = null;
+   public  TurnSelectionBidirectional turnSelectionBidirectional = null;
 
     //Unidirection
     public TurnSelectionUnidirectional turnSelectionUnidirectional = null;
 
     // Event Changed
     public static final String ROADCHANGED = "RoadChanged";
-
-    //Lit of roads
-    public static List<BRoad> listBidiretionalRoads = new ArrayList<>();
 
     //Constructor
     public BuildTurnLanes() {
@@ -79,7 +76,7 @@ public class BuildTurnLanes extends JPanel {
 
         turnSelectionBidirectional = new TurnSelectionBidirectional();
         turnSelectionBidirectional.addPropertyChangeListener(new LinesChangeBidirectionalListener());
-        build();
+        init();
     }
 
     // Build Table and add Actions
@@ -154,17 +151,14 @@ public class BuildTurnLanes extends JPanel {
     ActionListener actionListenerBidirectional = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent actionEvent) {
-            pnlContentDirectional.removeAll();
-            pnlContentDirectional.setLayout(new GridLayout(1, 1));
-            turnSelectionBidirectional = new TurnSelectionBidirectional();
-            pnlContentDirectional.add(turnSelectionBidirectional);
-            pnlContentDirectional.revalidate();
-            pnlContentDirectional.repaint();
+
+            startDefaultBidirectional();
         }
+
     };
 
     // Build the GUI for turn lanes
-    protected void build() {
+    protected void init() {
         setLayout(new BorderLayout());
         //Title
         add(new JLabel("Select Preset Turn Lanes"), BorderLayout.NORTH);
@@ -180,7 +174,7 @@ public class BuildTurnLanes extends JPanel {
         add(pnlBuildTurnLanes, BorderLayout.SOUTH);
 
         //road change event
-        jtfChangeRoad.getDocument().addDocumentListener(new SetRoadChangeUnidirectionalListener());
+        jtfChangeRoad.getDocument().addDocumentListener(new SetRoadChangeRoadListener());
 
         //Start Default 
         jrbUnidirectional.setSelected(true);
@@ -204,28 +198,22 @@ public class BuildTurnLanes extends JPanel {
 
         @Override
         public void propertyChange(PropertyChangeEvent evt) {
-            if (evt.getPropertyName().equals(TurnSelectionBidirectional.LINESCHANGEDA)) {
-                BRoad bRoadA = (BRoad) evt.getNewValue();
-                listBidiretionalRoads.add(bRoadA);
-            } else if (evt.getPropertyName().equals(TurnSelectionBidirectional.LINESCHANGEDB)) {
-
-                BRoad bRoadB = (BRoad) evt.getNewValue();
-                listBidiretionalRoads.add(bRoadB);
-
-            } else if (evt.getPropertyName().equals(TurnSelectionBidirectional.LINESCHANGEDC)) {
-                BRoad bRoadC = (BRoad) evt.getNewValue();
-                listBidiretionalRoads.add(bRoadC);
-
+            if (evt.getPropertyName().equals(TurnSelectionBidirectional.LINESCHANGEDBIDIRECTIONAL)) {
+                bRoad = (BRoad) evt.getNewValue();
+                String t = bRoad.getLanesA().getTagturns() + "==" + bRoad.getLanesB().getTagturns() + "==" + bRoad.getLanesC().getTagturns();
+                bRoad.setName("Bidirectional");
+                jtfChangeRoad.setText(t);
             }
 
         }
 
     }
 
-    private class SetRoadChangeUnidirectionalListener implements DocumentListener {
+    private class SetRoadChangeRoadListener implements DocumentListener {
 
         @Override
         public void insertUpdate(DocumentEvent e) {
+            
             firePropertyChange(ROADCHANGED, null, bRoad);
         }
 
@@ -251,23 +239,17 @@ public class BuildTurnLanes extends JPanel {
 
     public void SetLanesByRoadUnidirectional(BRoad road) {
         turnSelectionUnidirectional.setDefault(road);
-
     }
 
-    //Start Bidirecional
-//    public void startDefaultBidirectional() {
-//        pnlContentDirectional.removeAll();
-//        pnlContentDirectional.setLayout(new GridLayout(1, 1));
-//        //add default road when clicked unidirectional
-//        
-//        
-////        turnSelectionBidirectional.setDefault(listBRoads.get(0));
-//        pnlContentDirectional.add(turnSelectionUnidirectional);
-//        pnlContentDirectional.revalidate();
-//        pnlContentDirectional.repaint();
-//    }
-    public void SetLanesByRoadBidirectional(BRoad road) {
-        turnSelectionUnidirectional.setDefault(road);
-
+    private void startDefaultBidirectional() {
+        pnlContentDirectional.removeAll();
+        pnlContentDirectional.setLayout(new GridLayout(1, 1));
+//        turnSelectionBidirectional = new TurnSelectionBidirectional();
+        
+        turnSelectionBidirectional.setDefault(listBRoads.get(2));
+        pnlContentDirectional.add(turnSelectionBidirectional);
+        pnlContentDirectional.revalidate();
+        pnlContentDirectional.repaint();
     }
+
 }
