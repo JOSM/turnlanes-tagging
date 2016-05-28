@@ -20,9 +20,9 @@ public class PresetsData {
         List<BRoad> listBRoads = new ArrayList<>();
         //Road 1
         List<BLane> listBLines = new ArrayList<>();
-        listBLines.add(new BLane(1, "left"));
-        listBLines.add(new BLane(2, "through"));
-        listBLines.add(new BLane(3, "through"));
+        listBLines.add(new BLane("unid", 1, "left"));
+        listBLines.add(new BLane("unid", 2, "through"));
+        listBLines.add(new BLane("unid", 3, "through"));
         BRoad bRoad = new BRoad();
         bRoad.setName("Unidirectional");
         bRoad.setListLines(listBLines);
@@ -30,9 +30,9 @@ public class PresetsData {
 
         //Road 2
         List<BLane> listBLines2 = new ArrayList<>();
-        listBLines2.add(new BLane(1, "left"));
-        listBLines2.add(new BLane(2, "right"));
-        listBLines2.add(new BLane(3, "through"));
+        listBLines2.add(new BLane("unid", 1, "left"));
+        listBLines2.add(new BLane("unid", 2, "right"));
+        listBLines2.add(new BLane("unid", 3, "through"));
         BRoad bRoad2 = new BRoad();
         bRoad2.setName("Unidirectional");
 
@@ -42,21 +42,21 @@ public class PresetsData {
         //Bidirectional 1
         BLanes bLanesA = new BLanes("backward");
         List<BLane> lbA = new ArrayList<>();
-        lbA.add(new BLane(1, "left"));
-        lbA.add(new BLane(2, "right"));
-        lbA.add(new BLane(3, "through"));
+        lbA.add(new BLane("backward", 1, "left"));
+        lbA.add(new BLane("backward", 2, "right"));
+        lbA.add(new BLane("backward", 3, "through"));
         bLanesA.setLanes(lbA);
 
         BLanes bLanesB = new BLanes("both_way");
         List<BLane> lbB = new ArrayList<>();
-        lbB.add(new BLane(1, "left"));
+        lbB.add(new BLane("both_way", 1, "left"));
         bLanesB.setLanes(lbB);
 
-        BLanes bLanesC = new BLanes("backward");
+        BLanes bLanesC = new BLanes("forward");
         List<BLane> lbC = new ArrayList<>();
-        lbC.add(new BLane(1, "left"));
-        lbC.add(new BLane(2, "right"));
-        lbC.add(new BLane(3, "through"));
+        lbC.add(new BLane("forward", 1, "left"));
+        lbC.add(new BLane("forward", 2, "right"));
+        lbC.add(new BLane("forward", 3, "through"));
         bLanesC.setLanes(lbC);
 
         BRoad bRoad3 = new BRoad();
@@ -66,18 +66,18 @@ public class PresetsData {
         bRoad3.setLanesB(bLanesB);
         bRoad3.setLanesC(bLanesC);
 
-     listBRoads.add(bRoad3);
+        listBRoads.add(bRoad3);
 
         //Bidirectional
         return listBRoads;
 
     }
 
-    public BRoad defaultData(int lines) {
+    public BRoad defaultDataUnidirectional(int lines) {
         BRoad bRoad = new BRoad();
         List<BLane> listBLines = new ArrayList<>();
         for (int m = 0; m < lines; m++) {
-            BLane bLine = new BLane((m + 1), "");
+            BLane bLine = new BLane("unid", (m + 1), "");
             listBLines.add(bLine);
         }
         bRoad.setName("Unidirectional");
@@ -85,11 +85,11 @@ public class PresetsData {
         return bRoad;
     }
 
-    public BLanes defaultLanes(int lines) {
+    public BLanes defaultLanes(String type, int lines) {
         BLanes bLanes = new BLanes();
         List<BLane> list = new ArrayList<>();
         for (int m = 0; m < lines; m++) {
-            BLane bLine = new BLane((m + 1), "");
+            BLane bLine = new BLane(type, (m + 1), "");
             list.add(bLine);
         }
         bLanes.setLanes(list);

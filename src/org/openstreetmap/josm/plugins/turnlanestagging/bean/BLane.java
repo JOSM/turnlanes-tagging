@@ -4,7 +4,8 @@ package org.openstreetmap.josm.plugins.turnlanestagging.bean;
  *
  * @author ruben
  */
-public class BLane {  
+public class BLane {
+
     private int position;
     private String turn;
     private String type; //backward, fordward, bothway
@@ -12,10 +13,10 @@ public class BLane {
     public BLane() {
     }
 
-    
-    public BLane(int position, String turn) {
+    public BLane(String type, int position, String turn) {
         this.position = position;
         this.turn = turn;
+        this.type = type;// for unidirectional empty ""
     }
 
     public int getPosition() {
@@ -32,7 +33,7 @@ public class BLane {
 
     public void setTurn(String turn) {
         this.turn = turn;
-    }   
+    }
 
     public String getType() {
         return type;
@@ -41,6 +42,5 @@ public class BLane {
     public void setType(String type) {
         this.type = type;
     }
-    
-    
+
 }

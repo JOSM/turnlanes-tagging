@@ -102,7 +102,7 @@ public class TurnSelectionUnidirectional extends JPanel {
             int selected = (int) jcbNumLanes.getSelectedItem();
             if (clickLanesAction) {
 
-                lanes(presetsData.defaultData(selected));
+                lanes(presetsData.defaultDataUnidirectional(selected));
             }
             clickLanesAction = true;
         }
@@ -116,7 +116,7 @@ public class TurnSelectionUnidirectional extends JPanel {
         valBRoad.setName(new String(road.getName()));
         List<BLane> listbl = new ArrayList<>();
         for (int k = 0; k < road.getNumLanes(); k++) {
-            BLane bl = new BLane(new Integer(road.getListLines().get(k).getPosition()), new String(road.getListLines().get(k).getTurn()));
+            BLane bl = new BLane("unid", new Integer(road.getListLines().get(k).getPosition()), new String(road.getListLines().get(k).getTurn()));
             listbl.add(bl);
         }
         valBRoad.setListLines(listbl);
@@ -147,7 +147,7 @@ public class TurnSelectionUnidirectional extends JPanel {
                     } else if (evt.getPropertyName().equals(turnSelection.jCBThrough_CHANGED)) {
                         listBLines.add((BLane) evt.getNewValue());
                         valBRoad.setListLines(listBLines);
-                        
+
                         jtfChangeLanes.setText(valBRoad.getTagturns());
 
                     }

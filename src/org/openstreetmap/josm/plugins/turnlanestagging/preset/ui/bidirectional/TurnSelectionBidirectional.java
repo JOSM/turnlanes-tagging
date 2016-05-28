@@ -215,11 +215,12 @@ public class TurnSelectionBidirectional extends JPanel {
 
         @Override
         public void stateChanged(ChangeEvent e) {
-            BLanes bLanes = presetsData.defaultLanes(Integer.valueOf(spinnerA.getValue().toString()));
             if (jrbLaneForwardA.isSelected()) {
+                BLanes bLanes = presetsData.defaultLanes("forward", Integer.valueOf(spinnerA.getValue().toString()));
                 bLanes.setType("forward");
                 lanesA(bLanes);
             } else {
+                BLanes bLanes = presetsData.defaultLanes("backward", Integer.valueOf(spinnerA.getValue().toString()));
                 bLanes.setType("backward");
                 lanesA(bLanes);
 
@@ -231,12 +232,13 @@ public class TurnSelectionBidirectional extends JPanel {
 
         @Override
         public void stateChanged(ChangeEvent e) {
-            BLanes bLanes = presetsData.defaultLanes(Integer.valueOf(spinnerC.getValue().toString()));
 
             if (jrbLaneForwardC.isSelected()) {
+                BLanes bLanes = presetsData.defaultLanes("forward", Integer.valueOf(spinnerC.getValue().toString()));
                 bLanes.setType("forward");
                 lanesC(bLanes);
             } else {
+                BLanes bLanes = presetsData.defaultLanes("backward", Integer.valueOf(spinnerC.getValue().toString()));
                 bLanes.setType("backward");
                 lanesC(bLanes);
 
@@ -247,11 +249,14 @@ public class TurnSelectionBidirectional extends JPanel {
     ActionListener actionListenerA = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent actionEvent) {
-            BLanes bLanes = presetsData.defaultLanes(Integer.valueOf(spinnerA.getValue().toString()));
             if (jrbLaneForwardA.isSelected()) {
+                BLanes bLanes = presetsData.defaultLanes("forward", Integer.valueOf(spinnerA.getValue().toString()));
+
                 bLanes.setType("forward");
                 lanesA(bLanes);
             } else {
+                BLanes bLanes = presetsData.defaultLanes("backward", Integer.valueOf(spinnerA.getValue().toString()));
+
                 bLanes.setType("backward");
                 lanesA(bLanes);
             }
@@ -261,7 +266,8 @@ public class TurnSelectionBidirectional extends JPanel {
     ActionListener actionListenerB = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent actionEvent) {
-            BLanes bLanes = presetsData.defaultLanes(1);
+            BLanes bLanes = presetsData.defaultLanes("both_way", 1);
+
             bLanes.setType("both_way");
             if (jchbothwayB.isSelected()) {
                 jpanelcontentTurns.add(jpnlturnsB, BorderLayout.CENTER);
@@ -279,11 +285,12 @@ public class TurnSelectionBidirectional extends JPanel {
     ActionListener actionListenerC = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent actionEvent) {
-            BLanes bLanes = presetsData.defaultLanes(Integer.valueOf(spinnerC.getValue().toString()));
             if (jrbLaneForwardC.isSelected()) {
+                BLanes bLanes = presetsData.defaultLanes("forward", Integer.valueOf(spinnerC.getValue().toString()));
                 bLanes.setType("forward");
                 lanesC(bLanes);
             } else {
+                BLanes bLanes = presetsData.defaultLanes("backward", Integer.valueOf(spinnerC.getValue().toString()));
                 bLanes.setType("backward");
                 lanesC(bLanes);
             }
@@ -297,7 +304,7 @@ public class TurnSelectionBidirectional extends JPanel {
         bLanesA.setType(bLanes.getType());
         List<BLane> listbl = new ArrayList<>();
         for (int k = 0; k < bLanes.getLanes().size(); k++) {
-            BLane bl = new BLane(new Integer(bLanes.getLanes().get(k).getPosition()), new String(bLanes.getLanes().get(k).getTurn()));
+            BLane bl = new BLane(new String(bLanes.getType()), new Integer(bLanes.getLanes().get(k).getPosition()), new String(bLanes.getLanes().get(k).getTurn()));
             listbl.add(bl);
         }
         bLanesA.setLanes(listbl);
@@ -331,7 +338,7 @@ public class TurnSelectionBidirectional extends JPanel {
         bLanesB.setType(bLanes.getType());
         List<BLane> listbl = new ArrayList<>();
         for (int k = 0; k < bLanes.getLanes().size(); k++) {
-            BLane bl = new BLane(new Integer(bLanes.getLanes().get(k).getPosition()), new String(bLanes.getLanes().get(k).getTurn()));
+            BLane bl = new BLane(new String(bLanes.getType()), new Integer(bLanes.getLanes().get(k).getPosition()), new String(bLanes.getLanes().get(k).getTurn()));
             listbl.add(bl);
         }
         bLanesB.setLanes(listbl);
@@ -374,7 +381,7 @@ public class TurnSelectionBidirectional extends JPanel {
         bLanesC.setType(bLanes.getType());
         List<BLane> listbl = new ArrayList<>();
         for (int k = 0; k < bLanes.getLanes().size(); k++) {
-            BLane bl = new BLane(new Integer(bLanes.getLanes().get(k).getPosition()), new String(bLanes.getLanes().get(k).getTurn()));
+            BLane bl = new BLane(new String(bLanes.getType()), new Integer(bLanes.getLanes().get(k).getPosition()), new String(bLanes.getLanes().get(k).getTurn()));
             listbl.add(bl);
         }
         bLanesC.setLanes(listbl);

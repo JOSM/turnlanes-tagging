@@ -70,7 +70,7 @@ public class BRoad {
         String turns[] = turnLanes.split("\\|", -1);
         List<BLane> lst = new ArrayList<>();
         for (int i = 0; i < turns.length; i++) {
-            BLane bLine = new BLane((i + 1), turns[i]);
+            BLane bLine = new BLane("unid",(i + 1), turns[i]);
             lst.add(bLine);
         }
         this.listLines = lst;

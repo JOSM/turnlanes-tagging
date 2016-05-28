@@ -37,15 +37,16 @@ public class TurnSelection extends JPanel {
         jCBThrough = new JCheckBox();
 
         jCBLeft.setIcon(ImageProvider.get("types", "empty.png"));
-        jCBLeft.setSelectedIcon(ImageProvider.get("types", "left.png"));
+
+        jCBLeft.setSelectedIcon(ImageProvider.get("types", "left-" + bLine.getType() + ".png"));
         jCBLeft.addActionListener(new LeftListener());
 
         jCBRight.setIcon(ImageProvider.get("types", "empty.png"));
-        jCBRight.setSelectedIcon(ImageProvider.get("types", "right.png"));
+        jCBRight.setSelectedIcon(ImageProvider.get("types", "right-" + bLine.getType() + ".png"));
         jCBRight.addActionListener(new RightListener());
 
         jCBThrough.setIcon(ImageProvider.get("types", "empty.png"));
-        jCBThrough.setSelectedIcon(ImageProvider.get("types", "through.png"));
+        jCBThrough.setSelectedIcon(ImageProvider.get("types", "through-" + bLine.getType() + ".png"));
         jCBThrough.addActionListener(new ThroughListener());
 
         jPOptions = new JPanel(new GridLayout(1, 3));
