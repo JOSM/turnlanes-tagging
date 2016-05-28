@@ -58,7 +58,7 @@ public class TurnSelectionUnidirectional extends JPanel {
         add(buildselect(), BorderLayout.NORTH);
         jpanelcontentTurns = new JPanel();
         add(jpanelcontentTurns, BorderLayout.CENTER);
-        add(jtfChangeLanes, BorderLayout.SOUTH);
+        //add(jtfChangeLanes, BorderLayout.SOUTH);
 
         //Event Road Listenr
         jtfChangeLanes.getDocument().addDocumentListener(new SetLanesChangeListener());

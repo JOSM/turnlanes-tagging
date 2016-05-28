@@ -1,6 +1,8 @@
 package org.openstreetmap.josm.plugins.turnlanestagging.preset.ui;
 
+import java.util.AbstractList;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import org.openstreetmap.josm.plugins.turnlanestagging.bean.BLane;
 import org.openstreetmap.josm.plugins.turnlanestagging.bean.BRoad;
@@ -67,6 +69,33 @@ public class PresetsData {
         bRoad3.setLanesC(bLanesC);
 
         listBRoads.add(bRoad3);
+        //Bidirectional 2
+        BLanes bLanes2A = new BLanes("backward");
+        List<BLane> lb2A = new ArrayList<>();
+        lb2A.add(new BLane("backward", 1, "left"));
+        lb2A.add(new BLane("backward", 2, "right;through"));
+        lb2A.add(new BLane("backward", 3, "through"));
+        bLanes2A.setLanes(lb2A);
+        //made a empty  clall
+   
+        lb2A.add(new BLane("backward", 1, "left"));
+        lb2A.add(new BLane("backward", 2, "right;through"));
+        lb2A.add(new BLane("backward", 3, "through"));
+        bLanes2A.setLanes(lb2A);
+
+        BLanes bLanes2C = new BLanes("forward");
+        List<BLane> lb2C = new ArrayList<>();
+        lb2C.add(new BLane("forward", 1, "left"));
+        lb2C.add(new BLane("forward", 2, "right"));
+        bLanes2C.setLanes(lb2C);
+
+        BRoad bRoad4 = new BRoad();
+        bRoad4.setName("Bidirectional");
+
+        bRoad4.setLanesA(bLanes2A);
+        bRoad4.setLanesC(bLanes2C);
+
+        listBRoads.add(bRoad4);
 
         //Bidirectional
         return listBRoads;

@@ -16,9 +16,9 @@ public class BRoad {
 
     String name;
     List<BLane> listLines;
-    BLanes lanesA;
-    BLanes lanesB;
-    BLanes lanesC;
+    private BLanes lanesA = new BLanes();
+    private BLanes lanesB = new BLanes();
+    private BLanes lanesC = new BLanes();
 
     public BRoad() {
     }
@@ -70,14 +70,24 @@ public class BRoad {
         String turns[] = turnLanes.split("\\|", -1);
         List<BLane> lst = new ArrayList<>();
         for (int i = 0; i < turns.length; i++) {
-            BLane bLine = new BLane("unid",(i + 1), turns[i]);
+            BLane bLine = new BLane("unid", (i + 1), turns[i]);
             lst.add(bLine);
         }
         this.listLines = lst;
     }
 
     public int getNumLanesBidirectional() {
-        return (lanesA.getLanes().size() + lanesB.getLanes().size() + lanesC.getLanes().size());
+        int numdirc = 0;
+        if (lanesA != null) {
+            numdirc = numdirc + lanesA.getLanes().size();
+        }
+        if (lanesB != null) {
+            numdirc = numdirc + lanesB.getLanes().size();
+        }
+        if (lanesC != null) {
+            numdirc = numdirc + lanesC.getLanes().size();
+        }
+        return numdirc;
     }
 
     public BLanes getLanesA() {

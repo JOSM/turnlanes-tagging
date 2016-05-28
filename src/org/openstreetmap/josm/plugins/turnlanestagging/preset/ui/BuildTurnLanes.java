@@ -110,15 +110,9 @@ public class BuildTurnLanes extends JPanel {
             if (e.getClickCount() == 1) {
                 int rowNum = presetsTable.rowAtPoint(e.getPoint());
                 if (listBRoads.get(rowNum).getName().equals("Unidirectional")) {
-                    jrbUnidirectional.setSelected(true);
-
                     setLanesByRoadUnidirectional(listBRoads.get(rowNum));
-//                    turnSelectionUnidirectional.lanes(listBRoads.get(rowNum));
-
                 } else {
-                    jrbBidirectional.setSelected(true);
                     setLanesByRoadBidirectinal(listBRoads.get(rowNum));
-
                 }
             }
         }
@@ -235,6 +229,7 @@ public class BuildTurnLanes extends JPanel {
 
     //Start
     public void startDefaultUnidirectional() {
+        jrbUnidirectional.setSelected(true);
         pnlContentDirectional.removeAll();
         pnlContentDirectional.setLayout(new GridLayout(1, 1));
         turnSelectionUnidirectional.setDefault(listBRoads.get(0));
@@ -244,6 +239,7 @@ public class BuildTurnLanes extends JPanel {
     }
 
     public void setLanesByRoadUnidirectional(BRoad road) {
+        jrbUnidirectional.setSelected(true);
         pnlContentDirectional.removeAll();
         pnlContentDirectional.setLayout(new GridLayout(1, 1));
         turnSelectionUnidirectional.setDefault(road);
@@ -254,6 +250,7 @@ public class BuildTurnLanes extends JPanel {
     }
 
     private void startDefaultBidirectional() {
+        jrbBidirectional.setSelected(true);
         pnlContentDirectional.removeAll();
         pnlContentDirectional.setLayout(new GridLayout(1, 1));
         turnSelectionBidirectional.setDefault(listBRoads.get(2));
@@ -263,6 +260,7 @@ public class BuildTurnLanes extends JPanel {
     }
 
     private void setLanesByRoadBidirectinal(BRoad bRoad) {
+        jrbBidirectional.setSelected(true);
         pnlContentDirectional.removeAll();
         pnlContentDirectional.setLayout(new GridLayout(1, 1));
         turnSelectionBidirectional.setDefault(bRoad);

@@ -93,7 +93,7 @@ public class TurnSelectionBidirectional extends JPanel {
         setLayout(new BorderLayout());
         add(buildselect(), BorderLayout.NORTH);
         add(buildturn(), BorderLayout.CENTER);
-        add(jtfChangeLanes, BorderLayout.SOUTH);
+        //add(jtfChangeLanes, BorderLayout.SOUTH);
 
         jtfChangeLanes.getDocument().addDocumentListener(new SetLanesChangeListener());
 

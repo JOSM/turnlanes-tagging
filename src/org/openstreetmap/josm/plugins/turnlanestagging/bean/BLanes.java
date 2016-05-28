@@ -12,7 +12,7 @@ import java.util.TreeMap;
 public class BLanes {
 
     String type;
-    List<BLane> lanes;
+    List<BLane> lanes= new ArrayList<>();
 
     public BLanes() {
     }
