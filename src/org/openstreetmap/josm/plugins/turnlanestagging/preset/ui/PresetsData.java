@@ -44,7 +44,7 @@ public class PresetsData {
         //Bidirectional 1
         BLanes bLanesA = new BLanes("backward");
         List<BLane> lbA = new ArrayList<>();
-        lbA.add(new BLane("backward", 1, "left"));
+        lbA.add(new BLane("backward", 1, "left;through"));
         lbA.add(new BLane("backward", 2, "right"));
         lbA.add(new BLane("backward", 3, "through"));
         bLanesA.setLanes(lbA);
@@ -68,7 +68,6 @@ public class PresetsData {
         bRoad3.setLanesB(bLanesB);
         bRoad3.setLanesC(bLanesC);
 
-        listBRoads.add(bRoad3);
         //Bidirectional 2
         BLanes bLanes2A = new BLanes("backward");
         List<BLane> lb2A = new ArrayList<>();
@@ -77,7 +76,7 @@ public class PresetsData {
         lb2A.add(new BLane("backward", 3, "through"));
         bLanes2A.setLanes(lb2A);
         //made a empty  clall
-   
+
         lb2A.add(new BLane("backward", 1, "left"));
         lb2A.add(new BLane("backward", 2, "right;through"));
         lb2A.add(new BLane("backward", 3, "through"));
@@ -96,6 +95,7 @@ public class PresetsData {
         bRoad4.setLanesC(bLanes2C);
 
         listBRoads.add(bRoad4);
+        listBRoads.add(bRoad3);
 
         //Bidirectional
         return listBRoads;

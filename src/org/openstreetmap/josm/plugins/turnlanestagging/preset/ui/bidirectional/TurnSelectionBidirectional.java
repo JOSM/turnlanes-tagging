@@ -54,9 +54,6 @@ public class TurnSelectionBidirectional extends JPanel {
     private JPanel jpnlSelectWardB = null;
     private JPanel jpnlturnsB = null;
     private JCheckBox jchbothwayB = null;
-//    JPanel jpnContentSpinnerBs = null;
-//    JSpinner spinnerBee = null;
-
     //C
     JPanel jpanelcontentC = null;
     private JPanel jpnlSelectWardC = null;
@@ -241,7 +238,6 @@ public class TurnSelectionBidirectional extends JPanel {
                 BLanes bLanes = presetsData.defaultLanes("backward", Integer.valueOf(spinnerC.getValue().toString()));
                 bLanes.setType("backward");
                 lanesC(bLanes);
-
             }
         }
     }
@@ -251,12 +247,10 @@ public class TurnSelectionBidirectional extends JPanel {
         public void actionPerformed(ActionEvent actionEvent) {
             if (jrbLaneForwardA.isSelected()) {
                 BLanes bLanes = presetsData.defaultLanes("forward", Integer.valueOf(spinnerA.getValue().toString()));
-
                 bLanes.setType("forward");
                 lanesA(bLanes);
             } else {
                 BLanes bLanes = presetsData.defaultLanes("backward", Integer.valueOf(spinnerA.getValue().toString()));
-
                 bLanes.setType("backward");
                 lanesA(bLanes);
             }
@@ -363,20 +357,11 @@ public class TurnSelectionBidirectional extends JPanel {
                 turnSelection.addPropertyChangeListener(new PropertyChangeListener() {
                     @Override
                     public void propertyChange(PropertyChangeEvent evt) {
-                        if (evt.getPropertyName().equals(TurnSelection.jRBLeft_CHANGED)) {
-                            listBLanes.add((BLane) evt.getNewValue());
-                            bLanesB.setLanes(listBLanes);
-                            printChageLanes();
-                        } else if (evt.getPropertyName().equals(TurnSelection.jRBRight_CHANGED)) {
-                            listBLanes.add((BLane) evt.getNewValue());
-                            bLanesB.setLanes(listBLanes);
-                            printChageLanes();
-                        } else if (evt.getPropertyName().equals(TurnSelection.jCBThrough_CHANGED)) {
+                        if (evt.getPropertyName().equals(TurnSelection.jRBLeft_CHANGED) || evt.getPropertyName().equals(TurnSelection.jRBRight_CHANGED) || evt.getPropertyName().equals(TurnSelection.jCBThrough_CHANGED)) {
                             listBLanes.add((BLane) evt.getNewValue());
                             bLanesB.setLanes(listBLanes);
                             printChageLanes();
                         }
-
                     }
                 });
                 jpnlturnsB.add(turnSelection);
@@ -436,15 +421,15 @@ public class TurnSelectionBidirectional extends JPanel {
 
     }
 
-//    public void lanesa(BRoad bRoad) {
-//        valBRoad.setLanes("Bidirectional");
-//        lanesA(bRoad.getLanesA());
-//        lanesB(bRoad.getLanesB());
-//        lanesC(bRoad.getLanesC());
-//
-//    }
     public void setDefault(BRoad bRoad) {
         valBRoad.setLanes("Bidirectional");
+        bLanesA = bRoad.getLanesA();
+        bLanesB = bRoad.getLanesB();
+        bLanesC = bRoad.getLanesC();
+        valBRoad.setLanesA(bLanesA);
+        valBRoad.setLanesB(bLanesB);
+        valBRoad.setLanesC(bLanesC);
+        jtfChangeLanes.setText(bLanesA.getTagturns() + "==" + bLanesB.getTagturns() + "==" + bLanesC.getTagturns());
         lanesA(bRoad.getLanesA());
         lanesB(bRoad.getLanesB());
         lanesC(bRoad.getLanesC());
