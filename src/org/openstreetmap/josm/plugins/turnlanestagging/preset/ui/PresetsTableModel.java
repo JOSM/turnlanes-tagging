@@ -3,7 +3,6 @@ package org.openstreetmap.josm.plugins.turnlanestagging.preset.ui;
 
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
-import static org.openstreetmap.josm.gui.mappaint.mapcss.ExpressionFactory.Functions.tr;
 import org.openstreetmap.josm.plugins.turnlanestagging.bean.BRoad;
 
 public class PresetsTableModel extends AbstractTableModel {

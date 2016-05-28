@@ -98,8 +98,8 @@ public class TurnSelectionBidirectional extends JPanel {
         jtfChangeLanes.getDocument().addDocumentListener(new SetLanesChangeListener());
 
     }
-//Action Liseners when the roads changes
 
+    //Action Liseners when the roads changes
     private class SetLanesChangeListener implements DocumentListener {
 
         @Override
@@ -298,114 +298,133 @@ public class TurnSelectionBidirectional extends JPanel {
     };
 
     public void lanesA(BLanes bLanes) {
-        jpnlturnsA.setBorder(javax.swing.BorderFactory.createTitledBorder(null, bLanes.getType(), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, new java.awt.Color(102, 102, 102)));
-        jpnlturnsA.removeAll();
-        //Clone objtects
-        bLanesA.setType(bLanes.getType());
-        List<BLane> listbl = new ArrayList<>();
-        for (int k = 0; k < bLanes.getLanes().size(); k++) {
-            BLane bl = new BLane(new String(bLanes.getType()), new Integer(bLanes.getLanes().get(k).getPosition()), new String(bLanes.getLanes().get(k).getTurn()));
-            listbl.add(bl);
-        }
-        bLanesA.setLanes(listbl);
+        if (bLanes.getLanes().size() > 0) {
+            if (bLanes.getType().equals("forward")) {
+                jrbLaneForwardA.setSelected(true);
+            } else {
+                jrbLaneBackwardA.setSelected(true);
+            }
+            jpnlturnsA.setBorder(javax.swing.BorderFactory.createTitledBorder(null, bLanes.getType(), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, new java.awt.Color(102, 102, 102)));
+            jpnlturnsA.removeAll();
+            //Clone objtects
+            bLanesA.setType(bLanes.getType());
+            List<BLane> listbl = new ArrayList<>();
+            for (int k = 0; k < bLanes.getLanes().size(); k++) {
+                BLane bl = new BLane(new String(bLanes.getType()), new Integer(bLanes.getLanes().get(k).getPosition()), new String(bLanes.getLanes().get(k).getTurn()));
+                listbl.add(bl);
+            }
+            bLanesA.setLanes(listbl);
 
-        int numLanes = bLanesA.getLanes().size();
-        jpnlturnsA.setLayout(new GridLayout(1, numLanes));
-        final List<BLane> listBLanes = bLanesA.getLanes();
-        for (int i = 0; i < numLanes; i++) {
-            BLane bLine = listBLanes.get(i);
-            final TurnSelection turnSelection = new TurnSelection(bLine);
-            turnSelection.addPropertyChangeListener(new PropertyChangeListener() {
-                @Override
-                public void propertyChange(PropertyChangeEvent evt) {
-                    if (evt.getPropertyName().equals(TurnSelection.jRBLeft_CHANGED) || evt.getPropertyName().equals(TurnSelection.jRBRight_CHANGED) || evt.getPropertyName().equals(TurnSelection.jCBThrough_CHANGED)) {
-                        listBLanes.add((BLane) evt.getNewValue());
-                        bLanesA.setLanes(listBLanes);
-                        printChageLanes();
+            int numLanes = bLanesA.getLanes().size();
+            jpnlturnsA.setLayout(new GridLayout(1, numLanes));
+            final List<BLane> listBLanes = bLanesA.getLanes();
+            for (int i = 0; i < numLanes; i++) {
+                BLane bLine = listBLanes.get(i);
+                final TurnSelection turnSelection = new TurnSelection(bLine);
+                turnSelection.addPropertyChangeListener(new PropertyChangeListener() {
+                    @Override
+                    public void propertyChange(PropertyChangeEvent evt) {
+                        if (evt.getPropertyName().equals(TurnSelection.jRBLeft_CHANGED) || evt.getPropertyName().equals(TurnSelection.jRBRight_CHANGED) || evt.getPropertyName().equals(TurnSelection.jCBThrough_CHANGED)) {
+                            listBLanes.add((BLane) evt.getNewValue());
+                            bLanesA.setLanes(listBLanes);
+                            printChageLanes();
+                        }
                     }
-                }
-            });
-            jpnlturnsA.add(turnSelection);
+                });
+                jpnlturnsA.add(turnSelection);
+            }
+            jpnlturnsA.revalidate();
+            jpnlturnsA.repaint();
         }
-        jpnlturnsA.revalidate();
-        jpnlturnsA.repaint();
     }
 
     public void lanesB(BLanes bLanes) {
-        jpnlturnsB.setBorder(javax.swing.BorderFactory.createTitledBorder(null, bLanes.getType(), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, new java.awt.Color(102, 102, 102)));
-        jpnlturnsB.removeAll();
-        //Clone objtects
-        bLanesB.setType(bLanes.getType());
-        List<BLane> listbl = new ArrayList<>();
-        for (int k = 0; k < bLanes.getLanes().size(); k++) {
-            BLane bl = new BLane(new String(bLanes.getType()), new Integer(bLanes.getLanes().get(k).getPosition()), new String(bLanes.getLanes().get(k).getTurn()));
-            listbl.add(bl);
-        }
-        bLanesB.setLanes(listbl);
+        if (bLanes.getLanes().size() > 0) {
+            if (bLanes.getType().equals("both_way")) {
+                jchbothwayB.setSelected(true);
+            }
+            jpnlturnsB.setBorder(javax.swing.BorderFactory.createTitledBorder(null, bLanes.getType(), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, new java.awt.Color(102, 102, 102)));
+            jpnlturnsB.removeAll();
+            //Clone objtects
+            bLanesB.setType(bLanes.getType());
+            List<BLane> listbl = new ArrayList<>();
+            for (int k = 0; k < bLanes.getLanes().size(); k++) {
+                BLane bl = new BLane(new String(bLanes.getType()), new Integer(bLanes.getLanes().get(k).getPosition()), new String(bLanes.getLanes().get(k).getTurn()));
+                listbl.add(bl);
+            }
+            bLanesB.setLanes(listbl);
 
-        int numLanes = bLanesB.getLanes().size();
-        jpnlturnsB.setLayout(new GridLayout(1, numLanes));
-        final List<BLane> listBLanes = bLanesB.getLanes();
-        for (int i = 0; i < numLanes; i++) {
-            BLane bLine = listBLanes.get(i);
-            final TurnSelection turnSelection = new TurnSelection(bLine);
-            turnSelection.addPropertyChangeListener(new PropertyChangeListener() {
-                @Override
-                public void propertyChange(PropertyChangeEvent evt) {
-                    if (evt.getPropertyName().equals(TurnSelection.jRBLeft_CHANGED)) {
-                        listBLanes.add((BLane) evt.getNewValue());
-                        bLanesB.setLanes(listBLanes);
-                        printChageLanes();
-                    } else if (evt.getPropertyName().equals(TurnSelection.jRBRight_CHANGED)) {
-                        listBLanes.add((BLane) evt.getNewValue());
-                        bLanesB.setLanes(listBLanes);
-                        printChageLanes();
-                    } else if (evt.getPropertyName().equals(TurnSelection.jCBThrough_CHANGED)) {
-                        listBLanes.add((BLane) evt.getNewValue());
-                        bLanesB.setLanes(listBLanes);
-                        printChageLanes();
+            int numLanes = bLanesB.getLanes().size();
+            jpnlturnsB.setLayout(new GridLayout(1, numLanes));
+            final List<BLane> listBLanes = bLanesB.getLanes();
+            for (int i = 0; i < numLanes; i++) {
+                BLane bLine = listBLanes.get(i);
+                final TurnSelection turnSelection = new TurnSelection(bLine);
+                turnSelection.addPropertyChangeListener(new PropertyChangeListener() {
+                    @Override
+                    public void propertyChange(PropertyChangeEvent evt) {
+                        if (evt.getPropertyName().equals(TurnSelection.jRBLeft_CHANGED)) {
+                            listBLanes.add((BLane) evt.getNewValue());
+                            bLanesB.setLanes(listBLanes);
+                            printChageLanes();
+                        } else if (evt.getPropertyName().equals(TurnSelection.jRBRight_CHANGED)) {
+                            listBLanes.add((BLane) evt.getNewValue());
+                            bLanesB.setLanes(listBLanes);
+                            printChageLanes();
+                        } else if (evt.getPropertyName().equals(TurnSelection.jCBThrough_CHANGED)) {
+                            listBLanes.add((BLane) evt.getNewValue());
+                            bLanesB.setLanes(listBLanes);
+                            printChageLanes();
+                        }
+
                     }
-
-                }
-            });
-            jpnlturnsB.add(turnSelection);
+                });
+                jpnlturnsB.add(turnSelection);
+            }
+            jpnlturnsB.revalidate();
+            jpnlturnsB.repaint();
         }
-        jpnlturnsB.revalidate();
-        jpnlturnsB.repaint();
     }
 
     public void lanesC(BLanes bLanes) {
-        jpnlturnsC.setBorder(javax.swing.BorderFactory.createTitledBorder(null, bLanes.getType(), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, new java.awt.Color(102, 102, 102)));
-        jpnlturnsC.removeAll();
-        //Clone objtects
-        bLanesC.setType(bLanes.getType());
-        List<BLane> listbl = new ArrayList<>();
-        for (int k = 0; k < bLanes.getLanes().size(); k++) {
-            BLane bl = new BLane(new String(bLanes.getType()), new Integer(bLanes.getLanes().get(k).getPosition()), new String(bLanes.getLanes().get(k).getTurn()));
-            listbl.add(bl);
-        }
-        bLanesC.setLanes(listbl);
+        if (bLanes.getLanes().size() > 0) {
+            if (bLanes.getType().equals("forward")) {
+                jrbLaneForwardC.setSelected(true);
+            } else {
+                jrbLaneBackwardC.setSelected(false);
+            }
+            jpnlturnsC.setBorder(javax.swing.BorderFactory.createTitledBorder(null, bLanes.getType(), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, new java.awt.Color(102, 102, 102)));
+            jpnlturnsC.removeAll();
+            //Clone objtects
+            bLanesC.setType(bLanes.getType());
+            List<BLane> listbl = new ArrayList<>();
+            for (int k = 0; k < bLanes.getLanes().size(); k++) {
+                BLane bl = new BLane(new String(bLanes.getType()), new Integer(bLanes.getLanes().get(k).getPosition()), new String(bLanes.getLanes().get(k).getTurn()));
+                listbl.add(bl);
+            }
+            bLanesC.setLanes(listbl);
 
-        int numLanes = bLanesC.getLanes().size();
-        jpnlturnsC.setLayout(new GridLayout(1, numLanes));
-        final List<BLane> listBLanes = bLanesC.getLanes();
-        for (int i = 0; i < numLanes; i++) {
-            BLane bLine = listBLanes.get(i);
-            final TurnSelection turnSelection = new TurnSelection(bLine);
-            turnSelection.addPropertyChangeListener(new PropertyChangeListener() {
-                @Override
-                public void propertyChange(PropertyChangeEvent evt) {
-                    if (evt.getPropertyName().equals(TurnSelection.jRBLeft_CHANGED) || evt.getPropertyName().equals(TurnSelection.jRBRight_CHANGED) || evt.getPropertyName().equals(TurnSelection.jCBThrough_CHANGED)) {
-                        listBLanes.add((BLane) evt.getNewValue());
-                        bLanesC.setLanes(listBLanes);
-                        printChageLanes();
+            int numLanes = bLanesC.getLanes().size();
+            jpnlturnsC.setLayout(new GridLayout(1, numLanes));
+            final List<BLane> listBLanes = bLanesC.getLanes();
+            for (int i = 0; i < numLanes; i++) {
+                BLane bLine = listBLanes.get(i);
+                final TurnSelection turnSelection = new TurnSelection(bLine);
+                turnSelection.addPropertyChangeListener(new PropertyChangeListener() {
+                    @Override
+                    public void propertyChange(PropertyChangeEvent evt) {
+                        if (evt.getPropertyName().equals(TurnSelection.jRBLeft_CHANGED) || evt.getPropertyName().equals(TurnSelection.jRBRight_CHANGED) || evt.getPropertyName().equals(TurnSelection.jCBThrough_CHANGED)) {
+                            listBLanes.add((BLane) evt.getNewValue());
+                            bLanesC.setLanes(listBLanes);
+                            printChageLanes();
+                        }
                     }
-                }
-            });
-            jpnlturnsC.add(turnSelection);
+                });
+                jpnlturnsC.add(turnSelection);
+            }
+            jpnlturnsC.revalidate();
+            jpnlturnsC.repaint();
         }
-        jpnlturnsC.revalidate();
-        jpnlturnsC.repaint();
     }
 
     public void printChageLanes() {
@@ -417,14 +436,13 @@ public class TurnSelectionBidirectional extends JPanel {
 
     }
 
-    public void lanes(BRoad bRoad) {
-        valBRoad.setLanes("Bidirectional");
-        lanesA(bRoad.getLanesA());
-        lanesB(bRoad.getLanesB());
-        lanesC(bRoad.getLanesC());
-
-    }
-
+//    public void lanesa(BRoad bRoad) {
+//        valBRoad.setLanes("Bidirectional");
+//        lanesA(bRoad.getLanesA());
+//        lanesB(bRoad.getLanesB());
+//        lanesC(bRoad.getLanesC());
+//
+//    }
     public void setDefault(BRoad bRoad) {
         valBRoad.setLanes("Bidirectional");
         lanesA(bRoad.getLanesA());
