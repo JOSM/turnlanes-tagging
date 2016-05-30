@@ -330,11 +330,12 @@ public class TurnSelectionBidirectional extends JPanel {
     }
 
     public void lanesB(BLanes bLanes) {
+        jpnlturnsB.setBorder(null);
         jpnlturnsB.removeAll();
         jpnlturnsB.revalidate();
         jpnlturnsB.repaint();
         jchbothwayB.setSelected(false);
-        
+
         if (bLanes.getLanes().size() > 0) {
             if (bLanes.getType().equals("both_ways")) {
                 jchbothwayB.setSelected(true);
