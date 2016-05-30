@@ -112,7 +112,7 @@ public class BuildTurnLanes extends JPanel {
                 if (listBRoads.get(rowNum).getName().equals("Unidirectional")) {
                     setLanesByRoadUnidirectional(listBRoads.get(rowNum));
                 } else {
-                    setLanesByRoadBidirectinal(listBRoads.get(rowNum));
+                    setLanesByRoadBidirectional(listBRoads.get(rowNum));
                 }
             }
         }
@@ -243,7 +243,6 @@ public class BuildTurnLanes extends JPanel {
         pnlContentDirectional.removeAll();
         pnlContentDirectional.setLayout(new GridLayout(1, 1));
         turnSelectionUnidirectional.setDefault(road);
-        turnSelectionUnidirectional.setDefault(bRoad);
         pnlContentDirectional.add(turnSelectionUnidirectional);
         pnlContentDirectional.revalidate();
         pnlContentDirectional.repaint();
@@ -259,11 +258,14 @@ public class BuildTurnLanes extends JPanel {
         pnlContentDirectional.repaint();
     }
 
-    private void setLanesByRoadBidirectinal(BRoad bRoad) {
+    private void setLanesByRoadBidirectional(BRoad bRoad) {
         jrbBidirectional.setSelected(true);
         pnlContentDirectional.removeAll();
         pnlContentDirectional.setLayout(new GridLayout(1, 1));
+        
+        
         turnSelectionBidirectional.setDefault(bRoad);
+        
         pnlContentDirectional.add(turnSelectionBidirectional);
         pnlContentDirectional.revalidate();
         pnlContentDirectional.repaint();
