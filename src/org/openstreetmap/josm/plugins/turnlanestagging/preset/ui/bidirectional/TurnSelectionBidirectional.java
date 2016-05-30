@@ -200,9 +200,8 @@ public class TurnSelectionBidirectional extends JPanel {
     public JPanel buildturn() {
         jpanelcontentTurns = new JPanel();
         jpanelcontentTurns.setLayout(new BorderLayout());
-
         jpanelcontentTurns.add(jpnlturnsA, BorderLayout.WEST);
-        //jpanelcontentTurns.add(jpnlturnsB, BorderLayout.CENTER);
+        jpanelcontentTurns.add(jpnlturnsB, BorderLayout.CENTER);
         jpanelcontentTurns.add(jpnlturnsC, BorderLayout.EAST);
         return jpanelcontentTurns;
 
@@ -331,12 +330,16 @@ public class TurnSelectionBidirectional extends JPanel {
     }
 
     public void lanesB(BLanes bLanes) {
+        jpnlturnsB.removeAll();
+        jpnlturnsB.revalidate();
+        jpnlturnsB.repaint();
+        jchbothwayB.setSelected(false);
+        
         if (bLanes.getLanes().size() > 0) {
             if (bLanes.getType().equals("both_ways")) {
                 jchbothwayB.setSelected(true);
             }
             jpnlturnsB.setBorder(javax.swing.BorderFactory.createTitledBorder(null, bLanes.getType(), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, new java.awt.Color(102, 102, 102)));
-            jpnlturnsB.removeAll();
             //Clone objtects
             bLanesB.setType(bLanes.getType());
             List<BLane> listbl = new ArrayList<>();
@@ -374,7 +377,7 @@ public class TurnSelectionBidirectional extends JPanel {
             if (bLanes.getType().equals("forward")) {
                 jrbLaneForwardC.setSelected(true);
             } else {
-                jrbLaneBackwardC.setSelected(false);
+                jrbLaneBackwardC.setSelected(true);
             }
             jpnlturnsC.setBorder(javax.swing.BorderFactory.createTitledBorder(null, bLanes.getType(), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, new java.awt.Color(102, 102, 102)));
             jpnlturnsC.removeAll();
