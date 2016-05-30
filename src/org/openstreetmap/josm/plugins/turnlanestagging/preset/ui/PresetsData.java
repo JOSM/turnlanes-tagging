@@ -49,9 +49,9 @@ public class PresetsData {
         lbA.add(new BLane("backward", 3, "through"));
         bLanesA.setLanes(lbA);
 
-        BLanes bLanesB = new BLanes("both_way");
+        BLanes bLanesB = new BLanes("both_ways");
         List<BLane> lbB = new ArrayList<>();
-        lbB.add(new BLane("both_way", 1, "left"));
+        lbB.add(new BLane("both_ways", 1, "left"));
         bLanesB.setLanes(lbB);
 
         BLanes bLanesC = new BLanes("forward");

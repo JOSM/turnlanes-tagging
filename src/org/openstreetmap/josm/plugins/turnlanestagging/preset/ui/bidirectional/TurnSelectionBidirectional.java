@@ -76,7 +76,7 @@ public class TurnSelectionBidirectional extends JPanel {
     //Preset Data
     PresetsData presetsData = new PresetsData();
     int min = 1;
-    int max = 5;
+    int max = 10;
     int step = 1;
     int initValue = 1;
 
@@ -260,13 +260,11 @@ public class TurnSelectionBidirectional extends JPanel {
     ActionListener actionListenerB = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent actionEvent) {
-            BLanes bLanes = presetsData.defaultLanes("both_way", 1);
-
-            bLanes.setType("both_way");
+            BLanes bLanes = presetsData.defaultLanes("both_ways", 1);
+            bLanes.setType("both_ways");
             if (jchbothwayB.isSelected()) {
                 jpanelcontentTurns.add(jpnlturnsB, BorderLayout.CENTER);
                 lanesB(bLanes);
-
             } else {
                 jpnlturnsB.setBorder(null);
                 jpnlturnsB.removeAll();
@@ -334,7 +332,7 @@ public class TurnSelectionBidirectional extends JPanel {
 
     public void lanesB(BLanes bLanes) {
         if (bLanes.getLanes().size() > 0) {
-            if (bLanes.getType().equals("both_way")) {
+            if (bLanes.getType().equals("both_ways")) {
                 jchbothwayB.setSelected(true);
             }
             jpnlturnsB.setBorder(javax.swing.BorderFactory.createTitledBorder(null, bLanes.getType(), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, new java.awt.Color(102, 102, 102)));

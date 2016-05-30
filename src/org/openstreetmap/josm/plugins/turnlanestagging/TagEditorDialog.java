@@ -121,8 +121,8 @@ public class TagEditorDialog extends JDialog {
                     tagEditor.getModel().applyKeyValuePair(new KeyValuePair("lanes", null));
                     tagEditor.getModel().applyKeyValuePair(new KeyValuePair("turn:lanes:forward", null));
                     tagEditor.getModel().applyKeyValuePair(new KeyValuePair("lanes:forward", null));
-                    tagEditor.getModel().applyKeyValuePair(new KeyValuePair("turn:lanes:bothways", null));
-                    tagEditor.getModel().applyKeyValuePair(new KeyValuePair("lanes:bothways", null));
+                    tagEditor.getModel().applyKeyValuePair(new KeyValuePair("turn:lanes:both_ways", null));
+                    tagEditor.getModel().applyKeyValuePair(new KeyValuePair("lanes:both_ways", null));
                     tagEditor.getModel().applyKeyValuePair(new KeyValuePair("turn:lanes:backward", null));
                     tagEditor.getModel().applyKeyValuePair(new KeyValuePair("lanes:backward", null));
 
@@ -135,8 +135,8 @@ public class TagEditorDialog extends JDialog {
                             tagEditor.getModel().applyKeyValuePair(new KeyValuePair("lanes:forward", String.valueOf(b.getLanesA().getLanes().size())));
                         }
                         if (!b.getLanesB().getLanes().isEmpty()) {
-                            tagEditor.getModel().applyKeyValuePair(new KeyValuePair("turn:lanes:bothways", b.getLanesB().getTagturns()));
-                            tagEditor.getModel().applyKeyValuePair(new KeyValuePair("lanes:bothways", String.valueOf(b.getLanesB().getLanes().size())));
+                            tagEditor.getModel().applyKeyValuePair(new KeyValuePair("turn:lanes:both_ways", b.getLanesB().getTagturns()));
+                            tagEditor.getModel().applyKeyValuePair(new KeyValuePair("lanes:both_ways", String.valueOf(b.getLanesB().getLanes().size())));
                         }
                         if (!b.getLanesC().getLanes().isEmpty()) {
                             tagEditor.getModel().applyKeyValuePair(new KeyValuePair("turn:lanes:backward", b.getLanesC().getTagturns()));
