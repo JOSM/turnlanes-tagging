@@ -1,10 +1,12 @@
 package org.openstreetmap.josm.plugins.turnlanestagging.bean;
 
+import java.io.Serializable;
+
 /**
  *
  * @author ruben
  */
-public class BLane {
+public class BLane implements Serializable {
 
     private int position;
     private String turn;

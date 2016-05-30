@@ -2,6 +2,7 @@ package org.openstreetmap.josm.plugins.turnlanestagging.bean;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -12,7 +13,7 @@ import org.openstreetmap.josm.plugins.turnlanestagging.util.Util;
  *
  * @author ruben
  */
-public class BRoad {
+public class BRoad implements Serializable{
 
     String name;
     List<BLane> listLines;

@@ -27,6 +27,7 @@ import javax.swing.event.DocumentListener;
 import org.openstreetmap.josm.plugins.turnlanestagging.bean.BRoad;
 import org.openstreetmap.josm.plugins.turnlanestagging.preset.ui.bidirectional.TurnSelectionBidirectional;
 import org.openstreetmap.josm.plugins.turnlanestagging.preset.ui.unidirectional.TurnSelectionUnidirectional;
+import org.openstreetmap.josm.plugins.turnlanestagging.util.Util;
 
 /**
  *
@@ -110,9 +111,9 @@ public class BuildTurnLanes extends JPanel {
             if (e.getClickCount() == 1) {
                 int rowNum = presetsTable.rowAtPoint(e.getPoint());
                 if (listBRoads.get(rowNum).getName().equals("Unidirectional")) {
-                    setLanesByRoadUnidirectional(listBRoads.get(rowNum));
+                    setLanesByRoadUnidirectional((BRoad)Util.deepClone(listBRoads.get(rowNum)));
                 } else {
-                    setLanesByRoadBidirectinal(listBRoads.get(rowNum));
+                    setLanesByRoadBidirectinal((BRoad)Util.deepClone(listBRoads.get(rowNum)));
                 }
             }
         }
