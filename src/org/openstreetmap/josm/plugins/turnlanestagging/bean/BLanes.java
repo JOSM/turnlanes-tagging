@@ -1,5 +1,6 @@
 package org.openstreetmap.josm.plugins.turnlanestagging.bean;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -9,7 +10,7 @@ import java.util.TreeMap;
  *
  * @author ruben
  */
-public class BLanes {
+public class BLanes implements Serializable{
 
     String type;
     List<BLane> lanes= new ArrayList<>();

@@ -81,7 +81,7 @@ public class TagEditorDialog extends JDialog {
         );
 
         splitPane.setOneTouchExpandable(true);
-        splitPane.setDividerLocation(300);
+        splitPane.setDividerLocation(350);
         getContentPane().add(splitPane, BorderLayout.CENTER);
         getContentPane().add(buildButtonRowPanel(), BorderLayout.SOUTH);
         getRootPane().registerKeyboardAction(cancelAction, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
