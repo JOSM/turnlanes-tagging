@@ -75,7 +75,7 @@ public class TurnSelectionBidirectional extends JPanel {
 
     //Preset Data
     PresetsData presetsData = new PresetsData();
-    int min = 1;
+    int min = 0;
     int max = 10;
     int step = 1;
     int initValue = 1;
@@ -91,9 +91,7 @@ public class TurnSelectionBidirectional extends JPanel {
         add(buildselect(), BorderLayout.NORTH);
         add(buildturn(), BorderLayout.CENTER);
         //add(jtfChangeLanes, BorderLayout.SOUTH);
-
         jtfChangeLanes.getDocument().addDocumentListener(new SetLanesChangeListener());
-
     }
 
     //Action Liseners when the roads changes
@@ -245,6 +243,12 @@ public class TurnSelectionBidirectional extends JPanel {
     };
 
     public void lanesA(BLanes bLanes) {
+        jpnlturnsA.setBorder(null);
+        jpnlturnsA.removeAll();
+        jpnlturnsA.revalidate();
+        jpnlturnsA.repaint();
+        jrbLaneForwardA.setSelected(false);
+        jrbLaneBackwardA.setSelected(false);
         if (bLanes.getLanes().size() > 0) {
             if (bLanes.getType().equals("forward")) {
                 jrbLaneForwardA.setSelected(true);
@@ -261,7 +265,6 @@ public class TurnSelectionBidirectional extends JPanel {
                 listbl.add(bl);
             }
             bLanesA.setLanes(listbl);
-
             int numLanes = bLanesA.getLanes().size();
             jpnlturnsA.setLayout(new GridLayout(1, numLanes));
             final List<BLane> listBLanes = bLanesA.getLanes();
@@ -291,7 +294,6 @@ public class TurnSelectionBidirectional extends JPanel {
         jpnlturnsB.revalidate();
         jpnlturnsB.repaint();
         jchbothwayB.setSelected(false);
-
         if (bLanes.getLanes().size() > 0) {
             if (bLanes.getType().equals("both_ways")) {
                 jchbothwayB.setSelected(true);
@@ -305,7 +307,6 @@ public class TurnSelectionBidirectional extends JPanel {
                 listbl.add(bl);
             }
             bLanesB.setLanes(listbl);
-
             int numLanes = bLanesB.getLanes().size();
             jpnlturnsB.setLayout(new GridLayout(1, numLanes));
             final List<BLane> listBLanes = bLanesB.getLanes();
@@ -330,6 +331,12 @@ public class TurnSelectionBidirectional extends JPanel {
     }
 
     public void lanesC(BLanes bLanes) {
+        jpnlturnsC.setBorder(null);
+        jpnlturnsC.removeAll();
+        jpnlturnsC.revalidate();
+        jpnlturnsC.repaint();
+        jrbLaneForwardC.setSelected(false);
+        jrbLaneBackwardC.setSelected(false);
         if (bLanes.getLanes().size() > 0) {
             if (bLanes.getType().equals("forward")) {
                 jrbLaneForwardC.setSelected(true);
