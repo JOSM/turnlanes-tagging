@@ -116,7 +116,6 @@ public class TurnSelectionUnidirectional extends JPanel {
             listbl.add(bl);
         }
         valBRoad.getLanesUnid().setLanes(listbl);
-
         jpanelcontentTurns.setLayout(new GridLayout(1, valBRoad.getLanesUnid().getLanes().size()));
         int numLanes = valBRoad.getLanesUnid().getLanes().size();
 
@@ -130,21 +129,10 @@ public class TurnSelectionUnidirectional extends JPanel {
             turnSelection.addPropertyChangeListener(new PropertyChangeListener() {
                 @Override
                 public void propertyChange(PropertyChangeEvent evt) {
-                    if (evt.getPropertyName().equals(turnSelection.jRBLeft_CHANGED)) {
+                    if (evt.getPropertyName().equals(turnSelection.jRBLeft_CHANGED) || evt.getPropertyName().equals(turnSelection.jRBRight_CHANGED) || evt.getPropertyName().equals(turnSelection.jCBThrough_CHANGED)) {
                         listBLines.add((BLane) evt.getNewValue());
                         valBRoad.getLanesUnid().setLanes(listBLines);
                         jtfChangeLanes.setText(valBRoad.getLanesUnid().getTagturns());
-
-                    } else if (evt.getPropertyName().equals(turnSelection.jRBRight_CHANGED)) {
-                        listBLines.add((BLane) evt.getNewValue());
-                        valBRoad.getLanesUnid().setLanes(listBLines);
-                        jtfChangeLanes.setText(valBRoad.getLanesUnid().getTagturns());
-
-                    } else if (evt.getPropertyName().equals(turnSelection.jCBThrough_CHANGED)) {
-                        listBLines.add((BLane) evt.getNewValue());
-                        valBRoad.getLanesUnid().setLanes(listBLines);
-                        jtfChangeLanes.setText(valBRoad.getLanesUnid().getTagturns());
-
                     }
                 }
             });
