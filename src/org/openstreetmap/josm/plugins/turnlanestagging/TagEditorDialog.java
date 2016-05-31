@@ -159,33 +159,7 @@ public class TagEditorDialog extends JDialog {
         tagEditor.getModel().clearAppliedPresets();
         tagEditor.getModel().initFromJOSMSelection();
         getModel().ensureOneTag();
-
-        //Set the selection Roads
-        BRoad bRoad = new BRoad("selectRoad", new ArrayList<BLane>());
-        Collection<OsmPrimitive> selection = Main.main.getCurrentDataSet().getSelected();
-        int numLanes = 0;
-        for (OsmPrimitive element : selection) {
-            for (String key : element.keySet()) {
-                if (key.equals("turn:lanes")) {
-                    String value = element.get(key);
-                    bRoad.setLanes(value);
-                    bRoad.setName("selectRoad");
-                }
-                if (key.equals("lanes") && Util.isInt(element.get(key))) {
-                    numLanes = Integer.valueOf(element.get(key));
-                }
-            }
-        }
-        if (bRoad.getNumLanes() > 0) {
-            buildTurnLanes.setLanesByRoadUnidirectional(bRoad);
-            if (numLanes == 0) {
-                Util.notification(tr("Tag lanes is missing"));
-            } else if (bRoad.getNumLanes() != numLanes) {
-                Util.notification(tr("Number of lanes doesn't match with turn lanes"));
-            }
-        } else {
-            buildTurnLanes.startDefaultUnidirectional();
-        }
+        setRoadProperties();
     }
 
     //Buton Actions
@@ -249,4 +223,57 @@ public class TagEditorDialog extends JDialog {
         return true;
     }
 
+    public void setRoadProperties() {
+        //Set the selection Roads
+        BRoad bRoad = new BRoad("Unidirectional", new ArrayList<BLane>());
+        Collection<OsmPrimitive> selection = Main.main.getCurrentDataSet().getSelected();
+        int numLanes = 0;
+
+        for (OsmPrimitive element : selection) {
+            for (String key : element.keySet()) {
+                //Unidirectional
+                if (key.equals("turn:lanes")) {
+                    bRoad.setLanes(element.get(key));
+                    bRoad.setName("Unidirectional");
+                } else if (key.equals("turn:lanes:forward")) {
+                    bRoad.getLanesA().setStringLanes("forward", element.get(key));
+                    bRoad.getLanesA().setType("forward");
+                    bRoad.setName("Bidirectional");
+                } else if (key.equals("turn:lanes:both_ways")) {
+                    bRoad.getLanesB().setStringLanes("both_ways", element.get(key));
+                    bRoad.getLanesB().setType("both_ways");
+                    bRoad.setName("Bidirectional");
+                } else if (key.equals("turn:lanes:backward")) {
+                    bRoad.getLanesC().setStringLanes("backward", element.get(key));
+                    bRoad.getLanesC().setType("backward");
+                    bRoad.setName("Bidirectional");
+                }
+//                if (key.equals("lanes") && Util.isInt(element.get(key))) {
+//                    numLanes = Integer.valueOf(element.get(key));
+//                }
+
+            }
+        }
+
+        if (bRoad.getName().equals("Unidirectional")) {
+            if (bRoad.getNumLanes() > 0) {
+                buildTurnLanes.setLanesByRoadUnidirectional(bRoad);
+                if (numLanes == 0) {
+                    Util.notification(tr("Tag lanes is missing"));
+                } else if (bRoad.getNumLanes() != numLanes) {
+                    Util.notification(tr("Number of lanes doesn't match with turn lanes"));
+                }
+            } else {
+                buildTurnLanes.startDefaultUnidirectional();
+            }
+        } else {
+
+            if (bRoad.getLanesA().getLanes().size() > 0 || bRoad.getLanesB().getLanes().size() > 0 || bRoad.getLanesC().getLanes().size() > 0) {
+                buildTurnLanes.setLanesByRoadBidirectional(bRoad);
+            } else {
+                buildTurnLanes.startDefaultBidirectional();
+            }
+        }
+
+    }
 }

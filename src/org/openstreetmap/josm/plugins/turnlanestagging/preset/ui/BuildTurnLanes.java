@@ -104,6 +104,7 @@ public class BuildTurnLanes extends JPanel {
         return scrollPane;
     }
 
+
     private class ClickAdapter extends MouseAdapter {
 
         @Override
@@ -113,7 +114,7 @@ public class BuildTurnLanes extends JPanel {
                 if (listBRoads.get(rowNum).getName().equals("Unidirectional")) {
                     setLanesByRoadUnidirectional((BRoad)Util.deepClone(listBRoads.get(rowNum)));
                 } else {
-                    setLanesByRoadBidirectinal((BRoad)Util.deepClone(listBRoads.get(rowNum)));
+                    setLanesByRoadBidirectional((BRoad)Util.deepClone(listBRoads.get(rowNum)));
                 }
             }
         }
@@ -250,7 +251,7 @@ public class BuildTurnLanes extends JPanel {
         pnlContentDirectional.repaint();
     }
 
-    private void startDefaultBidirectional() {
+    public void startDefaultBidirectional() {
         jrbBidirectional.setSelected(true);
         pnlContentDirectional.removeAll();
         pnlContentDirectional.setLayout(new GridLayout(1, 1));
@@ -260,7 +261,7 @@ public class BuildTurnLanes extends JPanel {
         pnlContentDirectional.repaint();
     }
 
-    private void setLanesByRoadBidirectinal(BRoad bRoad) {
+    public void setLanesByRoadBidirectional(BRoad bRoad) {
         jrbBidirectional.setSelected(true);
         pnlContentDirectional.removeAll();
         pnlContentDirectional.setLayout(new GridLayout(1, 1));
@@ -269,5 +270,9 @@ public class BuildTurnLanes extends JPanel {
         pnlContentDirectional.revalidate();
         pnlContentDirectional.repaint();
     }
+//    public void setLanesByRoadBidirectional(BRoad bRoad) {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//    }
 
+    
 }
