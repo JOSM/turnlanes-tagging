@@ -239,10 +239,10 @@ public class TagEditorDialog extends JDialog {
                 if (key.equals("turn:lanes")) {
                     bRoad.setLanes(element.get(key));
                     bRoad.setName("Unidirectional");
-                }
-
-                if (key.equals("lanes") && Util.isInt(element.get(key))) {
+                } else if (key.equals("lanes") && Util.isInt(element.get(key)) && !element.hasKey("lanes")) {
                     numLanes = Integer.valueOf(element.get(key));
+                    //Aqui continuamos para set por numeor de lanes
+//                    bRoad.setListLines(presetsData.);
                 } //Bidirectional
                 //on turn lanes
                 else if (key.equals("turn:lanes:forward")) {
