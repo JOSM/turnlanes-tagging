@@ -1,26 +1,21 @@
 package org.openstreetmap.josm.plugins.turnlanestagging.bean;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
-import org.openstreetmap.josm.plugins.turnlanestagging.util.Util;
+import java.io.Serializable;
 
 /**
  *
  * @author ruben
  */
-public class BRoad implements Cloneable {
+public class BRoad implements Serializable {
 
     String name;
-    List<BLine> listLines;
+//    List<BLane> lanes;
+    private BLanes lanesUnid = new BLanes();
+    private BLanes lanesA = new BLanes();
+    private BLanes lanesB = new BLanes();
+    private BLanes lanesC = new BLanes();
 
     public BRoad() {
-    }
-
-    public BRoad(String name, List<BLine> listLines) {
-        this.name = name;
-        this.listLines = listLines;
     }
 
     public String getName() {
@@ -31,47 +26,55 @@ public class BRoad implements Cloneable {
         this.name = name;
     }
 
-    public List<BLine> getListLines() {
-        return listLines;
+    public int getNumLanesoo() {
+        return lanesUnid.getLanes().size();
     }
 
-    public void setListLines(List<BLine> newLines) {
-        Map<Integer, BLine> map = new TreeMap<Integer, BLine>();
-        for (int i = 0; i < newLines.size(); i++) {
-            map.put(newLines.get(i).getPosition(), newLines.get(i));
+    public int getNumLanesBidirectional() {
+        int numdirc = 0;
+        if (lanesA != null) {
+            numdirc = numdirc + lanesA.getLanes().size();
         }
-        List<BLine> listLs = new ArrayList<>(map.values());
-        this.listLines = listLs;
-    }
-
-    public String getTagturns() {
-        String tagturns = "";
-        for (int i = 0; i < listLines.size(); i++) {
-            if (i == 0) {
-                tagturns = listLines.get(i).getTurn();
-            } else {
-                tagturns = tagturns + "|" + listLines.get(i).getTurn();
-            }
+        if (lanesB != null) {
+            numdirc = numdirc + lanesB.getLanes().size();
         }
-        return tagturns;
-    }
-
-    public int getNumLanes() {
-        return listLines.size();
-    }
-
-    @Override
-    protected Object clone() throws CloneNotSupportedException {
-        return super.clone();
-    }
-
-    public void setLanes(String turnLanes) {
-        String turns[] = turnLanes.split("\\|", -1);
-        List<BLine> lst = new ArrayList<>();
-        for (int i = 0; i < turns.length; i++) {
-            BLine bLine = new BLine((i + 1), turns[i]);
-            lst.add(bLine);
+        if (lanesC != null) {
+            numdirc = numdirc + lanesC.getLanes().size();
         }
-        this.listLines = lst;
+        return numdirc;
     }
+
+    public BLanes getLanesA() {
+        return lanesA;
+    }
+
+    public void setLanesA(BLanes lanesA) {
+        this.lanesA = lanesA;
+    }
+
+    public BLanes getLanesB() {
+        return lanesB;
+    }
+
+    public void setLanesB(BLanes lanesB) {
+        this.lanesB = lanesB;
+    }
+
+    public BLanes getLanesC() {
+        return lanesC;
+    }
+
+    public void setLanesC(BLanes lanesC) {
+        this.lanesC = lanesC;
+    }
+
+    //for unidirectional
+    public BLanes getLanesUnid() {
+        return lanesUnid;
+    }
+
+    public void setLanesUnid(BLanes Lanes) {
+        this.lanesUnid = Lanes;
+    }
+
 }

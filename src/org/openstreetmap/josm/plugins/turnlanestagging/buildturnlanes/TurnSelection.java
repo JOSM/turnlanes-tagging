@@ -1,16 +1,11 @@
-package org.openstreetmap.josm.plugins.turnlanestagging.preset.ui;
+package org.openstreetmap.josm.plugins.turnlanestagging.buildturnlanes;
 
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.BorderFactory;
-import javax.swing.ButtonGroup;
-import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import org.openstreetmap.josm.plugins.turnlanestagging.bean.BLine;
+import org.openstreetmap.josm.plugins.turnlanestagging.bean.BLane;
 import org.openstreetmap.josm.tools.ImageProvider;
 
 /**
@@ -27,9 +22,9 @@ public class TurnSelection extends JPanel {
     private JPanel jPOptions;
     private JCheckBox jCBLeft;
     private JCheckBox jCBRight;
-    BLine bLine;
+    BLane bLine;
 
-    public TurnSelection(BLine bl) {
+    public TurnSelection(BLane bl) {
         super();
         this.bLine = bl;
         init();
@@ -42,15 +37,16 @@ public class TurnSelection extends JPanel {
         jCBThrough = new JCheckBox();
 
         jCBLeft.setIcon(ImageProvider.get("types", "empty.png"));
-        jCBLeft.setSelectedIcon(ImageProvider.get("types", "left.png"));
+
+        jCBLeft.setSelectedIcon(ImageProvider.get("types", "left-" + bLine.getType() + ".png"));
         jCBLeft.addActionListener(new LeftListener());
 
         jCBRight.setIcon(ImageProvider.get("types", "empty.png"));
-        jCBRight.setSelectedIcon(ImageProvider.get("types", "right.png"));
+        jCBRight.setSelectedIcon(ImageProvider.get("types", "right-" + bLine.getType() + ".png"));
         jCBRight.addActionListener(new RightListener());
 
         jCBThrough.setIcon(ImageProvider.get("types", "empty.png"));
-        jCBThrough.setSelectedIcon(ImageProvider.get("types", "through.png"));
+        jCBThrough.setSelectedIcon(ImageProvider.get("types", "through-" + bLine.getType() + ".png"));
         jCBThrough.addActionListener(new ThroughListener());
 
         jPOptions = new JPanel(new GridLayout(1, 3));

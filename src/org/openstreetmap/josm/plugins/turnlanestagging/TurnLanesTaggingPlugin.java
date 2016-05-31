@@ -7,7 +7,7 @@ import org.openstreetmap.josm.Main;
 import org.openstreetmap.josm.plugins.Plugin;
 import org.openstreetmap.josm.plugins.PluginInformation;
 import org.openstreetmap.josm.plugins.turnlanestagging.bean.BRoad;
-import org.openstreetmap.josm.plugins.turnlanestagging.preset.ui.PresetsData;
+import org.openstreetmap.josm.plugins.turnlanestagging.preset.PresetsData;
 
 /**
  *
@@ -28,9 +28,9 @@ public class TurnLanesTaggingPlugin extends Plugin {
         PresetsData presetsData = new PresetsData();
         List<BRoad> listpresets = presetsData.dataPreset();
 
-        for (int i = 0; i < listpresets.size(); i++) {
-            menu.add(new AddPresetAction(listpresets.get(i).getNumLanes(), listpresets.get(i).getTagturns(), (i + 1)));
-        }
+//        for (int i = 0; i < listpresets.size(); i++) {
+//            menu.add(new AddPresetAction(listpresets.get(i).getNumLanes(), listpresets.get(i).getTagturns(), (i + 1)));
+//        }
 
         Main.main.menu.editMenu.add(menu);
 

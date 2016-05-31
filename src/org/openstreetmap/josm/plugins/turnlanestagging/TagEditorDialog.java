@@ -9,9 +9,8 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.regex.Pattern;
+import java.util.List;
 import javax.swing.AbstractAction;
-import javax.swing.Action;
 import static javax.swing.Action.ACCELERATOR_KEY;
 import static javax.swing.Action.NAME;
 import static javax.swing.Action.SHORT_DESCRIPTION;
@@ -27,13 +26,13 @@ import org.openstreetmap.josm.Main;
 import org.openstreetmap.josm.data.osm.DataSet;
 import org.openstreetmap.josm.data.osm.OsmPrimitive;
 import org.openstreetmap.josm.gui.tagging.TagEditorModel;
-import org.openstreetmap.josm.gui.tagging.ac.AutoCompletionManager;
-import org.openstreetmap.josm.plugins.turnlanestagging.bean.BLine;
+import org.openstreetmap.josm.plugins.turnlanestagging.bean.BLane;
 import org.openstreetmap.josm.plugins.turnlanestagging.bean.BRoad;
 import org.openstreetmap.josm.plugins.turnlanestagging.editor.TagEditor;
 import org.openstreetmap.josm.plugins.turnlanestagging.editor.ac.KeyValuePair;
-import org.openstreetmap.josm.plugins.turnlanestagging.preset.ui.PresetsTableModel;
-import org.openstreetmap.josm.plugins.turnlanestagging.preset.ui.PresetSelector;
+import org.openstreetmap.josm.plugins.turnlanestagging.preset.PresetsTableModel;
+import org.openstreetmap.josm.plugins.turnlanestagging.buildturnlanes.BuildTurnLanes;
+import org.openstreetmap.josm.plugins.turnlanestagging.preset.PresetsData;
 import org.openstreetmap.josm.plugins.turnlanestagging.util.Util;
 import static org.openstreetmap.josm.tools.I18n.tr;
 import org.openstreetmap.josm.tools.ImageProvider;
@@ -55,13 +54,15 @@ public class TagEditorDialog extends JDialog {
         return instance;
     }
 
-    static public final Dimension PREFERRED_SIZE = new Dimension(800, 500);
+    static public final Dimension PREFERRED_SIZE = new Dimension(800, 600);
 
     private TagEditor tagEditor = null;
-    private AutoCompletionManager autocomplete = null;
-    private PresetSelector presetSelector = null;
+    private BuildTurnLanes buildTurnLanes = null;
     private OKAction okAction = null;
     private CancelAction cancelAction = null;
+
+    // Last Editions 
+    List<BRoad> lastEdits = new ArrayList<>();
 
     protected void build() {
         //Parameters for Dialog
@@ -85,7 +86,7 @@ public class TagEditorDialog extends JDialog {
         );
 
         splitPane.setOneTouchExpandable(true);
-        splitPane.setDividerLocation(250);
+        splitPane.setDividerLocation(450);
         getContentPane().add(splitPane, BorderLayout.CENTER);
         getContentPane().add(buildButtonRowPanel(), BorderLayout.SOUTH);
         getRootPane().registerKeyboardAction(cancelAction, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
@@ -114,63 +115,56 @@ public class TagEditorDialog extends JDialog {
 
     // Build preset grid
     protected JPanel buildPresetGridPanel() {
-        presetSelector = new PresetSelector();
-        presetSelector.addPropertyChangeListener(new PropertyChangeListener() {
+        buildTurnLanes = new BuildTurnLanes();
+        buildTurnLanes.addPropertyChangeListener(new PropertyChangeListener() {
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
-                if (evt.getPropertyName().equals(presetSelector.jTF_CHANGED)) {
+                if (evt.getPropertyName().equals(BuildTurnLanes.ROADCHANGED)) {
                     BRoad b = (BRoad) evt.getNewValue();
-                    tagEditor.getModel().applyKeyValuePair(new KeyValuePair("turn:lanes", b.getTagturns()));
-                    tagEditor.getModel().applyKeyValuePair(new KeyValuePair("lanes", String.valueOf(b.getNumLanes())));
-                    //Add oneway =yes if missing on road
-                    //                    if (addOneway()) {
-                    //                        tagEditor.getModel().applyKeyValuePair(new KeyValuePair("oneway", "yes"));
-                    //                    }
+                    //Clear
+                    tagEditor.getModel().applyKeyValuePair(new KeyValuePair("turn:lanes", null));
+                    tagEditor.getModel().applyKeyValuePair(new KeyValuePair("lanes", null));
+                    tagEditor.getModel().applyKeyValuePair(new KeyValuePair("turn:lanes:forward", null));
+                    tagEditor.getModel().applyKeyValuePair(new KeyValuePair("lanes:forward", null));
+                    tagEditor.getModel().applyKeyValuePair(new KeyValuePair("turn:lanes:both_ways", null));
+                    tagEditor.getModel().applyKeyValuePair(new KeyValuePair("lanes:both_ways", null));
+                    tagEditor.getModel().applyKeyValuePair(new KeyValuePair("turn:lanes:backward", null));
+                    tagEditor.getModel().applyKeyValuePair(new KeyValuePair("lanes:backward", null));
+
+                    if (b.getName().equals("Unidirectional")) {
+                        tagEditor.getModel().applyKeyValuePair(new KeyValuePair("turn:lanes", b.getLanesUnid().getTagturns()));
+                        tagEditor.getModel().applyKeyValuePair(new KeyValuePair("lanes", String.valueOf(b.getLanesUnid().getLanes().size())));
+                    } else {
+                        if (!b.getLanesA().getLanes().isEmpty()) {
+                            tagEditor.getModel().applyKeyValuePair(new KeyValuePair("turn:lanes:forward", b.getLanesA().getTagturns()));
+                            tagEditor.getModel().applyKeyValuePair(new KeyValuePair("lanes:forward", String.valueOf(b.getLanesA().getLanes().size())));
+                        }
+                        if (!b.getLanesB().getLanes().isEmpty()) {
+                            tagEditor.getModel().applyKeyValuePair(new KeyValuePair("turn:lanes:both_ways", b.getLanesB().getTagturns()));
+                            tagEditor.getModel().applyKeyValuePair(new KeyValuePair("lanes:both_ways", String.valueOf(b.getLanesB().getLanes().size())));
+                        }
+                        if (!b.getLanesC().getLanes().isEmpty()) {
+                            tagEditor.getModel().applyKeyValuePair(new KeyValuePair("turn:lanes:backward", b.getLanesC().getTagturns()));
+                            tagEditor.getModel().applyKeyValuePair(new KeyValuePair("lanes:backward", String.valueOf(b.getLanesC().getLanes().size())));
+                        }
+                        tagEditor.getModel().applyKeyValuePair(new KeyValuePair("lanes", String.valueOf(b.getNumLanesBidirectional())));
+                    }
                     tagEditor.repaint();
                 }
-
             }
         });
-
-        return presetSelector;
-
+        return buildTurnLanes;
     }
 
     public PresetsTableModel getPressetTableModel() {
-        return presetSelector.getModel();
+        return buildTurnLanes.getModel();
     }
 
     public void startEditSession() {
         tagEditor.getModel().clearAppliedPresets();
         tagEditor.getModel().initFromJOSMSelection();
         getModel().ensureOneTag();
-
-        //Set the selection Roads
-        BRoad bRoad = new BRoad("selectRoad", new ArrayList<BLine>());
-        Collection<OsmPrimitive> selection = Main.main.getCurrentDataSet().getSelected();
-        int numLanes = 0;
-        for (OsmPrimitive element : selection) {
-            for (String key : element.keySet()) {
-                if (key.equals("turn:lanes")) {
-                    String value = element.get(key);
-                    bRoad.setLanes(value);
-                    bRoad.setName("selectRoad");
-                }
-                if (key.equals("lanes") && Util.isInt(element.get(key))) {
-                    numLanes = Integer.valueOf(element.get(key));
-                }
-            }
-        }
-        if (bRoad.getNumLanes() > 0) {
-            presetSelector.lanes(bRoad);
-            if (numLanes == 0) {
-                Util.notification(tr("Tag lanes is missing"));
-            } else if (bRoad.getNumLanes() != numLanes) {
-                Util.notification(tr("Number of lanes doesn't match with turn lanes"));
-            }
-        } else {
-            presetSelector.setDefaultLanes();
-        }
+        setRoadProperties();
     }
 
     //Buton Actions
@@ -199,6 +193,8 @@ public class TagEditorDialog extends JDialog {
 
         public void actionPerformed(ActionEvent e) {
             run();
+            // Add on table
+            buildTurnLanes.addLastEditInTable();
         }
 
         public void run() {
@@ -234,4 +230,73 @@ public class TagEditorDialog extends JDialog {
         return true;
     }
 
+    public void setRoadProperties() {
+        //Set the selection Roads
+        PresetsData presetsData = new PresetsData();
+        BRoad bRoad = new BRoad();
+        //set as unidirectional as first
+        bRoad.setName("Unidirectional");
+        Collection<OsmPrimitive> selection = Main.main.getCurrentDataSet().getSelected();
+        for (OsmPrimitive element : selection) {
+            for (String key : element.keySet()) {
+                //Unidirectional
+                if (key.equals("turn:lanes")) {
+                    bRoad.getLanesUnid().setStringLanes("unid", element.get(key));
+                    bRoad.setName("Unidirectional");
+                } else if (key.equals("lanes") && Util.isInt(element.get(key)) && !element.hasKey("turn:lanes")) {
+                    //reparar aqui si hay fallas con lanes
+                    bRoad = presetsData.defaultRoadUnidirectional(Integer.valueOf(element.get(key)));
+                    bRoad.setName("Unidirectional");
+                } //Bidirectional
+                //on turn lanes
+                else if (key.equals("turn:lanes:forward")) {
+                    bRoad.getLanesA().setStringLanes("forward", element.get(key));
+                    bRoad.getLanesA().setType("forward");
+                    bRoad.setName("Bidirectional");
+                } else if (key.equals("turn:lanes:both_ways")) {
+                    bRoad.getLanesB().setStringLanes("both_ways", element.get(key));
+                    bRoad.getLanesB().setType("both_ways");
+                    bRoad.setName("Bidirectional");
+                } else if (key.equals("turn:lanes:backward")) {
+                    bRoad.getLanesC().setStringLanes("backward", element.get(key));
+                    bRoad.getLanesC().setType("backward");
+                    bRoad.setName("Bidirectional");
+                } //in case the road has just lanes
+                else if (key.equals("lanes:forward") && Util.isInt(element.get(key)) && !element.hasKey("turn:lanes:forward")) {
+                    bRoad.setLanesA(presetsData.defaultLanes("forward", Integer.valueOf(element.get(key))));
+                    bRoad.getLanesA().setType("forward");
+                    bRoad.setName("Bidirectional");
+                } else if (key.equals("lanes:both_ways") && Util.isInt(element.get(key)) && !element.hasKey("turn:lanes:both_ways")) {
+                    bRoad.setLanesB(presetsData.defaultLanes("both_ways", Integer.valueOf(element.get(key))));
+                    bRoad.getLanesB().setType("both_ways");
+                    bRoad.setName("Bidirectional");
+                } else if (key.equals("lanes:backward") && Util.isInt(element.get(key)) && !element.hasKey("turn:lanes:backward")) {
+                    bRoad.setLanesC(presetsData.defaultLanes("backward", Integer.valueOf(element.get(key))));
+                    bRoad.getLanesC().setType("backward");
+                    bRoad.setName("Bidirectional");
+                }
+            }
+        }
+
+        if (bRoad.getName().equals("Unidirectional")) {
+            if (bRoad.getLanesUnid().getLanes().size() > 0) {
+                buildTurnLanes.setLanesByRoadUnidirectional(bRoad);
+                //                if (numLanes == 0) {
+                //                    Util.notification(tr("Tag lanes is missing"));
+                //                } else if (bRoad.getLanesUnid().getLanes().size() != numLanes) {
+                //                    Util.notification(tr("Number of lanes doesn't match with turn lanes"));
+                //                }
+            } else {
+                //                buildTurnLanes.startDefaultUnidirectional();
+                buildTurnLanes.setLastEdit();
+            }
+        } else {
+            if (bRoad.getLanesA().getLanes().size() > 0 || bRoad.getLanesB().getLanes().size() > 0 || bRoad.getLanesC().getLanes().size() > 0) {
+                buildTurnLanes.setLanesByRoadBidirectional(bRoad);
+            } else {
+                //                buildTurnLanes.startDefaultBidirectional();
+                buildTurnLanes.setLastEdit();
+            }
+        }
+    }
 }

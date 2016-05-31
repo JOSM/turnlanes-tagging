@@ -1,4 +1,4 @@
-package org.openstreetmap.josm.plugins.turnlanestagging.preset.ui;
+package org.openstreetmap.josm.plugins.turnlanestagging.preset;
 
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
@@ -25,12 +25,15 @@ public class PresetsTable extends JTable {
     public void adjustColumnWidth(int scrollPaneWidth) {
         TableColumnModel tcm = getColumnModel();
         int width = scrollPaneWidth;
-        width = width / 2;
+        width = width / 3;
+        int reWidth = width / 2;
         if (width > 0) {
-            tcm.getColumn(0).setMinWidth(width);
-            tcm.getColumn(0).setMaxWidth(width);
-            tcm.getColumn(1).setMinWidth(width);
-            tcm.getColumn(1).setMaxWidth(width);
+            tcm.getColumn(0).setMinWidth(width - reWidth);
+            tcm.getColumn(0).setMaxWidth(width - reWidth);
+            tcm.getColumn(1).setMinWidth(width - reWidth);
+            tcm.getColumn(1).setMaxWidth(width - reWidth);
+            tcm.getColumn(2).setMinWidth(width + reWidth + reWidth);
+            tcm.getColumn(2).setMaxWidth(width + reWidth + reWidth);
         }
     }
 }
