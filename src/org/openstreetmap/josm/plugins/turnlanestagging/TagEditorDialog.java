@@ -31,6 +31,7 @@ import org.openstreetmap.josm.plugins.turnlanestagging.editor.TagEditor;
 import org.openstreetmap.josm.plugins.turnlanestagging.editor.ac.KeyValuePair;
 import org.openstreetmap.josm.plugins.turnlanestagging.preset.PresetsTableModel;
 import org.openstreetmap.josm.plugins.turnlanestagging.buildturnlanes.BuildTurnLanes;
+import org.openstreetmap.josm.plugins.turnlanestagging.preset.PresetsData;
 import org.openstreetmap.josm.plugins.turnlanestagging.util.Util;
 import static org.openstreetmap.josm.tools.I18n.tr;
 import org.openstreetmap.josm.tools.ImageProvider;
@@ -225,17 +226,26 @@ public class TagEditorDialog extends JDialog {
 
     public void setRoadProperties() {
         //Set the selection Roads
+        PresetsData presetsData = new PresetsData();
         BRoad bRoad = new BRoad("Unidirectional", new ArrayList<BLane>());
         Collection<OsmPrimitive> selection = Main.main.getCurrentDataSet().getSelected();
         int numLanes = 0;
 
         for (OsmPrimitive element : selection) {
             for (String key : element.keySet()) {
+
+                Util.print(element.hasKey("turn:lanes:forward"));
                 //Unidirectional
                 if (key.equals("turn:lanes")) {
                     bRoad.setLanes(element.get(key));
                     bRoad.setName("Unidirectional");
-                } else if (key.equals("turn:lanes:forward")) {
+                }
+
+                if (key.equals("lanes") && Util.isInt(element.get(key))) {
+                    numLanes = Integer.valueOf(element.get(key));
+                } //Bidirectional
+                //on turn lanes
+                else if (key.equals("turn:lanes:forward")) {
                     bRoad.getLanesA().setStringLanes("forward", element.get(key));
                     bRoad.getLanesA().setType("forward");
                     bRoad.setName("Bidirectional");
@@ -245,6 +255,19 @@ public class TagEditorDialog extends JDialog {
                     bRoad.setName("Bidirectional");
                 } else if (key.equals("turn:lanes:backward")) {
                     bRoad.getLanesC().setStringLanes("backward", element.get(key));
+                    bRoad.getLanesC().setType("backward");
+                    bRoad.setName("Bidirectional");
+                } //in case the road has just lanes
+                else if (key.equals("lanes:forward") && Util.isInt(element.get(key)) && !element.hasKey("turn:lanes:forward")) {
+                    bRoad.setLanesA(presetsData.defaultLanes("forward", Integer.valueOf(element.get(key))));
+                    bRoad.getLanesA().setType("forward");
+                    bRoad.setName("Bidirectional");
+                } else if (key.equals("lanes:both_ways") && Util.isInt(element.get(key)) && !element.hasKey("turn:lanes:both_ways")) {
+                    bRoad.setLanesB(presetsData.defaultLanes("both_ways", Integer.valueOf(element.get(key))));
+                    bRoad.getLanesB().setType("both_ways");
+                    bRoad.setName("Bidirectional");
+                } else if (key.equals("lanes:backward") && Util.isInt(element.get(key)) && !element.hasKey("turn:lanes:backward")) {
+                    bRoad.setLanesC(presetsData.defaultLanes("backward", Integer.valueOf(element.get(key))));
                     bRoad.getLanesC().setType("backward");
                     bRoad.setName("Bidirectional");
                 }
