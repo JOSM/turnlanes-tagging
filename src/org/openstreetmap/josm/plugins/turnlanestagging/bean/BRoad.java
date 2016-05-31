@@ -13,7 +13,7 @@ import org.openstreetmap.josm.plugins.turnlanestagging.util.Util;
  *
  * @author ruben
  */
-public class BRoad implements Serializable{
+public class BRoad implements Serializable {
 
     String name;
     List<BLane> listLines;
@@ -71,6 +71,10 @@ public class BRoad implements Serializable{
         String turns[] = turnLanes.split("\\|", -1);
         List<BLane> lst = new ArrayList<>();
         for (int i = 0; i < turns.length; i++) {
+            //remove none tags
+            if (turns[i].equals("none")) {
+                turns[i] = "";
+            }
             BLane bLine = new BLane("unid", (i + 1), turns[i]);
             lst.add(bLine);
         }

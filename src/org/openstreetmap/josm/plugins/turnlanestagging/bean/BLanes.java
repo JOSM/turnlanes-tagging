@@ -61,6 +61,10 @@ public class BLanes implements Serializable {
         String turns[] = turnLanes.split("\\|", -1);
         List<BLane> lst = new ArrayList<>();
         for (int i = 0; i < turns.length; i++) {
+            //remove none tags
+            if (turns[i].equals("none")) {
+                turns[i] = "";
+            }
             BLane bLine = new BLane(type, (i + 1), turns[i]);
             lst.add(bLine);
         }
