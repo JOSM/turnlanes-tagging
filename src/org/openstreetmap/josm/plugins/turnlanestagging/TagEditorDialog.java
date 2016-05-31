@@ -248,10 +248,6 @@ public class TagEditorDialog extends JDialog {
                     bRoad.getLanesC().setType("backward");
                     bRoad.setName("Bidirectional");
                 }
-//                if (key.equals("lanes") && Util.isInt(element.get(key))) {
-//                    numLanes = Integer.valueOf(element.get(key));
-//                }
-
             }
         }
 
