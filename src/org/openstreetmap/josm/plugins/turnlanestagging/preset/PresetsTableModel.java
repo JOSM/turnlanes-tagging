@@ -1,5 +1,5 @@
 // License: GPL. For details, see LICENSE file.
-package org.openstreetmap.josm.plugins.turnlanestagging.preset.ui;
+package org.openstreetmap.josm.plugins.turnlanestagging.preset;
 
 import java.util.List;
 import javax.swing.table.AbstractTableModel;

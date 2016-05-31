@@ -1,4 +1,4 @@
-package org.openstreetmap.josm.plugins.turnlanestagging.preset.ui;
+package org.openstreetmap.josm.plugins.turnlanestagging.buildturnlanes;
 
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;

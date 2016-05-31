@@ -1,4 +1,4 @@
-package org.openstreetmap.josm.plugins.turnlanestagging.preset.ui;
+package org.openstreetmap.josm.plugins.turnlanestagging.preset;
 
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;

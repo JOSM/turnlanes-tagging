@@ -1,4 +1,4 @@
-package org.openstreetmap.josm.plugins.turnlanestagging.preset.ui;
+package org.openstreetmap.josm.plugins.turnlanestagging.preset;
 
 import java.util.AbstractList;
 import java.util.ArrayList;

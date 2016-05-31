@@ -1,4 +1,4 @@
-package org.openstreetmap.josm.plugins.turnlanestagging.preset.ui.unidirectional;
+package org.openstreetmap.josm.plugins.turnlanestagging.buildturnlanes;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
@@ -17,8 +17,7 @@ import javax.swing.event.DocumentListener;
 import static org.openstreetmap.josm.gui.mappaint.mapcss.ExpressionFactory.Functions.tr;
 import org.openstreetmap.josm.plugins.turnlanestagging.bean.BLane;
 import org.openstreetmap.josm.plugins.turnlanestagging.bean.BRoad;
-import org.openstreetmap.josm.plugins.turnlanestagging.preset.ui.PresetsData;
-import org.openstreetmap.josm.plugins.turnlanestagging.preset.ui.TurnSelection;
+import org.openstreetmap.josm.plugins.turnlanestagging.preset.PresetsData;
 
 /**
  *

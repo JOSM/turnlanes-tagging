@@ -7,7 +7,7 @@ import org.openstreetmap.josm.Main;
 import org.openstreetmap.josm.plugins.Plugin;
 import org.openstreetmap.josm.plugins.PluginInformation;
 import org.openstreetmap.josm.plugins.turnlanestagging.bean.BRoad;
-import org.openstreetmap.josm.plugins.turnlanestagging.preset.ui.PresetsData;
+import org.openstreetmap.josm.plugins.turnlanestagging.preset.PresetsData;
 
 /**
  *

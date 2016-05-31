@@ -1,4 +1,4 @@
-package org.openstreetmap.josm.plugins.turnlanestagging.preset.ui;
+package org.openstreetmap.josm.plugins.turnlanestagging.buildturnlanes;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -25,8 +25,11 @@ import javax.swing.border.SoftBevelBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import org.openstreetmap.josm.plugins.turnlanestagging.bean.BRoad;
-import org.openstreetmap.josm.plugins.turnlanestagging.preset.ui.bidirectional.TurnSelectionBidirectional;
-import org.openstreetmap.josm.plugins.turnlanestagging.preset.ui.unidirectional.TurnSelectionUnidirectional;
+import org.openstreetmap.josm.plugins.turnlanestagging.preset.PresetsData;
+import org.openstreetmap.josm.plugins.turnlanestagging.preset.PresetsTable;
+import org.openstreetmap.josm.plugins.turnlanestagging.preset.PresetsTableModel;
+import org.openstreetmap.josm.plugins.turnlanestagging.buildturnlanes.TurnSelectionBidirectional;
+import org.openstreetmap.josm.plugins.turnlanestagging.buildturnlanes.TurnSelectionUnidirectional;
 import org.openstreetmap.josm.plugins.turnlanestagging.util.Util;
 
 /**
