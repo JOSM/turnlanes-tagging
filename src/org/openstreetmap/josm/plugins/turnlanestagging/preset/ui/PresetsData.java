@@ -42,11 +42,11 @@ public class PresetsData {
         listBRoads.add(bRoad2);
 
         //Bidirectional 1
-        BLanes bLanesA = new BLanes("backward");
+        BLanes bLanesA = new BLanes("forward");
         List<BLane> lbA = new ArrayList<>();
-        lbA.add(new BLane("backward", 1, "left;through"));
-        lbA.add(new BLane("backward", 2, "right"));
-        lbA.add(new BLane("backward", 3, "through"));
+        lbA.add(new BLane("forward", 1, "left;through"));
+        lbA.add(new BLane("forward", 2, "right"));
+        lbA.add(new BLane("forward", 3, "through"));
         bLanesA.setLanes(lbA);
 
         BLanes bLanesB = new BLanes("both_ways");
@@ -54,48 +54,38 @@ public class PresetsData {
         lbB.add(new BLane("both_ways", 1, "left"));
         bLanesB.setLanes(lbB);
 
-        BLanes bLanesC = new BLanes("forward");
+        BLanes bLanesC = new BLanes("backward");
         List<BLane> lbC = new ArrayList<>();
-        lbC.add(new BLane("forward", 1, "left"));
-        lbC.add(new BLane("forward", 2, "right"));
-        lbC.add(new BLane("forward", 3, "through"));
+        lbC.add(new BLane("backward", 1, "left"));
+        lbC.add(new BLane("backward", 2, "right"));
+        lbC.add(new BLane("backward", 3, "through"));
         bLanesC.setLanes(lbC);
 
         BRoad bRoad3 = new BRoad();
         bRoad3.setName("Bidirectional");
-
         bRoad3.setLanesA(bLanesA);
         bRoad3.setLanesB(bLanesB);
         bRoad3.setLanesC(bLanesC);
+        listBRoads.add(bRoad3);
 
         //Bidirectional 2
-        BLanes bLanes2A = new BLanes("backward");
+        BLanes bLanes2A = new BLanes("forward");
         List<BLane> lb2A = new ArrayList<>();
-        lb2A.add(new BLane("backward", 1, "left"));
-        lb2A.add(new BLane("backward", 2, "right;through"));
-        lb2A.add(new BLane("backward", 3, "through"));
+        lb2A.add(new BLane("forward", 1, "left"));
+        lb2A.add(new BLane("forward", 2, "right;through"));
+        lb2A.add(new BLane("forward", 3, "through"));
         bLanes2A.setLanes(lb2A);
         //made a empty  clall
-
-        lb2A.add(new BLane("backward", 1, "left"));
-        lb2A.add(new BLane("backward", 2, "right;through"));
-        lb2A.add(new BLane("backward", 3, "through"));
-        bLanes2A.setLanes(lb2A);
-
-        BLanes bLanes2C = new BLanes("forward");
+        BLanes bLanes2C = new BLanes("backward");
         List<BLane> lb2C = new ArrayList<>();
-        lb2C.add(new BLane("forward", 1, "left"));
-        lb2C.add(new BLane("forward", 2, "right"));
+        lb2C.add(new BLane("backward", 1, "left"));
+        lb2C.add(new BLane("backward", 2, "right"));
         bLanes2C.setLanes(lb2C);
-
         BRoad bRoad4 = new BRoad();
         bRoad4.setName("Bidirectional");
-
         bRoad4.setLanesA(bLanes2A);
         bRoad4.setLanesC(bLanes2C);
-
         listBRoads.add(bRoad4);
-        listBRoads.add(bRoad3);
 
         //Bidirectional
         return listBRoads;
