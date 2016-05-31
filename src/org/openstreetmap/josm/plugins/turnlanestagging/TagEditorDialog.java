@@ -53,7 +53,7 @@ public class TagEditorDialog extends JDialog {
         return instance;
     }
 
-    static public final Dimension PREFERRED_SIZE = new Dimension(900, 600);
+    static public final Dimension PREFERRED_SIZE = new Dimension(800, 600);
 
     private TagEditor tagEditor = null;
     private BuildTurnLanes buildTurnLanes = null;
@@ -82,7 +82,7 @@ public class TagEditorDialog extends JDialog {
         );
 
         splitPane.setOneTouchExpandable(true);
-        splitPane.setDividerLocation(350);
+        splitPane.setDividerLocation(450);
         getContentPane().add(splitPane, BorderLayout.CENTER);
         getContentPane().add(buildButtonRowPanel(), BorderLayout.SOUTH);
         getRootPane().registerKeyboardAction(cancelAction, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
@@ -236,8 +236,6 @@ public class TagEditorDialog extends JDialog {
 
         for (OsmPrimitive element : selection) {
             for (String key : element.keySet()) {
-
-                Util.print(element.hasKey("turn:lanes:forward"));
                 //Unidirectional
                 if (key.equals("turn:lanes")) {
                     bRoad.getLanesUnid().setStringLanes("unid", element.get(key));

@@ -2,9 +2,11 @@ package org.openstreetmap.josm.plugins.turnlanestagging.bean;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import org.openstreetmap.josm.plugins.turnlanestagging.util.Util;
 
 /**
  *
@@ -64,6 +66,8 @@ public class BLanes implements Serializable {
             //remove none tags
             if (turns[i].equals("none")) {
                 turns[i] = "";
+            } else if (turns[i].indexOf(";") > 0) {
+                turns[i] = sortTurns(turns[i]);
             }
             BLane bLine = new BLane(type, (i + 1), turns[i]);
             lst.add(bLine);
@@ -71,4 +75,16 @@ public class BLanes implements Serializable {
         this.lanes = lst;
     }
 
+    private String sortTurns(String roadTurns) {
+        //http://wiki.openstreetmap.org/wiki/Key:turn
+        List<String> turnsList = Arrays.asList("reverse", "sharp_left", "left", "slight_left", "merge_to_right", "through", "merge_to_left", "slight_right", "right", "sharp_right");
+        List<String> roadTurnsList = Arrays.asList(roadTurns.split(";"));
+        List<String> newRoadTurns = new ArrayList<>();
+        for (String e : turnsList) {
+            if (roadTurnsList.indexOf(e) > -1) {
+                newRoadTurns.add(e);
+            }
+        }
+        return newRoadTurns.toString().replaceAll("\\[|\\]", "").replaceAll(", ", ";");
+    }
 }

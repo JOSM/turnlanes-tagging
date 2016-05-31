@@ -31,7 +31,7 @@ public class Util {
         JOptionPane.showMessageDialog(null, object);
     }
 
-    public static void print(Object object) {
+    public static void prints(Object object) {
         System.err.println(object);
     }
 
