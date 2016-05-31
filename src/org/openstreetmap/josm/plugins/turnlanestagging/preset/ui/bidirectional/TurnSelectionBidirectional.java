@@ -194,7 +194,6 @@ public class TurnSelectionBidirectional extends JPanel {
 
         //Add All turns lanes
         jpanelcontent.add(jpanelcontentSelections);
-
         return jpanelcontent;
 
     }
@@ -206,7 +205,6 @@ public class TurnSelectionBidirectional extends JPanel {
         jpanelcontentTurns.add(jpnlturnsB, BorderLayout.CENTER);
         jpanelcontentTurns.add(jpnlturnsC, BorderLayout.EAST);
         return jpanelcontentTurns;
-
     }
 
     class SPinnerListenerA implements ChangeListener {
@@ -256,7 +254,6 @@ public class TurnSelectionBidirectional extends JPanel {
         //change without event
         eventSpinerA = false;
         spinnerA.setValue(bLanes.getLanes().size());
-
         if (bLanes.getLanes().size() > 0) {
             if (bLanes.getType().equals("forward")) {
                 jrbLaneForwardA.setSelected(true);
@@ -302,7 +299,6 @@ public class TurnSelectionBidirectional extends JPanel {
         jpnlturnsB.revalidate();
         jpnlturnsB.repaint();
         jchbothwayB.setSelected(false);
-
         if (bLanes.getLanes().size() > 0) {
             if (bLanes.getType().equals("both_ways")) {
                 jchbothwayB.setSelected(true);
@@ -346,11 +342,9 @@ public class TurnSelectionBidirectional extends JPanel {
         jpnlturnsC.repaint();
         jrbLaneForwardC.setSelected(false);
         jrbLaneBackwardC.setSelected(false);
-        
         //change without event
         eventSpinerC = false;
         spinnerC.setValue(bLanes.getLanes().size());
-
         if (bLanes.getLanes().size() > 0) {
             if (bLanes.getType().equals("forward")) {
                 jrbLaneForwardC.setSelected(true);
@@ -359,7 +353,6 @@ public class TurnSelectionBidirectional extends JPanel {
             }
             jpnlturnsC.setBorder(javax.swing.BorderFactory.createTitledBorder(null, bLanes.getType(), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, new java.awt.Color(102, 102, 102)));
             jpnlturnsC.removeAll();
-
             //Clone objtects
             bLanesC.setType(bLanes.getType());
             List<BLane> listbl = new ArrayList<>();
@@ -426,7 +419,6 @@ public class TurnSelectionBidirectional extends JPanel {
             }
         }
         eventSpinerA = true;
-
     }
 
     private void listenerB() {
