@@ -10,10 +10,10 @@ import java.util.TreeMap;
  *
  * @author ruben
  */
-public class BLanes implements Serializable{
+public class BLanes implements Serializable {
 
     String type;
-    List<BLane> lanes= new ArrayList<>();
+    List<BLane> lanes = new ArrayList<>();
 
     public BLanes() {
     }
@@ -55,6 +55,16 @@ public class BLanes implements Serializable{
             }
         }
         return tagturns;
+    }
+
+    public void setStringLanes(String type, String turnLanes) {
+        String turns[] = turnLanes.split("\\|", -1);
+        List<BLane> lst = new ArrayList<>();
+        for (int i = 0; i < turns.length; i++) {
+            BLane bLine = new BLane(type, (i + 1), turns[i]);
+            lst.add(bLine);
+        }
+        this.lanes = lst;
     }
 
 }

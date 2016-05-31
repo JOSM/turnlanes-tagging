@@ -87,6 +87,22 @@ public class PresetsData {
         bRoad4.setLanesC(bLanes2C);
         listBRoads.add(bRoad4);
 
+        //Bidirectional 3
+        BRoad bRoad5 = new BRoad();
+        bRoad5.setName("Bidirectional");
+        BLanes bLA5 = new BLanes("forward");
+        bLA5.setStringLanes("forward", "left|through;left|through|right");
+        bRoad5.setLanesA(bLA5);
+        listBRoads.add(bRoad5);
+
+        //Bidirectional 4
+        BRoad bRoad6 = new BRoad();
+        bRoad6.setName("Bidirectional");
+        BLanes bLA6 = new BLanes("backward");
+        bLA6.setStringLanes("backward", "left;through|through");
+        bRoad6.setLanesC(bLA6);
+        listBRoads.add(bRoad6);
+
         //Bidirectional
         return listBRoads;
 
