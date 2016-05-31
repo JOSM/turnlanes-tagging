@@ -80,6 +80,10 @@ public class TurnSelectionBidirectional extends JPanel {
     int step = 1;
     int initValue = 1;
 
+    //Avoid event after change spiner
+    boolean eventSpinerA = true;
+    boolean eventSpinerC = true;
+
     public TurnSelectionBidirectional() {
         super();
         init();
@@ -249,6 +253,10 @@ public class TurnSelectionBidirectional extends JPanel {
         jpnlturnsA.repaint();
         jrbLaneForwardA.setSelected(false);
         jrbLaneBackwardA.setSelected(false);
+        //change without event
+        eventSpinerA = false;
+        spinnerA.setValue(bLanes.getLanes().size());
+
         if (bLanes.getLanes().size() > 0) {
             if (bLanes.getType().equals("forward")) {
                 jrbLaneForwardA.setSelected(true);
@@ -294,6 +302,7 @@ public class TurnSelectionBidirectional extends JPanel {
         jpnlturnsB.revalidate();
         jpnlturnsB.repaint();
         jchbothwayB.setSelected(false);
+
         if (bLanes.getLanes().size() > 0) {
             if (bLanes.getType().equals("both_ways")) {
                 jchbothwayB.setSelected(true);
@@ -337,6 +346,11 @@ public class TurnSelectionBidirectional extends JPanel {
         jpnlturnsC.repaint();
         jrbLaneForwardC.setSelected(false);
         jrbLaneBackwardC.setSelected(false);
+        
+        //change without event
+        eventSpinerC = false;
+        spinnerC.setValue(bLanes.getLanes().size());
+
         if (bLanes.getLanes().size() > 0) {
             if (bLanes.getType().equals("forward")) {
                 jrbLaneForwardC.setSelected(true);
@@ -345,6 +359,7 @@ public class TurnSelectionBidirectional extends JPanel {
             }
             jpnlturnsC.setBorder(javax.swing.BorderFactory.createTitledBorder(null, bLanes.getType(), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, new java.awt.Color(102, 102, 102)));
             jpnlturnsC.removeAll();
+
             //Clone objtects
             bLanesC.setType(bLanes.getType());
             List<BLane> listbl = new ArrayList<>();
@@ -382,7 +397,6 @@ public class TurnSelectionBidirectional extends JPanel {
         valBRoad.setLanesB(bLanesB);
         valBRoad.setLanesC(bLanesC);
         jtfChangeLanes.setText(bLanesA.getTagturns() + "==" + bLanesB.getTagturns() + "==" + bLanesC.getTagturns());
-
     }
 
     public void setDefault(BRoad bRoad) {
@@ -400,15 +414,19 @@ public class TurnSelectionBidirectional extends JPanel {
     }
 
     private void listenerA() {
-        if (jrbLaneForwardA.isSelected()) {
-            BLanes bLanes = presetsData.defaultLanes("forward", Integer.valueOf(spinnerA.getValue().toString()));
-            bLanes.setType("forward");
-            lanesA(bLanes);
-        } else {
-            BLanes bLanes = presetsData.defaultLanes("backward", Integer.valueOf(spinnerA.getValue().toString()));
-            bLanes.setType("backward");
-            lanesA(bLanes);
+        if (eventSpinerA) {
+            if (jrbLaneForwardA.isSelected()) {
+                BLanes bLanes = presetsData.defaultLanes("forward", Integer.valueOf(spinnerA.getValue().toString()));
+                bLanes.setType("forward");
+                lanesA(bLanes);
+            } else {
+                BLanes bLanes = presetsData.defaultLanes("backward", Integer.valueOf(spinnerA.getValue().toString()));
+                bLanes.setType("backward");
+                lanesA(bLanes);
+            }
         }
+        eventSpinerA = true;
+
     }
 
     private void listenerB() {
@@ -426,14 +444,18 @@ public class TurnSelectionBidirectional extends JPanel {
     }
 
     private void listenerC() {
-        if (jrbLaneForwardC.isSelected()) {
-            BLanes bLanes = presetsData.defaultLanes("forward", Integer.valueOf(spinnerC.getValue().toString()));
-            bLanes.setType("forward");
-            lanesC(bLanes);
-        } else {
-            BLanes bLanes = presetsData.defaultLanes("backward", Integer.valueOf(spinnerC.getValue().toString()));
-            bLanes.setType("backward");
-            lanesC(bLanes);
+        if (eventSpinerC) {
+            if (jrbLaneForwardC.isSelected()) {
+                BLanes bLanes = presetsData.defaultLanes("forward", Integer.valueOf(spinnerC.getValue().toString()));
+                bLanes.setType("forward");
+                lanesC(bLanes);
+            } else {
+                BLanes bLanes = presetsData.defaultLanes("backward", Integer.valueOf(spinnerC.getValue().toString()));
+                bLanes.setType("backward");
+                lanesC(bLanes);
+            }
+
         }
+        eventSpinerC = true;
     }
 }
