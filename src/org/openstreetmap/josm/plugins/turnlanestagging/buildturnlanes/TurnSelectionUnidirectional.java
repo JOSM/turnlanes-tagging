@@ -111,14 +111,14 @@ public class TurnSelectionUnidirectional extends JPanel {
         //Clone objtects
         valBRoad.setName(new String(road.getName()));
         List<BLane> listbl = new ArrayList<>();
-        for (int k = 0; k < road.getNumLanes(); k++) {
+        for (int k = 0; k < road.getLanesUnid().getLanes().size(); k++) {
             BLane bl = new BLane("unid", new Integer(road.getLanesUnid().getLanes().get(k).getPosition()), new String(road.getLanesUnid().getLanes().get(k).getTurn()));
             listbl.add(bl);
         }
         valBRoad.getLanesUnid().setLanes(listbl);
 
-        jpanelcontentTurns.setLayout(new GridLayout(1, valBRoad.getNumLanes()));
-        int numLanes = valBRoad.getNumLanes();
+        jpanelcontentTurns.setLayout(new GridLayout(1, valBRoad.getLanesUnid().getLanes().size()));
+        int numLanes = valBRoad.getLanesUnid().getLanes().size();
 
         clickLanesAction = false;
         jcbNumLanes.setSelectedIndex(numLanes - 1);

@@ -33,7 +33,7 @@ public class PresetsTableModel extends AbstractTableModel {
                 return listBRoad.get(rowIndex).getName();
             case 1:
                 if (listBRoad.get(rowIndex).getName().equals("Unidirectional")) {
-                    return String.valueOf(listBRoad.get(rowIndex).getNumLanes());
+                    return String.valueOf(listBRoad.get(rowIndex).getLanesUnid().getLanes().size());
                 } else {
                     return String.valueOf(listBRoad.get(rowIndex).getNumLanesBidirectional());
                 }

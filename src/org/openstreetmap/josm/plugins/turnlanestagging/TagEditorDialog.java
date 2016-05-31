@@ -129,7 +129,7 @@ public class TagEditorDialog extends JDialog {
 
                     if (b.getName().equals("Unidirectional")) {
                         tagEditor.getModel().applyKeyValuePair(new KeyValuePair("turn:lanes", b.getLanesUnid().getTagturns()));
-                        tagEditor.getModel().applyKeyValuePair(new KeyValuePair("lanes", String.valueOf(b.getNumLanes())));
+                        tagEditor.getModel().applyKeyValuePair(new KeyValuePair("lanes", String.valueOf(b.getLanesUnid().getLanes().size())));
                     } else {
                         if (!b.getLanesA().getLanes().isEmpty()) {
                             tagEditor.getModel().applyKeyValuePair(new KeyValuePair("turn:lanes:forward", b.getLanesA().getTagturns()));
@@ -278,11 +278,11 @@ public class TagEditorDialog extends JDialog {
         }
 
         if (bRoad.getName().equals("Unidirectional")) {
-            if (bRoad.getNumLanes() > 0) {
+            if (bRoad.getLanesUnid().getLanes().size() > 0) {
                 buildTurnLanes.setLanesByRoadUnidirectional(bRoad);
                 if (numLanes == 0) {
                     Util.notification(tr("Tag lanes is missing"));
-                } else if (bRoad.getNumLanes() != numLanes) {
+                } else if (bRoad.getLanesUnid().getLanes().size() != numLanes) {
                     Util.notification(tr("Number of lanes doesn't match with turn lanes"));
                 }
             } else {
