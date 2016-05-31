@@ -12,12 +12,14 @@ import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.swing.ButtonGroup;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.border.BevelBorder;
@@ -42,6 +44,10 @@ public class BuildTurnLanes extends JPanel {
     private JScrollPane scrollPane = null;
     private PresetsTable presetsTable = null;
     private PresetsTableModel presetsTableModel = null;
+    // Table for last edits
+    private JScrollPane lastEditsScrollPane = null;
+    private PresetsTable lastEditsTable = null;
+    private PresetsTableModel lastEditsTableModel = null;
 
     //Main Content
     private JPanel pnlBuildTurnLanes = null;
@@ -59,8 +65,9 @@ public class BuildTurnLanes extends JPanel {
     public static JTextField jtfChangeRoad = new JTextField();
 
     // Data to fill  the  table
-    List<BRoad> listBRoads = null;
+    List<BRoad> listPresetRoads = null;
     PresetsData presetsData = new PresetsData();
+    List<BRoad> listLastEditsRoads = new ArrayList<>();
 
     //Road
     public static BRoad bRoad = new BRoad();
@@ -84,8 +91,8 @@ public class BuildTurnLanes extends JPanel {
 
     // Build Table and add Actions
     protected JScrollPane buildPresetTable() {
-        listBRoads = new ArrayList<>(presetsData.dataPreset());
-        presetsTableModel = new PresetsTableModel(listBRoads);
+        listPresetRoads = new ArrayList<>(presetsData.dataPreset());
+        presetsTableModel = new PresetsTableModel(listPresetRoads);
         //print on table
         presetsTable = new PresetsTable(presetsTableModel);
         scrollPane = new JScrollPane(presetsTable);
@@ -106,16 +113,55 @@ public class BuildTurnLanes extends JPanel {
         return scrollPane;
     }
 
+    // Build Table and add Actions
+    protected JScrollPane buildLastEditsTable() {
+        List<BRoad> lastEditsRoads = new ArrayList<>();
+        lastEditsTableModel = new PresetsTableModel(lastEditsRoads);
+        //print on table
+        lastEditsTable = new PresetsTable(lastEditsTableModel);
+        lastEditsScrollPane = new JScrollPane(lastEditsTable);
+        lastEditsScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        lastEditsScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+        lastEditsScrollPane.addComponentListener(
+                new ComponentAdapter() {
+                    @Override
+                    public void componentResized(ComponentEvent e) {
+                        super.componentResized(e);
+                        Dimension d = lastEditsScrollPane.getViewport().getExtentSize();
+                        lastEditsTable.adjustColumnWidth(d.width);
+                    }
+                }
+        );
+        // add the  click listener
+        lastEditsTable.addMouseListener(new ClickAdapterLastEditsTable());
+        return lastEditsScrollPane;
+    }
+
     private class ClickAdapter extends MouseAdapter {
 
         @Override
         public void mouseClicked(MouseEvent e) {
             if (e.getClickCount() == 1) {
                 int rowNum = presetsTable.rowAtPoint(e.getPoint());
-                if (listBRoads.get(rowNum).getName().equals("Unidirectional")) {
-                    setLanesByRoadUnidirectional((BRoad) Util.deepClone(listBRoads.get(rowNum)));
+                if (listPresetRoads.get(rowNum).getName().equals("Unidirectional")) {
+                    setLanesByRoadUnidirectional((BRoad) Util.deepClone(listPresetRoads.get(rowNum)));
                 } else {
-                    setLanesByRoadBidirectional((BRoad) Util.deepClone(listBRoads.get(rowNum)));
+                    setLanesByRoadBidirectional((BRoad) Util.deepClone(listPresetRoads.get(rowNum)));
+                }
+            }
+        }
+    }
+
+    private class ClickAdapterLastEditsTable extends MouseAdapter {
+
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            if (e.getClickCount() == 1) {
+                int rowNum = lastEditsTable.rowAtPoint(e.getPoint());
+                if (listLastEditsRoads.get(rowNum).getName().equals("Unidirectional")) {
+                    setLanesByRoadUnidirectional((BRoad) Util.deepClone(listLastEditsRoads.get(rowNum)));
+                } else {
+                    setLanesByRoadBidirectional((BRoad) Util.deepClone(listLastEditsRoads.get(rowNum)));
                 }
             }
         }
@@ -162,9 +208,12 @@ public class BuildTurnLanes extends JPanel {
     protected void init() {
         setLayout(new BorderLayout());
         //Title
-        add(new JLabel("Select Preset Turn Lanes"), BorderLayout.NORTH);
         //Table
-        add(buildPresetTable(), BorderLayout.CENTER);
+        JTabbedPane jTabbedPane = new JTabbedPane();
+        jTabbedPane.addTab("Preset Turn Lanes", buildPresetTable());
+        jTabbedPane.addTab("Last Turn Lanes", buildLastEditsTable());
+
+        add(jTabbedPane, BorderLayout.CENTER);
         //turnlanes builder
         pnlBuildTurnLanes = new JPanel(new BorderLayout());
         pnlBuildTurnLanes.add(buildDirectionalOptions(), BorderLayout.NORTH);
@@ -202,16 +251,13 @@ public class BuildTurnLanes extends JPanel {
                 bRoad.setName("Bidirectional");
                 jtfChangeRoad.setText(t);
             }
-
         }
-
     }
 
     private class SetRoadChangeRoadListener implements DocumentListener {
 
         @Override
         public void insertUpdate(DocumentEvent e) {
-
             firePropertyChange(ROADCHANGED, null, bRoad);
         }
 
@@ -229,7 +275,7 @@ public class BuildTurnLanes extends JPanel {
         jrbUnidirectional.setSelected(true);
         pnlContentDirectional.removeAll();
         pnlContentDirectional.setLayout(new GridLayout(1, 1));
-        turnSelectionUnidirectional.setDefault((BRoad) Util.deepClone(listBRoads.get(0)));
+        turnSelectionUnidirectional.setDefault((BRoad) Util.deepClone(listPresetRoads.get(0)));
         pnlContentDirectional.add(turnSelectionUnidirectional);
         pnlContentDirectional.revalidate();
         pnlContentDirectional.repaint();
@@ -240,7 +286,6 @@ public class BuildTurnLanes extends JPanel {
         pnlContentDirectional.removeAll();
         pnlContentDirectional.setLayout(new GridLayout(1, 1));
         turnSelectionUnidirectional.setDefault(road);
-        turnSelectionUnidirectional.setDefault(bRoad);
         pnlContentDirectional.add(turnSelectionUnidirectional);
         pnlContentDirectional.revalidate();
         pnlContentDirectional.repaint();
@@ -250,7 +295,7 @@ public class BuildTurnLanes extends JPanel {
         jrbBidirectional.setSelected(true);
         pnlContentDirectional.removeAll();
         pnlContentDirectional.setLayout(new GridLayout(1, 1));
-        turnSelectionBidirectional.setDefault((BRoad) Util.deepClone(listBRoads.get(2)));//we have to know where is the bidirectional road
+        turnSelectionBidirectional.setDefault((BRoad) Util.deepClone(listPresetRoads.get(2)));//we have to know where is the bidirectional road
         pnlContentDirectional.add(turnSelectionBidirectional);
         pnlContentDirectional.revalidate();
         pnlContentDirectional.repaint();
@@ -265,4 +310,12 @@ public class BuildTurnLanes extends JPanel {
         pnlContentDirectional.revalidate();
         pnlContentDirectional.repaint();
     }
+
+    public void setLastEdition() {
+        listLastEditsRoads.add((BRoad) Util.deepClone(bRoad));
+        Collections.reverse(listLastEditsRoads);
+        PresetsTableModel lasteditsTM = new PresetsTableModel(listLastEditsRoads);
+        lastEditsTable.setModel(lasteditsTM);
+    }
+
 }

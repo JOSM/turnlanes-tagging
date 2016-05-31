@@ -9,6 +9,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import javax.swing.AbstractAction;
 import static javax.swing.Action.ACCELERATOR_KEY;
 import static javax.swing.Action.NAME;
@@ -59,6 +60,9 @@ public class TagEditorDialog extends JDialog {
     private BuildTurnLanes buildTurnLanes = null;
     private OKAction okAction = null;
     private CancelAction cancelAction = null;
+
+    // Last Editions 
+    List<BRoad> lastEdits = new ArrayList<>();
 
     protected void build() {
         //Parameters for Dialog
@@ -189,6 +193,8 @@ public class TagEditorDialog extends JDialog {
 
         public void actionPerformed(ActionEvent e) {
             run();
+            // Add on table
+            buildTurnLanes.setLastEdition();
         }
 
         public void run() {
