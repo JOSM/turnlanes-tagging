@@ -306,11 +306,24 @@ public class BuildTurnLanes extends JPanel {
         pnlContentDirectional.repaint();
     }
 
-    public void setLastEdition() {
+    public void addLastEditInTable() {
         listLastEditsRoads.add((BRoad) Util.deepClone(bRoad));
         Collections.reverse(listLastEditsRoads);
         PresetsTableModel lasteditsTM = new PresetsTableModel(listLastEditsRoads);
         lastEditsTable.setModel(lasteditsTM);
+    }
+
+    public void setLastEdit() {
+        if (listLastEditsRoads.size() > 0) {
+            if (listLastEditsRoads.get(0).getName().equals("Unidirectional")) {
+                setLanesByRoadUnidirectional((BRoad) Util.deepClone(listLastEditsRoads.get(0)));
+            } else {
+                setLanesByRoadBidirectional((BRoad) Util.deepClone(listLastEditsRoads.get(0)));
+            }
+        } else {
+            startDefaultUnidirectional();
+        }
+
     }
 
 }

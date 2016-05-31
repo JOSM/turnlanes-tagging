@@ -194,7 +194,7 @@ public class TagEditorDialog extends JDialog {
         public void actionPerformed(ActionEvent e) {
             run();
             // Add on table
-            buildTurnLanes.setLastEdition();
+            buildTurnLanes.addLastEditInTable();
         }
 
         public void run() {
@@ -249,7 +249,6 @@ public class TagEditorDialog extends JDialog {
                 } else if (key.equals("lanes") && Util.isInt(element.get(key)) && !element.hasKey("lanes")) {
                     numLanes = Integer.valueOf(element.get(key));
                     //Aqui continuamos para set por numeor de lanes
-//                    bRoad.setListLines(presetsData.);
                 } //Bidirectional
                 //on turn lanes
                 else if (key.equals("turn:lanes:forward")) {
@@ -290,14 +289,15 @@ public class TagEditorDialog extends JDialog {
                 //                    Util.notification(tr("Number of lanes doesn't match with turn lanes"));
                 //                }
             } else {
-                buildTurnLanes.startDefaultUnidirectional();
+//                buildTurnLanes.startDefaultUnidirectional();
+                buildTurnLanes.setLastEdit();
             }
         } else {
-
             if (bRoad.getLanesA().getLanes().size() > 0 || bRoad.getLanesB().getLanes().size() > 0 || bRoad.getLanesC().getLanes().size() > 0) {
                 buildTurnLanes.setLanesByRoadBidirectional(bRoad);
             } else {
-                buildTurnLanes.startDefaultBidirectional();
+//                buildTurnLanes.startDefaultBidirectional();
+                buildTurnLanes.setLastEdit();
             }
         }
     }
