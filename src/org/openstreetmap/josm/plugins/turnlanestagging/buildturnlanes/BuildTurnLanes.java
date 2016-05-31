@@ -26,12 +26,11 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.SoftBevelBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import static org.openstreetmap.josm.gui.mappaint.mapcss.ExpressionFactory.Functions.tr;
 import org.openstreetmap.josm.plugins.turnlanestagging.bean.BRoad;
 import org.openstreetmap.josm.plugins.turnlanestagging.preset.PresetsData;
 import org.openstreetmap.josm.plugins.turnlanestagging.preset.PresetsTable;
 import org.openstreetmap.josm.plugins.turnlanestagging.preset.PresetsTableModel;
-import org.openstreetmap.josm.plugins.turnlanestagging.buildturnlanes.TurnSelectionBidirectional;
-import org.openstreetmap.josm.plugins.turnlanestagging.buildturnlanes.TurnSelectionUnidirectional;
 import org.openstreetmap.josm.plugins.turnlanestagging.util.Util;
 
 /**
@@ -201,18 +200,15 @@ public class BuildTurnLanes extends JPanel {
         public void actionPerformed(ActionEvent actionEvent) {
             startDefaultBidirectional();
         }
-
     };
 
     // Build the GUI for turn lanes
     protected void init() {
         setLayout(new BorderLayout());
-        //Title
         //Table
         JTabbedPane jTabbedPane = new JTabbedPane();
-        jTabbedPane.addTab("Preset Turn Lanes", buildPresetTable());
-        jTabbedPane.addTab("Last Turn Lanes", buildLastEditsTable());
-
+        jTabbedPane.addTab(tr("Preset turn lanes"), buildPresetTable());
+        jTabbedPane.addTab(tr("Recently turn lanes edits"), buildLastEditsTable());
         add(jTabbedPane, BorderLayout.CENTER);
         //turnlanes builder
         pnlBuildTurnLanes = new JPanel(new BorderLayout());
@@ -226,7 +222,6 @@ public class BuildTurnLanes extends JPanel {
         //Start Default 
         jrbUnidirectional.setSelected(true);
         startDefaultUnidirectional();
-
     }
 
     public static class LinesChangeUnidirectionalListener implements PropertyChangeListener {

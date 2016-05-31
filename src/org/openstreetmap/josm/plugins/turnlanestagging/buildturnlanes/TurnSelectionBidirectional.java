@@ -287,6 +287,7 @@ public class TurnSelectionBidirectional extends JPanel {
                 });
                 jpnlturnsA.add(turnSelection);
             }
+             printChageLanes();
             jpnlturnsA.revalidate();
             jpnlturnsA.repaint();
         }
@@ -329,6 +330,7 @@ public class TurnSelectionBidirectional extends JPanel {
                 });
                 jpnlturnsB.add(turnSelection);
             }
+            printChageLanes();            
             jpnlturnsB.revalidate();
             jpnlturnsB.repaint();
         }
@@ -378,6 +380,8 @@ public class TurnSelectionBidirectional extends JPanel {
                 });
                 jpnlturnsC.add(turnSelection);
             }
+            //after preset the actions to update
+            printChageLanes();            
             jpnlturnsC.revalidate();
             jpnlturnsC.repaint();
         }
