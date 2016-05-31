@@ -215,7 +215,8 @@ public class BuildTurnLanes extends JPanel {
         pnlBuildTurnLanes.add(buildDirectionalOptions(), BorderLayout.NORTH);
         pnlContentDirectional = new JPanel();
         pnlBuildTurnLanes.add(pnlContentDirectional, BorderLayout.CENTER);
-        pnlBuildTurnLanes.add(jtfChangeRoad, BorderLayout.SOUTH);
+        //comment
+//        pnlBuildTurnLanes.add(jtfChangeRoad, BorderLayout.SOUTH);
         add(pnlBuildTurnLanes, BorderLayout.SOUTH);
         //road change event
         jtfChangeRoad.getDocument().addDocumentListener(new SetRoadChangeRoadListener());

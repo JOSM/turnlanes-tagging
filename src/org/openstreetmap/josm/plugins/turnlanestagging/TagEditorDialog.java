@@ -236,19 +236,17 @@ public class TagEditorDialog extends JDialog {
         BRoad bRoad = new BRoad();
         //set as unidirectional as first
         bRoad.setName("Unidirectional");
-
         Collection<OsmPrimitive> selection = Main.main.getCurrentDataSet().getSelected();
-        int numLanes = 0;
-
         for (OsmPrimitive element : selection) {
             for (String key : element.keySet()) {
                 //Unidirectional
                 if (key.equals("turn:lanes")) {
                     bRoad.getLanesUnid().setStringLanes("unid", element.get(key));
                     bRoad.setName("Unidirectional");
-                } else if (key.equals("lanes") && Util.isInt(element.get(key)) && !element.hasKey("lanes")) {
-                    numLanes = Integer.valueOf(element.get(key));
-                    //Aqui continuamos para set por numeor de lanes
+                } else if (key.equals("lanes") && Util.isInt(element.get(key)) && !element.hasKey("turn:lanes")) {
+                    //reparar aqui si hay fallas con lanes
+                    bRoad = presetsData.defaultRoadUnidirectional(Integer.valueOf(element.get(key)));
+                    bRoad.setName("Unidirectional");
                 } //Bidirectional
                 //on turn lanes
                 else if (key.equals("turn:lanes:forward")) {
@@ -289,14 +287,14 @@ public class TagEditorDialog extends JDialog {
                 //                    Util.notification(tr("Number of lanes doesn't match with turn lanes"));
                 //                }
             } else {
-//                buildTurnLanes.startDefaultUnidirectional();
+                //                buildTurnLanes.startDefaultUnidirectional();
                 buildTurnLanes.setLastEdit();
             }
         } else {
             if (bRoad.getLanesA().getLanes().size() > 0 || bRoad.getLanesB().getLanes().size() > 0 || bRoad.getLanesC().getLanes().size() > 0) {
                 buildTurnLanes.setLanesByRoadBidirectional(bRoad);
             } else {
-//                buildTurnLanes.startDefaultBidirectional();
+                //                buildTurnLanes.startDefaultBidirectional();
                 buildTurnLanes.setLastEdit();
             }
         }
