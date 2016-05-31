@@ -384,7 +384,7 @@ public class TurnSelectionBidirectional extends JPanel {
     }
 
     public void printChageLanes() {
-        valBRoad.setLanes("Bidirectional");
+        valBRoad.setName("Bidirectional");
         valBRoad.setLanesA(bLanesA);
         valBRoad.setLanesB(bLanesB);
         valBRoad.setLanesC(bLanesC);
@@ -392,7 +392,7 @@ public class TurnSelectionBidirectional extends JPanel {
     }
 
     public void setDefault(BRoad bRoad) {
-        valBRoad.setLanes("Bidirectional");
+        valBRoad.setName("Bidirectional");
         bLanesA = bRoad.getLanesA();
         bLanesB = bRoad.getLanesB();
         bLanesC = bRoad.getLanesC();

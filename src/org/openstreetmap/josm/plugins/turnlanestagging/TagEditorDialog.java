@@ -128,7 +128,7 @@ public class TagEditorDialog extends JDialog {
                     tagEditor.getModel().applyKeyValuePair(new KeyValuePair("lanes:backward", null));
 
                     if (b.getName().equals("Unidirectional")) {
-                        tagEditor.getModel().applyKeyValuePair(new KeyValuePair("turn:lanes", b.getTagturns()));
+                        tagEditor.getModel().applyKeyValuePair(new KeyValuePair("turn:lanes", b.getLanesUnid().getTagturns()));
                         tagEditor.getModel().applyKeyValuePair(new KeyValuePair("lanes", String.valueOf(b.getNumLanes())));
                     } else {
                         if (!b.getLanesA().getLanes().isEmpty()) {
@@ -227,7 +227,10 @@ public class TagEditorDialog extends JDialog {
     public void setRoadProperties() {
         //Set the selection Roads
         PresetsData presetsData = new PresetsData();
-        BRoad bRoad = new BRoad("Unidirectional", new ArrayList<BLane>());
+        BRoad bRoad = new BRoad();
+        //set as unidirectional as first
+        bRoad.setName("Unidirectional");
+
         Collection<OsmPrimitive> selection = Main.main.getCurrentDataSet().getSelected();
         int numLanes = 0;
 
@@ -237,7 +240,7 @@ public class TagEditorDialog extends JDialog {
                 Util.print(element.hasKey("turn:lanes:forward"));
                 //Unidirectional
                 if (key.equals("turn:lanes")) {
-                    bRoad.setLanes(element.get(key));
+                    bRoad.getLanesUnid().setStringLanes("unid", element.get(key));
                     bRoad.setName("Unidirectional");
                 } else if (key.equals("lanes") && Util.isInt(element.get(key)) && !element.hasKey("lanes")) {
                     numLanes = Integer.valueOf(element.get(key));

@@ -100,25 +100,22 @@ public class TurnSelectionUnidirectional extends JPanel {
         public void actionPerformed(ActionEvent event) {
             int selected = (int) jcbNumLanes.getSelectedItem();
             if (clickLanesAction) {
-
-                lanes(presetsData.defaultDataUnidirectional(selected));
+                lanes(presetsData.defaultRoadUnidirectional(selected));
             }
             clickLanesAction = true;
         }
     }
 
     public void lanes(BRoad road) {
-
         jpanelcontentTurns.removeAll();
-
         //Clone objtects
         valBRoad.setName(new String(road.getName()));
         List<BLane> listbl = new ArrayList<>();
         for (int k = 0; k < road.getNumLanes(); k++) {
-            BLane bl = new BLane("unid", new Integer(road.getListLines().get(k).getPosition()), new String(road.getListLines().get(k).getTurn()));
+            BLane bl = new BLane("unid", new Integer(road.getLanesUnid().getLanes().get(k).getPosition()), new String(road.getLanesUnid().getLanes().get(k).getTurn()));
             listbl.add(bl);
         }
-        valBRoad.setListLines(listbl);
+        valBRoad.getLanesUnid().setLanes(listbl);
 
         jpanelcontentTurns.setLayout(new GridLayout(1, valBRoad.getNumLanes()));
         int numLanes = valBRoad.getNumLanes();
@@ -126,7 +123,7 @@ public class TurnSelectionUnidirectional extends JPanel {
         clickLanesAction = false;
         jcbNumLanes.setSelectedIndex(numLanes - 1);
 
-        final List<BLane> listBLines = valBRoad.getListLines();
+        final List<BLane> listBLines = valBRoad.getLanesUnid().getLanes();
         for (int i = 0; i < numLanes; i++) {
             BLane bLine = listBLines.get(i);
             final TurnSelection turnSelection = new TurnSelection(bLine);
@@ -135,27 +132,25 @@ public class TurnSelectionUnidirectional extends JPanel {
                 public void propertyChange(PropertyChangeEvent evt) {
                     if (evt.getPropertyName().equals(turnSelection.jRBLeft_CHANGED)) {
                         listBLines.add((BLane) evt.getNewValue());
-                        valBRoad.setListLines(listBLines);
-                        jtfChangeLanes.setText(valBRoad.getTagturns());
+                        valBRoad.getLanesUnid().setLanes(listBLines);
+                        jtfChangeLanes.setText(valBRoad.getLanesUnid().getTagturns());
 
                     } else if (evt.getPropertyName().equals(turnSelection.jRBRight_CHANGED)) {
                         listBLines.add((BLane) evt.getNewValue());
-                        valBRoad.setListLines(listBLines);
-                        jtfChangeLanes.setText(valBRoad.getTagturns());
+                        valBRoad.getLanesUnid().setLanes(listBLines);
+                        jtfChangeLanes.setText(valBRoad.getLanesUnid().getTagturns());
 
                     } else if (evt.getPropertyName().equals(turnSelection.jCBThrough_CHANGED)) {
                         listBLines.add((BLane) evt.getNewValue());
-                        valBRoad.setListLines(listBLines);
-
-                        jtfChangeLanes.setText(valBRoad.getTagturns());
+                        valBRoad.getLanesUnid().setLanes(listBLines);
+                        jtfChangeLanes.setText(valBRoad.getLanesUnid().getTagturns());
 
                     }
                 }
             });
             jpanelcontentTurns.add(turnSelection);
         }
-        jtfChangeLanes.setText(valBRoad.getTagturns());
-
+        jtfChangeLanes.setText(valBRoad.getLanesUnid().getTagturns());
         jpanelcontentTurns.revalidate();
         jpanelcontentTurns.repaint();
     }

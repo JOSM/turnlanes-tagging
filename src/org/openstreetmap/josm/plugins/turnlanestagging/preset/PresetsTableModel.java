@@ -39,7 +39,7 @@ public class PresetsTableModel extends AbstractTableModel {
                 }
             case 2:
                 if (listBRoad.get(rowIndex).getName().equals("Unidirectional")) {
-                    return listBRoad.get(rowIndex).getTagturns();
+                    return listBRoad.get(rowIndex).getLanesUnid().getTagturns();
                 } else {
                     String birecTurns = "";
                     if (listBRoad.get(rowIndex).getLanesA().getLanes().size() > 0) {

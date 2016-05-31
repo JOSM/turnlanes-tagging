@@ -186,7 +186,7 @@ public class BuildTurnLanes extends JPanel {
         public void propertyChange(PropertyChangeEvent evt) {
             if (evt.getPropertyName().equals(TurnSelectionUnidirectional.LINESCHANGED)) {
                 bRoad = (BRoad) evt.getNewValue();
-                jtfChangeRoad.setText(bRoad.getTagturns());
+                jtfChangeRoad.setText(bRoad.getLanesUnid().getTagturns());
             }
         }
 

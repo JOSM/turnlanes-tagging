@@ -15,30 +15,35 @@ import org.openstreetmap.josm.plugins.turnlanestagging.bean.BLanes;
 public class PresetsData {
 
     public List<BRoad> dataPreset() {
+        List<BRoad> listBRoads = new ArrayList<>();
+
         //oneway=yes
         //lanes=3
         //turn:lanes=left||
         //placement=right_of:2
-        List<BRoad> listBRoads = new ArrayList<>();
-        //Road 1
-        List<BLane> listBLines = new ArrayList<>();
-        listBLines.add(new BLane("unid", 1, "left"));
-        listBLines.add(new BLane("unid", 2, "through"));
-        listBLines.add(new BLane("unid", 3, "through"));
+        //road 1
+        BLanes bl1 = new BLanes("unid");
+
+        List<BLane> listbl1 = new ArrayList<>();
+        listbl1.add(new BLane("unid", 1, "left"));
+        listbl1.add(new BLane("unid", 2, "through"));
+        listbl1.add(new BLane("unid", 3, "through"));
+        bl1.setLanes(listbl1);
         BRoad bRoad = new BRoad();
         bRoad.setName("Unidirectional");
-        bRoad.setListLines(listBLines);
+        bRoad.setLanesUnid(bl1);
         listBRoads.add(bRoad);
 
         //Road 2
-        List<BLane> listBLines2 = new ArrayList<>();
-        listBLines2.add(new BLane("unid", 1, "left"));
-        listBLines2.add(new BLane("unid", 2, "right"));
-        listBLines2.add(new BLane("unid", 3, "through"));
+        BLanes bl2 = new BLanes("unid");
+        List<BLane> listbl2 = new ArrayList<>();
+        listbl2.add(new BLane("unid", 1, "left"));
+        listbl2.add(new BLane("unid", 2, "right"));
+        listbl2.add(new BLane("unid", 3, "through"));        
+        bl2.setLanes(listbl2);        
         BRoad bRoad2 = new BRoad();
         bRoad2.setName("Unidirectional");
-
-        bRoad2.setListLines(listBLines2);
+        bRoad2.setLanesUnid(bl2);
         listBRoads.add(bRoad2);
 
         //Bidirectional 1
@@ -108,15 +113,17 @@ public class PresetsData {
 
     }
 
-    public BRoad defaultDataUnidirectional(int lines) {
+    public BRoad defaultRoadUnidirectional(int lines) {
         BRoad bRoad = new BRoad();
-        List<BLane> listBLines = new ArrayList<>();
+        BLanes bLanes = new BLanes("unid");
+        List<BLane> listLanes = new ArrayList<>();
         for (int m = 0; m < lines; m++) {
             BLane bLine = new BLane("unid", (m + 1), "");
-            listBLines.add(bLine);
+            listLanes.add(bLine);
         }
+        bLanes.setLanes(listLanes);
         bRoad.setName("Unidirectional");
-        bRoad.setListLines(listBLines);
+        bRoad.setLanesUnid(bLanes);
         return bRoad;
     }
 

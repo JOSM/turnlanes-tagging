@@ -16,7 +16,8 @@ import org.openstreetmap.josm.plugins.turnlanestagging.util.Util;
 public class BRoad implements Serializable {
 
     String name;
-    List<BLane> listLines;
+//    List<BLane> lanes;
+    private BLanes lanesUnid = new BLanes();
     private BLanes lanesA = new BLanes();
     private BLanes lanesB = new BLanes();
     private BLanes lanesC = new BLanes();
@@ -24,11 +25,10 @@ public class BRoad implements Serializable {
     public BRoad() {
     }
 
-    public BRoad(String name, List<BLane> listLines) {
-        this.name = name;
-        this.listLines = listLines;
-    }
-
+//    public BRoad(String name, List<BLane> listLines) {
+//        this.name = name;
+//        this.lanes = listLines;
+//    }
     public String getName() {
         return name;
     }
@@ -37,50 +37,47 @@ public class BRoad implements Serializable {
         this.name = name;
     }
 
-    public List<BLane> getListLines() {
-        return listLines;
-    }
-
-    public void setListLines(List<BLane> newLines) {
-
-        Map<Integer, BLane> map = new TreeMap<>();
-        for (int i = 0; i < newLines.size(); i++) {
-            map.put(newLines.get(i).getPosition(), newLines.get(i));
-        }
-        List<BLane> listLs = new ArrayList<>(map.values());
-        this.listLines = listLs;
-    }
-
-    public String getTagturns() {
-        String tagturns = "";
-        for (int i = 0; i < listLines.size(); i++) {
-            if (i == 0) {
-                tagturns = listLines.get(i).getTurn();
-            } else {
-                tagturns = tagturns + "|" + listLines.get(i).getTurn();
-            }
-        }
-        return tagturns;
-    }
-
+//    public List<BLane> getListLines() {
+//        return lanes;
+//    }
+//    public void setListLines(List<BLane> newLines) {
+//
+//        Map<Integer, BLane> map = new TreeMap<>();
+//        for (int i = 0; i < newLines.size(); i++) {
+//            map.put(newLines.get(i).getPosition(), newLines.get(i));
+//        }
+//        List<BLane> listLs = new ArrayList<>(map.values());
+//        this.lanes = listLs;
+//    }
+//
+//    public String getTagturns() {
+//        String tagturns = "";
+//        for (int i = 0; i < lanes.size(); i++) {
+//            if (i == 0) {
+//                tagturns = lanes.get(i).getTurn();
+//            } else {
+//                tagturns = tagturns + "|" + lanes.get(i).getTurn();
+//            }
+//        }
+//        return tagturns;
+//    }
     public int getNumLanes() {
-        return listLines.size();
+        return lanesUnid.getLanes().size();
     }
 
-    public void setLanes(String turnLanes) {
-        String turns[] = turnLanes.split("\\|", -1);
-        List<BLane> lst = new ArrayList<>();
-        for (int i = 0; i < turns.length; i++) {
-            //remove none tags
-            if (turns[i].equals("none")) {
-                turns[i] = "";
-            }
-            BLane bLine = new BLane("unid", (i + 1), turns[i]);
-            lst.add(bLine);
-        }
-        this.listLines = lst;
-    }
-
+//    public void setStringLanes(String turnLanes) {
+//        String turns[] = turnLanes.split("\\|", -1);
+//        List<BLane> lst = new ArrayList<>();
+//        for (int i = 0; i < turns.length; i++) {
+//            //remove none tags
+//            if (turns[i].equals("none")) {
+//                turns[i] = "";
+//            }
+//            BLane bLine = new BLane("unid", (i + 1), turns[i]);
+//            lst.add(bLine);
+//        }
+//        this.lanes = lst;
+//    }
     public int getNumLanesBidirectional() {
         int numdirc = 0;
         if (lanesA != null) {
@@ -117,6 +114,15 @@ public class BRoad implements Serializable {
 
     public void setLanesC(BLanes lanesC) {
         this.lanesC = lanesC;
+    }
+
+    //for unidirectional
+    public BLanes getLanesUnid() {
+        return lanesUnid;
+    }
+
+    public void setLanesUnid(BLanes Lanes) {
+        this.lanesUnid = Lanes;
     }
 
 }
