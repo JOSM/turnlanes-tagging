@@ -41,17 +41,17 @@ public class PresetsTableModel extends AbstractTableModel {
                 if (listBRoad.get(rowIndex).getName().equals("Unidirectional")) {
                     return listBRoad.get(rowIndex).getLanesUnid().getTagturns();
                 } else {
-                    String birecTurns = "";
+                    String textTurns = "";
                     if (listBRoad.get(rowIndex).getLanesA().getLanes().size() > 0) {
-                        birecTurns = listBRoad.get(rowIndex).getLanesA().getType() + ": " + listBRoad.get(rowIndex).getLanesA().getTagturns();
+                        textTurns = listBRoad.get(rowIndex).getLanesA().getType() + ": " + listBRoad.get(rowIndex).getLanesA().getTagturns();
                     }
                     if (listBRoad.get(rowIndex).getLanesB().getLanes().size() > 0) {
-                        birecTurns = birecTurns + "; " + listBRoad.get(rowIndex).getLanesB().getType() + ": " + listBRoad.get(rowIndex).getLanesB().getTagturns();
+                        textTurns = textTurns + "  " + listBRoad.get(rowIndex).getLanesB().getType() + ": " + listBRoad.get(rowIndex).getLanesB().getTagturns();
                     }
                     if (listBRoad.get(rowIndex).getLanesC().getLanes().size() > 0) {
-                        birecTurns = birecTurns + "; " + listBRoad.get(rowIndex).getLanesC().getType() + ": " + listBRoad.get(rowIndex).getLanesC().getTagturns();
+                        textTurns = textTurns + " " + listBRoad.get(rowIndex).getLanesC().getType() + ": " + listBRoad.get(rowIndex).getLanesC().getTagturns();
                     }
-                    return birecTurns;
+                    return textTurns;
                 }
 
             default:
