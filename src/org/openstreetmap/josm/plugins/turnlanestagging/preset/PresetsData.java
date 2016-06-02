@@ -51,7 +51,7 @@ public class PresetsData {
         List<BLane> lbA = new ArrayList<>();
         lbA.add(new BLane("forward", 1, "left;through"));
         lbA.add(new BLane("forward", 2, "right"));
-        lbA.add(new BLane("forward", 3, "through"));
+//        lbA.add(new BLane("forward", 3, "through"));
         bLanesA.setLanes(lbA);
 
         BLanes bLanesB = new BLanes("both_ways");
@@ -63,7 +63,7 @@ public class PresetsData {
         List<BLane> lbC = new ArrayList<>();
         lbC.add(new BLane("backward", 1, "left"));
         lbC.add(new BLane("backward", 2, "right"));
-        lbC.add(new BLane("backward", 3, "through"));
+//        lbC.add(new BLane("backward", 3, "through"));
         bLanesC.setLanes(lbC);
 
         BRoad bRoad3 = new BRoad();
