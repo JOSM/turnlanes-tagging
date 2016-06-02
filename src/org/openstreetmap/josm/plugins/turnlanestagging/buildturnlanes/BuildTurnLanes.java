@@ -12,10 +12,8 @@ import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import javax.swing.ButtonGroup;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
@@ -27,8 +25,6 @@ import javax.swing.border.SoftBevelBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import static org.openstreetmap.josm.gui.mappaint.mapcss.ExpressionFactory.Functions.tr;
-import org.openstreetmap.josm.plugins.turnlanestagging.bean.BLane;
-import org.openstreetmap.josm.plugins.turnlanestagging.bean.BLanes;
 import org.openstreetmap.josm.plugins.turnlanestagging.bean.BRoad;
 import org.openstreetmap.josm.plugins.turnlanestagging.preset.PresetsData;
 import org.openstreetmap.josm.plugins.turnlanestagging.preset.PresetsTable;
@@ -310,8 +306,7 @@ public class BuildTurnLanes extends JPanel {
     }
     
     public void addLastEditInTable() {
-        listLastEditsRoads.add((BRoad) Util.deepClone(bRoad));
-        Collections.reverse(listLastEditsRoads);
+        listLastEditsRoads.add(0,(BRoad) Util.deepClone(bRoad));
         PresetsTableModel lasteditsTM = new PresetsTableModel(listLastEditsRoads);
         lastEditsTable.setModel(lasteditsTM);
     }
