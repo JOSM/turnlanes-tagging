@@ -253,6 +253,8 @@ public class TurnSelectionBidirectional extends JPanel {
         //change without event
         eventSpinerA = false;
         spinnerA.setValue(bLanes.getLanes().size());
+        eventSpinerA = true;
+
         if (bLanes.getLanes().size() > 0) {
             if (bLanes.getType().equals("forward")) {
                 jrbLaneForwardA.setSelected(true);
@@ -287,7 +289,7 @@ public class TurnSelectionBidirectional extends JPanel {
                 });
                 jpnlturnsA.add(turnSelection);
             }
-             printChageLanes();
+            printChageLanes();
             jpnlturnsA.revalidate();
             jpnlturnsA.repaint();
         }
@@ -330,7 +332,7 @@ public class TurnSelectionBidirectional extends JPanel {
                 });
                 jpnlturnsB.add(turnSelection);
             }
-            printChageLanes();            
+            printChageLanes();
             jpnlturnsB.revalidate();
             jpnlturnsB.repaint();
         }
@@ -346,6 +348,7 @@ public class TurnSelectionBidirectional extends JPanel {
         //change without event
         eventSpinerC = false;
         spinnerC.setValue(bLanes.getLanes().size());
+        eventSpinerC = true;
         if (bLanes.getLanes().size() > 0) {
             if (bLanes.getType().equals("forward")) {
                 jrbLaneForwardC.setSelected(true);
@@ -381,7 +384,7 @@ public class TurnSelectionBidirectional extends JPanel {
                 jpnlturnsC.add(turnSelection);
             }
             //after preset the actions to update
-            printChageLanes();            
+            printChageLanes();
             jpnlturnsC.revalidate();
             jpnlturnsC.repaint();
         }
