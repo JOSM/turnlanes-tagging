@@ -74,7 +74,7 @@ public class TurnSelectionBidirectional extends JPanel {
 
     //Preset Data
     PresetsData presetsData = new PresetsData();
-    int min = 0;
+    int min = 1;
     int max = 10;
     int step = 1;
     int initValue = 1;
