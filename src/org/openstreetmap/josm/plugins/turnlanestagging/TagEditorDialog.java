@@ -299,24 +299,18 @@ public class TagEditorDialog extends JDialog {
                 }
             }
         }
-
         if (bRoad.getName().equals("Unidirectional")) {
             if (bRoad.getLanesUnid().getLanes().size() > 0) {
                 buildTurnLanes.setLanesByRoadUnidirectional(bRoad);
-                //                if (numLanes == 0) {
-                //                    Util.notification(tr("Tag lanes is missing"));
-                //                } else if (bRoad.getLanesUnid().getLanes().size() != numLanes) {
-                //                    Util.notification(tr("Number of lanes doesn't match with turn lanes"));
-                //                }
             } else {
-                //                buildTurnLanes.startDefaultUnidirectional();
+                //buildTurnLanes.startDefaultUnidirectional();
                 buildTurnLanes.setLastEdit();
             }
         } else {
             if (bRoad.getLanesA().getLanes().size() > 0 || bRoad.getLanesB().getLanes().size() > 0 || bRoad.getLanesC().getLanes().size() > 0) {
                 buildTurnLanes.setLanesByRoadBidirectional(bRoad);
             } else {
-                //                buildTurnLanes.startDefaultBidirectional();
+                //buildTurnLanes.startDefaultBidirectional();
                 buildTurnLanes.setLastEdit();
             }
         }
