@@ -52,6 +52,8 @@ public class BuildTurnLanes extends JPanel {
     //Content directional options
     private JPanel pnlDirectionalOptions = null;
     private ButtonGroup btdirectional = null;
+    private JPanel pnlUnidirectionalOptions = null;
+    private JPanel pnlBidirectionalOptions = null;
     private JRadioButton jrbUnidirectional = null;
     private JRadioButton jrbBidirectional = null;
 
@@ -133,9 +135,9 @@ public class BuildTurnLanes extends JPanel {
         lastEditsTable.addMouseListener(new ClickAdapterLastEditsTable());
         return lastEditsScrollPane;
     }
-    
+
     private class ClickAdapter extends MouseAdapter {
-        
+
         @Override
         public void mouseClicked(MouseEvent e) {
             if (e.getClickCount() == 1) {
@@ -148,9 +150,9 @@ public class BuildTurnLanes extends JPanel {
             }
         }
     }
-    
+
     private class ClickAdapterLastEditsTable extends MouseAdapter {
-        
+
         @Override
         public void mouseClicked(MouseEvent e) {
             if (e.getClickCount() == 1) {
@@ -163,7 +165,7 @@ public class BuildTurnLanes extends JPanel {
             }
         }
     }
-    
+
     public PresetsTableModel getModel() {
         return (PresetsTableModel) presetsTable.getModel();
     }
@@ -171,15 +173,21 @@ public class BuildTurnLanes extends JPanel {
     // Build Radio Butons and add Actions
     protected JPanel buildDirectionalOptions() {
         //Directional options
-        pnlDirectionalOptions = new JPanel(new GridLayout(1, 2));
-        pnlDirectionalOptions.setBorder(new SoftBevelBorder(BevelBorder.RAISED));
+        pnlDirectionalOptions = new JPanel(new GridLayout(1, 2, 5, 5));
+        pnlUnidirectionalOptions = new JPanel(new BorderLayout());
+        pnlBidirectionalOptions = new JPanel(new BorderLayout());
+        pnlUnidirectionalOptions.setBorder(new SoftBevelBorder(BevelBorder.RAISED));
+        pnlBidirectionalOptions.setBorder(new SoftBevelBorder(BevelBorder.RAISED));
+//        pnlDirectionalOptions.setBorder(new SoftBevelBorder(BevelBorder.RAISED));
         btdirectional = new ButtonGroup();
         jrbUnidirectional = new JRadioButton("Unidirectional");
         jrbBidirectional = new JRadioButton("Bidirectional");
         btdirectional.add(jrbUnidirectional);
         btdirectional.add(jrbBidirectional);
-        pnlDirectionalOptions.add(jrbUnidirectional);
-        pnlDirectionalOptions.add(jrbBidirectional);
+        pnlUnidirectionalOptions.add(jrbUnidirectional, BorderLayout.CENTER);
+        pnlBidirectionalOptions.add(jrbBidirectional, BorderLayout.CENTER);
+        pnlDirectionalOptions.add(pnlUnidirectionalOptions);
+        pnlDirectionalOptions.add(pnlBidirectionalOptions);
         jrbUnidirectional.addActionListener(actionListenerUnidirectional);
         jrbBidirectional.addActionListener(actionListenerBidirectional);
         return pnlDirectionalOptions;
@@ -192,7 +200,7 @@ public class BuildTurnLanes extends JPanel {
             startDefaultUnidirectional();
         }
     };
-    
+
     ActionListener actionListenerBidirectional = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent actionEvent) {
@@ -214,7 +222,7 @@ public class BuildTurnLanes extends JPanel {
         pnlContentDirectional = new JPanel();
         pnlBuildTurnLanes.add(pnlContentDirectional, BorderLayout.CENTER);
         //comment
-//        pnlBuildTurnLanes.add(jtfChangeRoad, BorderLayout.SOUTH);
+        // pnlBuildTurnLanes.add(jtfChangeRoad, BorderLayout.SOUTH);
         add(pnlBuildTurnLanes, BorderLayout.SOUTH);
         //road change event
         jtfChangeRoad.getDocument().addDocumentListener(new SetRoadChangeRoadListener());
@@ -222,9 +230,9 @@ public class BuildTurnLanes extends JPanel {
         jrbUnidirectional.setSelected(true);
         startDefaultUnidirectional();
     }
-    
+
     public static class LinesChangeUnidirectionalListener implements PropertyChangeListener {
-        
+
         @Override
         public void propertyChange(PropertyChangeEvent evt) {
             if (evt.getPropertyName().equals(TurnSelectionUnidirectional.LINESCHANGED)) {
@@ -232,11 +240,11 @@ public class BuildTurnLanes extends JPanel {
                 jtfChangeRoad.setText(bRoad.getLanesUnid().getTagturns());
             }
         }
-        
+
     }
-    
+
     public static class LinesChangeBidirectionalListener implements PropertyChangeListener {
-        
+
         @Override
         public void propertyChange(PropertyChangeEvent evt) {
             if (evt.getPropertyName().equals(TurnSelectionBidirectional.LINESCHANGEDBIDIRECTIONAL)) {
@@ -247,18 +255,18 @@ public class BuildTurnLanes extends JPanel {
             }
         }
     }
-    
+
     private class SetRoadChangeRoadListener implements DocumentListener {
-        
+
         @Override
         public void insertUpdate(DocumentEvent e) {
             firePropertyChange(ROADCHANGED, null, bRoad);
         }
-        
+
         @Override
         public void removeUpdate(DocumentEvent e) {
         }
-        
+
         @Override
         public void changedUpdate(DocumentEvent e) {
         }
@@ -274,7 +282,7 @@ public class BuildTurnLanes extends JPanel {
         pnlContentDirectional.revalidate();
         pnlContentDirectional.repaint();
     }
-    
+
     public void setLanesByRoadUnidirectional(BRoad road) {
         jrbUnidirectional.setSelected(true);
         pnlContentDirectional.removeAll();
@@ -284,7 +292,7 @@ public class BuildTurnLanes extends JPanel {
         pnlContentDirectional.revalidate();
         pnlContentDirectional.repaint();
     }
-    
+
     public void startDefaultBidirectional() {
         jrbBidirectional.setSelected(true);
         pnlContentDirectional.removeAll();
@@ -294,7 +302,7 @@ public class BuildTurnLanes extends JPanel {
         pnlContentDirectional.revalidate();
         pnlContentDirectional.repaint();
     }
-    
+
     public void setLanesByRoadBidirectional(BRoad bRoad) {
         jrbBidirectional.setSelected(true);
         pnlContentDirectional.removeAll();
@@ -304,13 +312,13 @@ public class BuildTurnLanes extends JPanel {
         pnlContentDirectional.revalidate();
         pnlContentDirectional.repaint();
     }
-    
+
     public void addLastEditInTable() {
-        listLastEditsRoads.add(0,(BRoad) Util.deepClone(bRoad));
+        listLastEditsRoads.add(0, (BRoad) Util.deepClone(bRoad));
         PresetsTableModel lasteditsTM = new PresetsTableModel(listLastEditsRoads);
         lastEditsTable.setModel(lasteditsTM);
     }
-    
+
     public void setLastEdit() {
         if (listLastEditsRoads.size() > 0) {
             if (listLastEditsRoads.get(0).getName().equals("Unidirectional")) {
@@ -321,7 +329,7 @@ public class BuildTurnLanes extends JPanel {
         } else {
             startDefaultUnidirectional();
         }
-        
+
     }
-    
+
 }
