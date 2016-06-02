@@ -12,6 +12,8 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.SoftBevelBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import static org.openstreetmap.josm.gui.mappaint.mapcss.ExpressionFactory.Functions.tr;
@@ -26,6 +28,7 @@ import org.openstreetmap.josm.plugins.turnlanestagging.preset.PresetsData;
 public class TurnSelectionUnidirectional extends JPanel {
 
     JPanel jpanelcontent = null;
+    JPanel jpanelContentLane = null;
     JPanel jpanelcontentTurns = null;
 
     //Panel for create the number of lines.
@@ -55,10 +58,13 @@ public class TurnSelectionUnidirectional extends JPanel {
         //add in Main Panel
         setLayout(new BorderLayout());
         add(buildselect(), BorderLayout.NORTH);
+        jpanelContentLane = new JPanel(new GridLayout(1, 1));
+        jpanelContentLane.setBorder(new SoftBevelBorder(BevelBorder.RAISED));
         jpanelcontentTurns = new JPanel();
-        add(jpanelcontentTurns, BorderLayout.CENTER);
+        jpanelcontentTurns.setBorder(javax.swing.BorderFactory.createTitledBorder(null, tr("Lanes"), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, new java.awt.Color(102, 102, 102)));
+        jpanelContentLane.add(jpanelcontentTurns);
+        add(jpanelContentLane, BorderLayout.CENTER);
         //add(jtfChangeLanes, BorderLayout.SOUTH);
-
         //Event Road Listenr
         jtfChangeLanes.getDocument().addDocumentListener(new SetLanesChangeListener());
     }
@@ -83,6 +89,7 @@ public class TurnSelectionUnidirectional extends JPanel {
     //Build pannel for   lanes
     protected JPanel buildselect() {
         jpanelcontentSelections = new JPanel(new GridLayout(1, 2));
+        jpanelcontentSelections.setBorder(new SoftBevelBorder(BevelBorder.RAISED));
         //fill Combo Box
         jcbNumLanes = new JComboBox<>();
         for (int j = 0; j < 15; j++) {

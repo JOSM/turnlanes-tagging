@@ -12,10 +12,8 @@ import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import javax.swing.ButtonGroup;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
@@ -54,6 +52,8 @@ public class BuildTurnLanes extends JPanel {
     //Content directional options
     private JPanel pnlDirectionalOptions = null;
     private ButtonGroup btdirectional = null;
+    private JPanel pnlUnidirectionalOptions = null;
+    private JPanel pnlBidirectionalOptions = null;
     private JRadioButton jrbUnidirectional = null;
     private JRadioButton jrbBidirectional = null;
 
@@ -173,15 +173,21 @@ public class BuildTurnLanes extends JPanel {
     // Build Radio Butons and add Actions
     protected JPanel buildDirectionalOptions() {
         //Directional options
-        pnlDirectionalOptions = new JPanel(new GridLayout(1, 2));
-        pnlDirectionalOptions.setBorder(new SoftBevelBorder(BevelBorder.RAISED));
+        pnlDirectionalOptions = new JPanel(new GridLayout(1, 2, 5, 5));
+        pnlUnidirectionalOptions = new JPanel(new BorderLayout());
+        pnlBidirectionalOptions = new JPanel(new BorderLayout());
+        pnlUnidirectionalOptions.setBorder(new SoftBevelBorder(BevelBorder.RAISED));
+        pnlBidirectionalOptions.setBorder(new SoftBevelBorder(BevelBorder.RAISED));
+//        pnlDirectionalOptions.setBorder(new SoftBevelBorder(BevelBorder.RAISED));
         btdirectional = new ButtonGroup();
         jrbUnidirectional = new JRadioButton("Unidirectional");
         jrbBidirectional = new JRadioButton("Bidirectional");
         btdirectional.add(jrbUnidirectional);
         btdirectional.add(jrbBidirectional);
-        pnlDirectionalOptions.add(jrbUnidirectional);
-        pnlDirectionalOptions.add(jrbBidirectional);
+        pnlUnidirectionalOptions.add(jrbUnidirectional, BorderLayout.CENTER);
+        pnlBidirectionalOptions.add(jrbBidirectional, BorderLayout.CENTER);
+        pnlDirectionalOptions.add(pnlUnidirectionalOptions);
+        pnlDirectionalOptions.add(pnlBidirectionalOptions);
         jrbUnidirectional.addActionListener(actionListenerUnidirectional);
         jrbBidirectional.addActionListener(actionListenerBidirectional);
         return pnlDirectionalOptions;
@@ -216,7 +222,7 @@ public class BuildTurnLanes extends JPanel {
         pnlContentDirectional = new JPanel();
         pnlBuildTurnLanes.add(pnlContentDirectional, BorderLayout.CENTER);
         //comment
-//        pnlBuildTurnLanes.add(jtfChangeRoad, BorderLayout.SOUTH);
+        // pnlBuildTurnLanes.add(jtfChangeRoad, BorderLayout.SOUTH);
         add(pnlBuildTurnLanes, BorderLayout.SOUTH);
         //road change event
         jtfChangeRoad.getDocument().addDocumentListener(new SetRoadChangeRoadListener());
@@ -271,7 +277,7 @@ public class BuildTurnLanes extends JPanel {
         jrbUnidirectional.setSelected(true);
         pnlContentDirectional.removeAll();
         pnlContentDirectional.setLayout(new GridLayout(1, 1));
-        turnSelectionUnidirectional.setDefault((BRoad) Util.deepClone(listPresetRoads.get(0)));
+        turnSelectionUnidirectional.setDefault(presetsData.defaultRoadUnidirectional(4)); //default 4 lanes according data team
         pnlContentDirectional.add(turnSelectionUnidirectional);
         pnlContentDirectional.revalidate();
         pnlContentDirectional.repaint();
@@ -291,7 +297,7 @@ public class BuildTurnLanes extends JPanel {
         jrbBidirectional.setSelected(true);
         pnlContentDirectional.removeAll();
         pnlContentDirectional.setLayout(new GridLayout(1, 1));
-        turnSelectionBidirectional.setDefault((BRoad) Util.deepClone(listPresetRoads.get(2)));//we have to know where is the bidirectional road
+        turnSelectionBidirectional.setDefault(presetsData.defaultRoadBidirectional("forward", 3, "backward", 2));//default 3 and 2 lanes according data team
         pnlContentDirectional.add(turnSelectionBidirectional);
         pnlContentDirectional.revalidate();
         pnlContentDirectional.repaint();
@@ -308,8 +314,7 @@ public class BuildTurnLanes extends JPanel {
     }
 
     public void addLastEditInTable() {
-        listLastEditsRoads.add((BRoad) Util.deepClone(bRoad));
-        Collections.reverse(listLastEditsRoads);
+        listLastEditsRoads.add(0, (BRoad) Util.deepClone(bRoad));
         PresetsTableModel lasteditsTM = new PresetsTableModel(listLastEditsRoads);
         lastEditsTable.setModel(lasteditsTM);
     }

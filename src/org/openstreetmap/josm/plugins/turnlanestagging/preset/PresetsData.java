@@ -39,8 +39,8 @@ public class PresetsData {
         List<BLane> listbl2 = new ArrayList<>();
         listbl2.add(new BLane("unid", 1, "left"));
         listbl2.add(new BLane("unid", 2, "right"));
-        listbl2.add(new BLane("unid", 3, "through"));        
-        bl2.setLanes(listbl2);        
+        listbl2.add(new BLane("unid", 3, "through"));
+        bl2.setLanes(listbl2);
         BRoad bRoad2 = new BRoad();
         bRoad2.setName("Unidirectional");
         bRoad2.setLanesUnid(bl2);
@@ -113,11 +113,11 @@ public class PresetsData {
 
     }
 
-    public BRoad defaultRoadUnidirectional(int lines) {
+    public BRoad defaultRoadUnidirectional(int lanes) {
         BRoad bRoad = new BRoad();
         BLanes bLanes = new BLanes("unid");
         List<BLane> listLanes = new ArrayList<>();
-        for (int m = 0; m < lines; m++) {
+        for (int m = 0; m < lanes; m++) {
             BLane bLine = new BLane("unid", (m + 1), "");
             listLanes.add(bLine);
         }
@@ -127,10 +127,10 @@ public class PresetsData {
         return bRoad;
     }
 
-    public BLanes defaultLanes(String type, int lines) {
+    public BLanes defaultLanes(String type, int lanes) {
         BLanes bLanes = new BLanes();
         List<BLane> list = new ArrayList<>();
-        for (int m = 0; m < lines; m++) {
+        for (int m = 0; m < lanes; m++) {
             BLane bLine = new BLane(type, (m + 1), "");
             list.add(bLine);
         }
@@ -138,4 +138,23 @@ public class PresetsData {
         return bLanes;
     }
 
+    public BRoad defaultRoadBidirectional(String typeA, int lanesA, String typeC, int lanesC) {
+        BLanes bLanes2A = new BLanes(typeA);
+        List<BLane> lb2A = new ArrayList<>();
+        for (int i = 0; i < lanesA; i++) {
+            lb2A.add(new BLane(typeA, (i + 1), ""));
+        }
+        bLanes2A.setLanes(lb2A);
+        BLanes bLanes2C = new BLanes(typeC);
+        List<BLane> lb2C = new ArrayList<>();
+        for (int j = 0; j < lanesC; j++) {
+            lb2C.add(new BLane(typeC, (j + 1), ""));
+        }
+        bLanes2C.setLanes(lb2C);
+        BRoad bRoad = new BRoad();
+        bRoad.setName("Bidirectional");
+        bRoad.setLanesA(bLanes2A);
+        bRoad.setLanesC(bLanes2C);
+        return bRoad;
+    }
 }
