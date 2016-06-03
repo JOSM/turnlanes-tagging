@@ -137,7 +137,7 @@ public class TagEditorDialog extends JDialog {
                     if (b.getName().equals("Unidirectional")) {
                         tagEditor.getModel().applyKeyValuePair(new KeyValuePair("turn:lanes", b.getLanesUnid().getTagturns()));
                         tagEditor.getModel().applyKeyValuePair(new KeyValuePair("lanes", String.valueOf(b.getLanesUnid().getLanes().size())));
-                        if (addOneway()) {
+                        if (!addOneway()) {
                             tagEditor.getModel().applyKeyValuePair(new KeyValuePair("oneway", "yes"));
                         }
                     } else {
