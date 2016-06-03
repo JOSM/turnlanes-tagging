@@ -30,6 +30,8 @@ public class BLanes implements Serializable {
 
     public void setType(String type) {
         this.type = type;
+        changeDirectionLanes(type);
+
     }
 
     public List<BLane> getLanes() {
@@ -86,5 +88,11 @@ public class BLanes implements Serializable {
             }
         }
         return newRoadTurns.toString().replaceAll("\\[|\\]", "").replaceAll(", ", ";");
+    }
+
+    public void changeDirectionLanes(String Type) {
+        for (int k = 0; k < lanes.size(); k++) {
+            lanes.get(k).setType(type);
+        }
     }
 }

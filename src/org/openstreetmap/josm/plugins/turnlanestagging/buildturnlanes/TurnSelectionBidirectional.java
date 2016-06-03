@@ -411,13 +411,29 @@ public class TurnSelectionBidirectional extends JPanel {
     private void listenerA() {
         if (eventSpinerA) {
             if (jrbLaneForwardA.isSelected()) {
-                BLanes bLanes = presetsData.defaultLanes("forward", Integer.valueOf(spinnerA.getValue().toString()));
-                bLanes.setType("forward");
-                lanesA(bLanes);
+
+//                BLanes bLanes = presetsData.defaultLanes("forward", Integer.valueOf(spinnerA.getValue().toString()));
+//                lanesA(bLanes);
+                bLanesA.setType("forward");
+                lanesA(bLanesA);
+
+                //change to backward
+                jrbLaneBackwardC.setSelected(true);
+                bLanesC.setType("backward");
+                lanesC(bLanesC);
+
             } else {
-                BLanes bLanes = presetsData.defaultLanes("backward", Integer.valueOf(spinnerA.getValue().toString()));
-                bLanes.setType("backward");
-                lanesA(bLanes);
+//                BLanes bLanes = presetsData.defaultLanes("backward", Integer.valueOf(spinnerA.getValue().toString()));
+//                bLanes.setType("backward");
+//                lanesA(bLanes);
+
+                bLanesA.setType("backward");
+                lanesA(bLanesA);
+
+                //change to forward
+                jrbLaneForwardC.setSelected(true);
+                bLanesC.setType("forward");
+                lanesC(bLanesC);
             }
         }
         eventSpinerA = true;
@@ -440,13 +456,28 @@ public class TurnSelectionBidirectional extends JPanel {
     private void listenerC() {
         if (eventSpinerC) {
             if (jrbLaneForwardC.isSelected()) {
-                BLanes bLanes = presetsData.defaultLanes("forward", Integer.valueOf(spinnerC.getValue().toString()));
-                bLanes.setType("forward");
-                lanesC(bLanes);
+//                BLanes bLanes = presetsData.defaultLanes("forward", Integer.valueOf(spinnerC.getValue().toString()));
+//                lanesC(bLanes);
+
+                bLanesC.setType("forward");
+                lanesC(bLanesC);
+
+                //change to backward
+                jrbLaneBackwardA.setSelected(true);
+                bLanesA.setType("backward");
+                lanesA(bLanesA);
+
             } else {
-                BLanes bLanes = presetsData.defaultLanes("backward", Integer.valueOf(spinnerC.getValue().toString()));
-                bLanes.setType("backward");
-                lanesC(bLanes);
+//                BLanes bLanes = presetsData.defaultLanes("backward", Integer.valueOf(spinnerC.getValue().toString()));
+//                lanesC(bLanes);
+
+                bLanesC.setType("backward");
+                lanesC(bLanesC);
+
+                //change to forward
+                jrbLaneBackwardA.setSelected(true);
+                bLanesA.setType("forward");
+                lanesA(bLanesA);
             }
         }
         eventSpinerC = true;
