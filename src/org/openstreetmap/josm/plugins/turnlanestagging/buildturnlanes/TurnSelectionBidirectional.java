@@ -425,7 +425,7 @@ public class TurnSelectionBidirectional extends JPanel {
 
     private void listenerB() {
         BLanes bLanes = presetsData.defaultLanes("both_ways", 1);
-        bLanes.setType("both_ways");
+//        bLanes.setType("both_ways");
         if (jchbothwayB.isSelected()) {
             jpanelcontentTurns.add(jpnlturnsB, BorderLayout.CENTER);
             lanesB(bLanes);

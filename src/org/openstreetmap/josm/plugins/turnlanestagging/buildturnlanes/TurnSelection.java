@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import org.openstreetmap.josm.plugins.turnlanestagging.bean.BLane;
+import org.openstreetmap.josm.plugins.turnlanestagging.util.Util;
 import org.openstreetmap.josm.tools.ImageProvider;
 
 /**
@@ -46,7 +47,11 @@ public class TurnSelection extends JPanel {
         jCBRight.addActionListener(new RightListener());
 
         jCBThrough.setIcon(ImageProvider.get("types", "empty.png"));
-        jCBThrough.setSelectedIcon(ImageProvider.get("types", "through-" + bLine.getType() + ".png"));
+        if (bLine.getType().equals("both_ways")) {
+            jCBThrough.setSelectedIcon(ImageProvider.get("types", "reverse.png"));
+        } else {
+            jCBThrough.setSelectedIcon(ImageProvider.get("types", "through-" + bLine.getType() + ".png"));
+        }
         jCBThrough.addActionListener(new ThroughListener());
 
         jPOptions = new JPanel(new GridLayout(1, 3));
@@ -73,6 +78,7 @@ public class TurnSelection extends JPanel {
         if (jCBRight.isSelected()) {
             t = "right";
         }
+        //Combinaciones normales
         if (jCBThrough.isSelected() && jCBRight.isSelected()) {
             t = "through;right";
         }
@@ -85,40 +91,73 @@ public class TurnSelection extends JPanel {
         if (jCBLeft.isSelected() && jCBThrough.isSelected() && jCBRight.isSelected()) {
             t = "left;through;right";
         }
+        //combinaciones para both_ways
+        if (jCBThrough.isSelected() && bLine.getType().equals("both_ways")) {
+            t = "reverse";
+        }
+        if (jCBThrough.isSelected() && jCBRight.isSelected() && bLine.getType().equals("both_ways")) {
+            t = "reverse;right";
+        }
+        if (jCBLeft.isSelected() && jCBThrough.isSelected() && bLine.getType().equals("both_ways")) {
+            t = "left;reverse";
+        }
+        if (jCBLeft.isSelected() && jCBRight.isSelected() && bLine.getType().equals("both_ways")) {
+            t = "left;right";
+        }
+        if (jCBLeft.isSelected() && jCBThrough.isSelected() && jCBRight.isSelected() && bLine.getType().equals("both_ways")) {
+            t = "left;reverse;right";
+        }
 
         bLine.setTurn(t);
     }
 
     protected void setTurn() {
-        if (bLine.getTurn().equals("left")) {
-            jCBLeft.setSelected(true);
+        String dirs[] = bLine.getTurn().split("\\;", -1);
+        Util.prints(dirs);
+        for (int i = 0; i < dirs.length; i++) {
+            if (dirs[i].equals("left")) {
+                jCBLeft.setSelected(true);
+            }
+            if (dirs[i].equals("right")) {
+                jCBRight.setSelected(true);
+            }
+            if (dirs[i].equals("through")) {
+                jCBThrough.setSelected(true);
+            }
+            if (dirs[i].equals("reverse")) {
+                jCBThrough.setSelected(true);
+            }
         }
-        if (bLine.getTurn().equals("right")) {
-            jCBRight.setSelected(true);
-        }
-        if (bLine.getTurn().equals("through")) {
-            jCBThrough.setSelected(true);
-        }
-        if (bLine.getTurn().equals("through;right") || bLine.getTurn().equals("right;through")) {
-            jCBRight.setSelected(true);
-            jCBThrough.setSelected(true);
-        }
-        if (bLine.getTurn().equals("left;through") || bLine.getTurn().equals("through;left")) {
-            jCBLeft.setSelected(true);
-            jCBThrough.setSelected(true);
-        }
-        if (bLine.getTurn().equals("left;right") || bLine.getTurn().equals("right;left")) {
-            jCBLeft.setSelected(true);
-            jCBRight.setSelected(true);
-        }
-        if (bLine.getTurn().equals("left;through;right") || bLine.getTurn().equals("left;right;through")
-                || bLine.getTurn().equals("through;right;left") || bLine.getTurn().equals("through;left;right")
-                || bLine.getTurn().equals("right;left;through") || bLine.getTurn().equals("right;through;left")) {
 
-            jCBLeft.setSelected(true);
-            jCBThrough.setSelected(true);
-            jCBRight.setSelected(true);
-        }
+//        if (bLine.getTurn().equals("left")) {
+//            jCBLeft.setSelected(true);
+//        }
+//        if (bLine.getTurn().equals("right")) {
+//            jCBRight.setSelected(true);
+//        }
+//        if (bLine.getTurn().equals("through")) {
+//            jCBThrough.setSelected(true);
+//        }
+//        if (bLine.getTurn().equals("through;right") || bLine.getTurn().equals("right;through")) {
+//            jCBRight.setSelected(true);
+//            jCBThrough.setSelected(true);
+//        }
+//        if (bLine.getTurn().equals("left;through") || bLine.getTurn().equals("through;left")) {
+//            jCBLeft.setSelected(true);
+//            jCBThrough.setSelected(true);
+//        }
+//        if (bLine.getTurn().equals("left;right") || bLine.getTurn().equals("right;left")) {
+//            jCBLeft.setSelected(true);
+//            jCBRight.setSelected(true);
+//        }
+//        if (bLine.getTurn().equals("left;through;right") || bLine.getTurn().equals("left;right;through")
+//                || bLine.getTurn().equals("through;right;left") || bLine.getTurn().equals("through;left;right")
+//                || bLine.getTurn().equals("right;left;through") || bLine.getTurn().equals("right;through;left")) {
+//
+//            jCBLeft.setSelected(true);
+//            jCBThrough.setSelected(true);
+//            jCBRight.setSelected(true);
+//        }
     }
 
     private class LeftListener implements ActionListener {
