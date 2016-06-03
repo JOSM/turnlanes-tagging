@@ -128,7 +128,7 @@ public class PresetsData {
     }
 
     public BLanes defaultLanes(String type, int lanes) {
-        BLanes bLanes = new BLanes();
+        BLanes bLanes = new BLanes(type);
         List<BLane> list = new ArrayList<>();
         for (int m = 0; m < lanes; m++) {
             BLane bLine = new BLane(type, (m + 1), "");

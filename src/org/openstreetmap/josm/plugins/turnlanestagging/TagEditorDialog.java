@@ -307,6 +307,12 @@ public class TagEditorDialog extends JDialog {
             }
         } else {
             if (bRoad.getLanesA().getLanes().size() > 0 || bRoad.getLanesB().getLanes().size() > 0 || bRoad.getLanesC().getLanes().size() > 0) {
+                if (bRoad.getLanesA().getLanes().isEmpty()) {
+                    bRoad.setLanesA(presetsData.defaultLanes("forward", 1));
+                }
+                if (bRoad.getLanesC().getLanes().isEmpty()) {
+                    bRoad.setLanesC(presetsData.defaultLanes("backward", 1));
+                }
                 buildTurnLanes.setLanesByRoadBidirectional(bRoad);
             } else {
                 //buildTurnLanes.startDefaultBidirectional();

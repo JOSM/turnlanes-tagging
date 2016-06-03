@@ -448,7 +448,6 @@ public class TurnSelectionBidirectional extends JPanel {
                 bLanes.setType("backward");
                 lanesC(bLanes);
             }
-
         }
         eventSpinerC = true;
     }

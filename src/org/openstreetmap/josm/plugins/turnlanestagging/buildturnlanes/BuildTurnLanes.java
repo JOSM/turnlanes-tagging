@@ -329,7 +329,6 @@ public class BuildTurnLanes extends JPanel {
         } else {
             startDefaultUnidirectional();
         }
-
     }
 
 }
