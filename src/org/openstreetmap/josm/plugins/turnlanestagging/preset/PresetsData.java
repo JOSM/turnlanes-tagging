@@ -157,4 +157,20 @@ public class PresetsData {
         bRoad.setLanesC(bLanes2C);
         return bRoad;
     }
+
+    public BLanes addLanes(BLanes bLanes, String type, int lanes) {
+        for (int m = 0; m < lanes; m++) {
+            BLane bLine = new BLane(type, bLanes.getLanes().size() + 1, "");
+            bLanes.getLanes().add(bLine);
+        }
+        return bLanes;
+    }
+
+    public BLanes removeLanes(BLanes bLanes, int lanes) {
+        int numLanes = bLanes.getLanes().size();
+        for (int i = 1; i <= lanes; i++) {
+            bLanes.getLanes().remove(numLanes - i);
+        }
+        return bLanes;
+    }
 }
