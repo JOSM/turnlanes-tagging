@@ -132,10 +132,14 @@ public class TagEditorDialog extends JDialog {
                     tagEditor.getModel().applyKeyValuePair(new KeyValuePair("lanes:both_ways", null));
                     tagEditor.getModel().applyKeyValuePair(new KeyValuePair("turn:lanes:backward", null));
                     tagEditor.getModel().applyKeyValuePair(new KeyValuePair("lanes:backward", null));
+                    tagEditor.getModel().applyKeyValuePair(new KeyValuePair("oneway", null));
 
                     if (b.getName().equals("Unidirectional")) {
                         tagEditor.getModel().applyKeyValuePair(new KeyValuePair("turn:lanes", b.getLanesUnid().getTagturns()));
                         tagEditor.getModel().applyKeyValuePair(new KeyValuePair("lanes", String.valueOf(b.getLanesUnid().getLanes().size())));
+                        if (addOneway()) {
+                            tagEditor.getModel().applyKeyValuePair(new KeyValuePair("oneway", "yes"));
+                        }
                     } else {
                         if (!b.getLanesA().getLanes().isEmpty()) {
                             tagEditor.getModel().applyKeyValuePair(new KeyValuePair("turn:lanes:forward", b.getLanesA().getTagturns()));
@@ -179,6 +183,7 @@ public class TagEditorDialog extends JDialog {
             putValue(SHORT_DESCRIPTION, tr("Abort tag editing and close dialog"));
         }
 
+        @Override
         public void actionPerformed(ActionEvent arg0) {
             setVisible(false);
         }
@@ -193,6 +198,7 @@ public class TagEditorDialog extends JDialog {
             putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke("ctrl ENTER"));
         }
 
+        @Override
         public void actionPerformed(ActionEvent e) {
             run();
             // Add on table
@@ -208,6 +214,7 @@ public class TagEditorDialog extends JDialog {
             Main.parent.repaint(); // repaint all
         }
 
+        @Override
         public void propertyChange(PropertyChangeEvent evt) {
             if (!evt.getPropertyName().equals(TagEditorModel.PROP_DIRTY)) {
                 return;
@@ -223,10 +230,8 @@ public class TagEditorDialog extends JDialog {
     public boolean addOneway() {
         Collection<OsmPrimitive> selection = Main.main.getCurrentDataSet().getSelected();
         for (OsmPrimitive element : selection) {
-            for (String key : element.keySet()) {
-                if (key.equals("oneway")) {
-                    return false;
-                }
+            if (element.hasDirectionKeys()) {
+                return false;
             }
         }
         return true;
