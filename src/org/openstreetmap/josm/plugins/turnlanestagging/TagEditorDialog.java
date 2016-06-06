@@ -68,10 +68,10 @@ public class TagEditorDialog extends JDialog {
     protected void build() {
         //Parameters for Dialog
         getContentPane().setLayout(new BorderLayout());
-        setModal(true);
+        setModal(false);
         setSize(PREFERRED_SIZE);
         setTitle(tr("Turn Lanes Editor"));
-
+        setAlwaysOnTop(true);
         // Preset Panel
         JPanel pnlPresetGrid = buildPresetGridPanel();
         pnlPresetGrid.setBorder(BorderFactory.createEmptyBorder(0, 0, 5, 0));
