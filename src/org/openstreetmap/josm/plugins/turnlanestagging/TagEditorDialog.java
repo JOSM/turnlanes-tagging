@@ -300,15 +300,15 @@ public class TagEditorDialog extends JDialog {
         tagEditor.getModel().applyKeyValuePair(new KeyValuePair("lanes:both_ways", null));
         tagEditor.getModel().applyKeyValuePair(new KeyValuePair("turn:lanes:backward", null));
         tagEditor.getModel().applyKeyValuePair(new KeyValuePair("lanes:backward", null));
-        tagEditor.getModel().applyKeyValuePair(new KeyValuePair("oneway", null));
+//        tagEditor.getModel().applyKeyValuePair(new KeyValuePair("oneway", null));
         if (bRoad.getName().equals("Unidirectional")) {
             if (isEmptyturnlane(bRoad.getLanesUnid().getTagturns())) {
                 tagEditor.getModel().applyKeyValuePair(new KeyValuePair("turn:lanes", bRoad.getLanesUnid().getTagturns()));
             }
             tagEditor.getModel().applyKeyValuePair(new KeyValuePair("lanes", String.valueOf(bRoad.getLanesUnid().getLanes().size())));
-            if (!addOneway()) {
-                tagEditor.getModel().applyKeyValuePair(new KeyValuePair("oneway", "yes"));
-            }
+//            if (!addOneway()) {
+//                tagEditor.getModel().applyKeyValuePair(new KeyValuePair("oneway", "yes"));
+//            }
         } else {
             if (!bRoad.getLanesA().getLanes().isEmpty()) {
                 if (bRoad.getLanesA().getType().equals("forward")) {
