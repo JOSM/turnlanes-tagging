@@ -6,7 +6,6 @@ import java.awt.event.ActionListener;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import org.openstreetmap.josm.plugins.turnlanestagging.bean.BLane;
-import org.openstreetmap.josm.plugins.turnlanestagging.util.Util;
 import org.openstreetmap.josm.tools.ImageProvider;
 
 /**
@@ -113,7 +112,6 @@ public class TurnSelection extends JPanel {
 
     protected void setTurn() {
         String dirs[] = bLine.getTurn().split("\\;", -1);
-        Util.prints(dirs);
         for (int i = 0; i < dirs.length; i++) {
             if (dirs[i].equals("left")) {
                 jCBLeft.setSelected(true);
@@ -128,36 +126,6 @@ public class TurnSelection extends JPanel {
                 jCBThrough.setSelected(true);
             }
         }
-
-//        if (bLine.getTurn().equals("left")) {
-//            jCBLeft.setSelected(true);
-//        }
-//        if (bLine.getTurn().equals("right")) {
-//            jCBRight.setSelected(true);
-//        }
-//        if (bLine.getTurn().equals("through")) {
-//            jCBThrough.setSelected(true);
-//        }
-//        if (bLine.getTurn().equals("through;right") || bLine.getTurn().equals("right;through")) {
-//            jCBRight.setSelected(true);
-//            jCBThrough.setSelected(true);
-//        }
-//        if (bLine.getTurn().equals("left;through") || bLine.getTurn().equals("through;left")) {
-//            jCBLeft.setSelected(true);
-//            jCBThrough.setSelected(true);
-//        }
-//        if (bLine.getTurn().equals("left;right") || bLine.getTurn().equals("right;left")) {
-//            jCBLeft.setSelected(true);
-//            jCBRight.setSelected(true);
-//        }
-//        if (bLine.getTurn().equals("left;through;right") || bLine.getTurn().equals("left;right;through")
-//                || bLine.getTurn().equals("through;right;left") || bLine.getTurn().equals("through;left;right")
-//                || bLine.getTurn().equals("right;left;through") || bLine.getTurn().equals("right;through;left")) {
-//
-//            jCBLeft.setSelected(true);
-//            jCBThrough.setSelected(true);
-//            jCBRight.setSelected(true);
-//        }
     }
 
     private class LeftListener implements ActionListener {
