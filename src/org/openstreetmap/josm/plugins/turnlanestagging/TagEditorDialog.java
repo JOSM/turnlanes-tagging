@@ -199,18 +199,16 @@ public class TagEditorDialog extends JDialog {
         Collection<OsmPrimitive> selection = Main.main.getCurrentDataSet().getSelected();
         for (OsmPrimitive element : selection) {
             if (element.hasDirectionKeys()) {
-                return false;
+                return true;
             }
         }
-        return true;
+        return false;
     }
 
     public void setRoadProperties() {
         //Set the selection Roads
         PresetsData presetsData = new PresetsData();
         BRoad bRoad = new BRoad();
-        Map numLanes = new HashMap();
-
         //set as unidirectional as first
         bRoad.setName("Unidirectional");
         Collection<OsmPrimitive> selection = Main.main.getCurrentDataSet().getSelected();
