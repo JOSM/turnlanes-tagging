@@ -242,7 +242,6 @@ public class TurnSelectionBidirectional extends JPanel {
     };
 
     public void lanesA(BLanes bLanes) {
-        Util.prints("Pasada en Lanes A");
         jpnlturnsA.setBorder(null);
         jpnlturnsA.removeAll();
         jpnlturnsA.revalidate();
