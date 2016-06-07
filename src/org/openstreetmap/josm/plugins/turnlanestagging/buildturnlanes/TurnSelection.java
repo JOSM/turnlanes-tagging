@@ -1,8 +1,13 @@
 package org.openstreetmap.josm.plugins.turnlanestagging.buildturnlanes;
 
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Panel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import org.openstreetmap.josm.plugins.turnlanestagging.bean.BLane;
@@ -14,116 +19,201 @@ import org.openstreetmap.josm.tools.ImageProvider;
  */
 public class TurnSelection extends JPanel {
 
-    public static final String jRBLeft_CHANGED = "jRBLeft Changed";
-    public static final String jRBRight_CHANGED = "jRBRight Changed";
-    public static final String jCBThrough_CHANGED = "jCBThrough Changed";
-    private JCheckBox jCBThrough;
+    public static final String Left_CHANGED = "Left Changed";
+    public static final String Right_CHANGED = "Right Changed";
+    public static final String Through_CHANGED = "Through Changed";
+    public static final String Slight_right_CHANGED = "slight_right Changed";
+    public static final String Slight_left_CHANGED = "slight_left Changed";
+    public static final String Merge_to_right_CHANGED = "merge_to_right Changed";
+    public static final String Merge_to_left_CHANGED = "merge_to_left Changed";
+
 //    private JPanel jPTurnSelection;
     private JPanel jPOptions;
-    private JCheckBox jCBLeft;
-    private JCheckBox jCBRight;
+    private JCheckBox left;
+    private JCheckBox through;
+    private JCheckBox right;
+    private JCheckBox slight_right;
+    private JCheckBox slight_left;
+    private JCheckBox merge_to_right;
+    private JCheckBox merge_to_left;
     BLane bLine;
+    int numRoadLanes;
 
-    public TurnSelection(BLane bl) {
+    GridBagConstraints gbc = new GridBagConstraints();
+
+    public TurnSelection(BLane bl, int numRoadLanes) {
         super();
         this.bLine = bl;
+        this.numRoadLanes = numRoadLanes;
         init();
     }
 
     public void init() {
-        jPOptions = new JPanel();
-        jCBLeft = new JCheckBox();
-        jCBRight = new JCheckBox();
-        jCBThrough = new JCheckBox();
+        jPOptions = new JPanel(new GridBagLayout());
+        left = new JCheckBox();
+        through = new JCheckBox();
+        right = new JCheckBox();
+        slight_right = new JCheckBox();
+        slight_left = new JCheckBox();
+        merge_to_right = new JCheckBox();
+        merge_to_left = new JCheckBox();
 
-        jCBLeft.setIcon(ImageProvider.get("types", "empty.png"));
-
-        jCBLeft.setSelectedIcon(ImageProvider.get("types", "left-" + bLine.getType() + ".png"));
-        jCBLeft.addActionListener(new LeftListener());
-
-        jCBRight.setIcon(ImageProvider.get("types", "empty.png"));
-        jCBRight.setSelectedIcon(ImageProvider.get("types", "right-" + bLine.getType() + ".png"));
-        jCBRight.addActionListener(new RightListener());
-
-        jCBThrough.setIcon(ImageProvider.get("types", "empty.png"));
-        if (bLine.getType().equals("both_ways")) {
-            jCBThrough.setSelectedIcon(ImageProvider.get("types", "reverse.png"));
+        if (bLine.getPosition() == 1 || bLine.getPosition() == numRoadLanes && (bLine.getType().equals("forward") || bLine.getType().equals("backward"))) {
+            if (bLine.getType().equals("forward")) {
+                forwardFirstLast();
+            }
+            if (bLine.getType().equals("backward")) {
+                backwardFirstLast();
+            }
         } else {
-            jCBThrough.setSelectedIcon(ImageProvider.get("types", "through-" + bLine.getType() + ".png"));
+            if (bLine.getType().equals("forward")) {
+                forwareMidle();
+            }
+            if (bLine.getType().equals("backward")) {
+                backwardMidle();
+            }
         }
-        jCBThrough.addActionListener(new ThroughListener());
 
-        jPOptions = new JPanel(new GridLayout(1, 3));
+        if (bLine.getType().equals("both_ways")) {
+            both_waysOne();
+        }
+
+        left.addActionListener(new LeftListener());
+        right.addActionListener(new RightListener());
+        through.addActionListener(new ThroughListener());
+
+        slight_right.addActionListener(new Slight_rightListener());
+        slight_left.addActionListener(new Slight_leftListener());
+        merge_to_right.addActionListener(new Merge_to_rightListener());
+        merge_to_left.addActionListener(new Merge_to_leftListener());
+
         jPOptions.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Lane " + bLine.getPosition(), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, new java.awt.Color(102, 102, 102)));
-
-        jPOptions.add(jCBLeft);
-        jPOptions.add(jCBThrough);
-        jPOptions.add(jCBRight);
-
         setTurn();
-        //add on Main Panel
         add(jPOptions);
     }
 
     //left|left;through||…|right
     protected void builturn() {
         String t = "";
-        if (jCBThrough.isSelected()) {
-            t = "through";
-        }
-        if (jCBLeft.isSelected()) {
-            t = "left";
-        }
-        if (jCBRight.isSelected()) {
-            t = "right";
-        }
-        //Combinaciones normales
-        if (jCBThrough.isSelected() && jCBRight.isSelected()) {
-            t = "through;right";
-        }
-        if (jCBLeft.isSelected() && jCBThrough.isSelected()) {
-            t = "left;through";
-        }
-        if (jCBLeft.isSelected() && jCBRight.isSelected()) {
-            t = "left;right";
-        }
-        if (jCBLeft.isSelected() && jCBThrough.isSelected() && jCBRight.isSelected()) {
-            t = "left;through;right";
-        }
-        //combinaciones para both_ways
-        if (jCBThrough.isSelected() && bLine.getType().equals("both_ways")) {
-            t = "reverse";
-        }
-        if (jCBThrough.isSelected() && jCBRight.isSelected() && bLine.getType().equals("both_ways")) {
-            t = "reverse;right";
-        }
-        if (jCBLeft.isSelected() && jCBThrough.isSelected() && bLine.getType().equals("both_ways")) {
-            t = "left;reverse";
-        }
-        if (jCBLeft.isSelected() && jCBRight.isSelected() && bLine.getType().equals("both_ways")) {
-            t = "left;right";
-        }
-        if (jCBLeft.isSelected() && jCBThrough.isSelected() && jCBRight.isSelected() && bLine.getType().equals("both_ways")) {
-            t = "left;reverse;right";
+        String[] turns = new String[7];
+        List<String> list = new ArrayList<>();
+        //"reverse", "sharp_left", "left", "slight_left", "merge_to_right", "through", "merge_to_left", "slight_right", "right", "sharp_right"
+        boolean status_left = left.isSelected();
+        boolean status_through = through.isSelected();
+        boolean status_right = right.isSelected();
+        boolean status_slight_right = slight_right.isSelected();
+        boolean status_slight_left = slight_left.isSelected();
+        boolean status_merge_to_right = merge_to_right.isSelected();
+        boolean status_merge_to_left = merge_to_left.isSelected();
+
+        if (status_left) {
+            list.add("left");
         }
 
+        if (status_slight_left) {
+            list.add("slight_left");
+        }
+
+        if (status_merge_to_right) {
+            list.add("merge_to_right");
+        }
+
+        if (status_through) {
+            list.add("through");
+        }
+
+        if (status_merge_to_left) {
+            list.add("merge_to_left");
+        }
+
+        if (status_slight_right) {
+            list.add("slight_right");
+        }
+
+        if (status_right) {
+            list.add("right");
+        }
+
+        t = list.toString().replace("[", "").replace("]", "").replace(", ", ";");
+
+//        //============================
+//        if (through.isSelected()) {
+//            t = "through";
+//        }
+//        if (left.isSelected()) {
+//            t = "left";
+//        }
+//        if (right.isSelected()) {
+//            t = "right";
+//        }
+//        //Combinaciones normales
+//        if (through.isSelected() && right.isSelected()) {
+//            t = "through;right";
+//        }
+//        if (left.isSelected() && through.isSelected()) {
+//            t = "left;through";
+//        }
+//        if (left.isSelected() && right.isSelected()) {
+//            t = "left;right";
+//        }
+//        if (left.isSelected() && through.isSelected() && right.isSelected()) {
+//            t = "left;through;right";
+//        }
+//        //combinaciones para both_ways
+//        if (through.isSelected() && bLine.getType().equals("both_ways")) {
+//            t = "reverse";
+//        }
+//        if (through.isSelected() && right.isSelected() && bLine.getType().equals("both_ways")) {
+//            t = "reverse;right";
+//        }
+//        if (left.isSelected() && through.isSelected() && bLine.getType().equals("both_ways")) {
+//            t = "left;reverse";
+//        }
+//        if (left.isSelected() && right.isSelected() && bLine.getType().equals("both_ways")) {
+//            t = "left;right";
+//        }
+//        if (left.isSelected() && through.isSelected() && right.isSelected() && bLine.getType().equals("both_ways")) {
+//            t = "left;reverse;right";
+//        }
         bLine.setTurn(t);
     }
 
     protected void setTurn() {
         String dirs[] = bLine.getTurn().split("\\;", -1);
+
+                //"reverse", "sharp_left", "left", "slight_left", "merge_to_right", "through", "merge_to_left", "slight_right", "right", "sharp_right"
         for (int i = 0; i < dirs.length; i++) {
+
             if (dirs[i].equals("left")) {
-                jCBLeft.setSelected(true);
+                left.setSelected(true);
             }
-            if (dirs[i].equals("right")) {
-                jCBRight.setSelected(true);
+
+            if (dirs[i].equals("slight_left")) {
+                slight_left.setSelected(true);
             }
+
+            if (dirs[i].equals("merge_to_right")) {
+                merge_to_right.setSelected(true);
+            }
+
             if (dirs[i].equals("through")) {
-                jCBThrough.setSelected(true);
+                through.setSelected(true);
             }
+
+            if (dirs[i].equals("merge_to_left")) {
+                merge_to_left.setSelected(true);
+            }
+
+            if (dirs[i].equals("slight_right")) {
+                slight_right.setSelected(true);
+            }
+
+            if (dirs[i].equals("right")) {
+                right.setSelected(true);
+            }
+
             if (dirs[i].equals("reverse")) {
-                jCBThrough.setSelected(true);
+                through.setSelected(true);
             }
         }
     }
@@ -133,7 +223,7 @@ public class TurnSelection extends JPanel {
         @Override
         public void actionPerformed(ActionEvent ae) {
             builturn();
-            firePropertyChange(jRBLeft_CHANGED, null, bLine);
+            firePropertyChange(Left_CHANGED, null, bLine);
         }
     }
 
@@ -142,7 +232,7 @@ public class TurnSelection extends JPanel {
         @Override
         public void actionPerformed(ActionEvent ae) {
             builturn();
-            firePropertyChange(jRBRight_CHANGED, null, bLine);
+            firePropertyChange(Right_CHANGED, null, bLine);
         }
     }
 
@@ -151,7 +241,312 @@ public class TurnSelection extends JPanel {
         @Override
         public void actionPerformed(ActionEvent ae) {
             builturn();
-            firePropertyChange(jCBThrough_CHANGED, null, bLine);
+            firePropertyChange(Through_CHANGED, null, bLine);
         }
+    }
+
+    private class Slight_rightListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            builturn();
+            firePropertyChange(Slight_right_CHANGED, null, bLine);
+        }
+    }
+
+    private class Slight_leftListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            builturn();
+            firePropertyChange(Slight_left_CHANGED, null, bLine);
+        }
+    }
+
+    private class Merge_to_rightListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            builturn();
+            firePropertyChange(Merge_to_right_CHANGED, null, bLine);
+        }
+    }
+
+    private class Merge_to_leftListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            builturn();
+            firePropertyChange(Merge_to_left_CHANGED, null, bLine);
+        }
+    }
+
+    public void forwardFirstLast() {
+        slight_left.setIcon(ImageProvider.get("types", "slight_left-forward-off.png"));
+        slight_right.setIcon(ImageProvider.get("types", "slight_right-forward-off.png"));
+        left.setIcon(ImageProvider.get("types", "left-forward-off.png"));
+        through.setIcon(ImageProvider.get("types", "through-forward-off.png"));
+        right.setIcon(ImageProvider.get("types", "right-forward-off.png"));
+        merge_to_left.setIcon(ImageProvider.get("types", "merge_to_left-forward-off.png"));
+        merge_to_right.setIcon(ImageProvider.get("types", "merge_to_right-forward-off.png"));
+
+        slight_left.setSelectedIcon(ImageProvider.get("types", "slight_left-forward.png"));
+        slight_right.setSelectedIcon(ImageProvider.get("types", "slight_right-forward.png"));
+        left.setSelectedIcon(ImageProvider.get("types", "left-forward.png"));
+        through.setSelectedIcon(ImageProvider.get("types", "through-forward.png"));
+        right.setSelectedIcon(ImageProvider.get("types", "right-forward.png"));
+        merge_to_left.setSelectedIcon(ImageProvider.get("types", "merge_to_left-forward.png"));
+        merge_to_right.setSelectedIcon(ImageProvider.get("types", "merge_to_right-forward.png"));
+
+        //slight_left
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridheight = 1;
+        jPOptions.add(slight_left, gbc);
+
+        //slight_right
+        gbc.gridx = 2;
+        gbc.gridy = 0;
+        gbc.gridheight = 1;
+        jPOptions.add(slight_right, gbc);
+
+        //left
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.gridheight = 1;
+        jPOptions.add(left, gbc);
+
+        //Through
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        gbc.gridheight = 3;
+        gbc.fill = GridBagConstraints.VERTICAL;
+        jPOptions.add(through, gbc);
+
+        //Right
+        gbc.gridx = 2;
+        gbc.gridy = 1;
+        gbc.gridheight = 1;
+        jPOptions.add(right, gbc);
+
+        //merge_to_left
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.gridheight = 1;
+        jPOptions.add(merge_to_left, gbc);
+
+        //merge_to_right
+        gbc.gridx = 2;
+        gbc.gridy = 2;
+        gbc.gridheight = 1;
+        jPOptions.add(merge_to_right, gbc);
+
+    }
+
+    public void forwareMidle() {
+        slight_left.setIcon(ImageProvider.get("types", "slight_left-forward-off.png"));
+        slight_right.setIcon(ImageProvider.get("types", "slight_right-forward-off.png"));
+        left.setIcon(ImageProvider.get("types", "left-forward-off.png"));
+        through.setIcon(ImageProvider.get("types", "through-forward-off.png"));
+        right.setIcon(ImageProvider.get("types", "right-forward-off.png"));
+        merge_to_left.setIcon(ImageProvider.get("types", "merge_to_left-forward-off.png"));
+        merge_to_right.setIcon(ImageProvider.get("types", "merge_to_right-forward-off.png"));
+
+        slight_left.setSelectedIcon(ImageProvider.get("types", "slight_left-forward.png"));
+        slight_right.setSelectedIcon(ImageProvider.get("types", "slight_right-forward.png"));
+        left.setSelectedIcon(ImageProvider.get("types", "left-forward.png"));
+        through.setSelectedIcon(ImageProvider.get("types", "through-forward.png"));
+        right.setSelectedIcon(ImageProvider.get("types", "right-forward.png"));
+        merge_to_left.setSelectedIcon(ImageProvider.get("types", "merge_to_left-forward.png"));
+        merge_to_right.setSelectedIcon(ImageProvider.get("types", "merge_to_right-forward.png"));
+
+        //slight_left
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridheight = 1;
+        jPOptions.add(slight_left, gbc);
+
+        //slight_right
+        gbc.gridx = 2;
+        gbc.gridy = 0;
+        gbc.gridheight = 1;
+        jPOptions.add(slight_right, gbc);
+
+        //left
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.gridheight = 1;
+        jPOptions.add(left, gbc);
+
+        //Through
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        gbc.gridheight = 3;
+        gbc.fill = GridBagConstraints.VERTICAL;
+        jPOptions.add(through, gbc);
+
+        //Right
+        gbc.gridx = 2;
+        gbc.gridy = 1;
+        gbc.gridheight = 1;
+        jPOptions.add(right, gbc);
+
+//        //merge_to_left
+//        gbc.gridx = 0;
+//        gbc.gridy = 2;
+//        gbc.gridheight = 1;
+//        jPOptions.add(merge_to_left, gbc);
+//        merge_to_left.setVisible(false);
+//
+//        //merge_to_right
+//        gbc.gridx = 2;
+//        gbc.gridy = 2;
+//        gbc.gridheight = 1;
+//        jPOptions.add(merge_to_right, gbc);
+//        merge_to_right.setVisible(false);
+    }
+
+    public void backwardFirstLast() {
+
+        slight_left.setIcon(ImageProvider.get("types", "slight_left-backward-off.png"));
+        slight_right.setIcon(ImageProvider.get("types", "slight_right-backward-off.png"));
+        left.setIcon(ImageProvider.get("types", "left-backward-off.png"));
+        through.setIcon(ImageProvider.get("types", "through-backward-off.png"));
+        right.setIcon(ImageProvider.get("types", "right-backward-off.png"));
+        merge_to_left.setIcon(ImageProvider.get("types", "merge_to_left-backward-off.png"));
+        merge_to_right.setIcon(ImageProvider.get("types", "merge_to_right-backward-off.png"));
+
+        slight_left.setSelectedIcon(ImageProvider.get("types", "slight_left-backward.png"));
+        slight_right.setSelectedIcon(ImageProvider.get("types", "slight_right-backward.png"));
+        left.setSelectedIcon(ImageProvider.get("types", "left-backward.png"));
+        through.setSelectedIcon(ImageProvider.get("types", "through-backward.png"));
+        right.setSelectedIcon(ImageProvider.get("types", "right-backward.png"));
+        merge_to_left.setSelectedIcon(ImageProvider.get("types", "merge_to_left-backward.png"));
+        merge_to_right.setSelectedIcon(ImageProvider.get("types", "merge_to_right-backward.png"));
+
+        //merge_to_left
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridheight = 1;
+        jPOptions.add(merge_to_left, gbc);
+
+        //merge_to_right
+        gbc.gridx = 2;
+        gbc.gridy = 0;
+        gbc.gridheight = 1;
+        jPOptions.add(merge_to_right, gbc);
+
+        //left
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.gridheight = 1;
+        jPOptions.add(left, gbc);
+
+        //Through
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        gbc.gridheight = 3;
+        gbc.fill = GridBagConstraints.VERTICAL;
+        jPOptions.add(through, gbc);
+
+        //Right
+        gbc.gridx = 2;
+        gbc.gridy = 1;
+        gbc.gridheight = 1;
+        jPOptions.add(right, gbc);
+
+        //slight_left
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.gridheight = 1;
+        jPOptions.add(slight_left, gbc);
+
+        //slight_right
+        gbc.gridx = 2;
+        gbc.gridy = 2;
+        gbc.gridheight = 1;
+        jPOptions.add(slight_right, gbc);
+
+    }
+
+    public void backwardMidle() {
+        slight_left.setIcon(ImageProvider.get("types", "slight_left-backward-off.png"));
+        slight_right.setIcon(ImageProvider.get("types", "slight_right-backward-off.png"));
+        left.setIcon(ImageProvider.get("types", "left-backward-off.png"));
+        through.setIcon(ImageProvider.get("types", "through-backward-off.png"));
+        right.setIcon(ImageProvider.get("types", "right-backward-off.png"));
+        merge_to_left.setIcon(ImageProvider.get("types", "merge_to_left-backward-off.png"));
+        merge_to_right.setIcon(ImageProvider.get("types", "merge_to_right-backward-off.png"));
+
+        slight_left.setSelectedIcon(ImageProvider.get("types", "slight_left-backward.png"));
+        slight_right.setSelectedIcon(ImageProvider.get("types", "slight_right-backward.png"));
+        left.setSelectedIcon(ImageProvider.get("types", "left-backward.png"));
+        through.setSelectedIcon(ImageProvider.get("types", "through-backward.png"));
+        right.setSelectedIcon(ImageProvider.get("types", "right-backward.png"));
+        merge_to_left.setSelectedIcon(ImageProvider.get("types", "merge_to_left-backward.png"));
+        merge_to_right.setSelectedIcon(ImageProvider.get("types", "merge_to_right-backward.png"));
+
+        //left
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.gridheight = 1;
+        jPOptions.add(left, gbc);
+
+        //Through
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        gbc.gridheight = 3;
+        gbc.fill = GridBagConstraints.VERTICAL;
+        jPOptions.add(through, gbc);
+
+        //Right
+        gbc.gridx = 2;
+        gbc.gridy = 1;
+        gbc.gridheight = 1;
+        jPOptions.add(right, gbc);
+
+        //slight_left
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.gridheight = 1;
+        jPOptions.add(slight_left, gbc);
+
+        //slight_right
+        gbc.gridx = 2;
+        gbc.gridy = 2;
+        gbc.gridheight = 1;
+        jPOptions.add(slight_right, gbc);
+
+    }
+
+    public void both_waysOne() {
+
+        left.setIcon(ImageProvider.get("types", "left-forward-off.png"));
+        through.setIcon(ImageProvider.get("types", "reverse-both_ways-off.png"));
+        right.setIcon(ImageProvider.get("types", "right-forward-off.png"));
+
+        left.setSelectedIcon(ImageProvider.get("types", "left-forward.png"));
+        through.setSelectedIcon(ImageProvider.get("types", "reverse-both_ways.png"));
+        right.setSelectedIcon(ImageProvider.get("types", "right-forward.png"));
+
+        //left
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.gridheight = 1;
+        jPOptions.add(left, gbc);
+
+        //Through
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        gbc.gridheight = 3;
+        gbc.fill = GridBagConstraints.VERTICAL;
+        jPOptions.add(through, gbc);
+
+        //Right
+        gbc.gridx = 2;
+        gbc.gridy = 1;
+        gbc.gridheight = 1;
+        jPOptions.add(right, gbc);
+
     }
 }

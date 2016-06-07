@@ -275,11 +275,17 @@ public class TurnSelectionBidirectional extends JPanel {
             final List<BLane> listBLanes = bLanesA.getLanes();
             for (int i = 0; i < numLanes; i++) {
                 BLane bLine = listBLanes.get(i);
-                final TurnSelection turnSelection = new TurnSelection(bLine);
+                final TurnSelection turnSelection = new TurnSelection(bLine, numLanes);
                 turnSelection.addPropertyChangeListener(new PropertyChangeListener() {
                     @Override
                     public void propertyChange(PropertyChangeEvent evt) {
-                        if (evt.getPropertyName().equals(TurnSelection.jRBLeft_CHANGED) || evt.getPropertyName().equals(TurnSelection.jRBRight_CHANGED) || evt.getPropertyName().equals(TurnSelection.jCBThrough_CHANGED)) {
+                        if (evt.getPropertyName().equals(TurnSelection.Left_CHANGED)
+                                || evt.getPropertyName().equals(TurnSelection.Right_CHANGED)
+                                || evt.getPropertyName().equals(TurnSelection.Through_CHANGED)
+                                || evt.getPropertyName().equals(TurnSelection.Slight_right_CHANGED)
+                                || evt.getPropertyName().equals(TurnSelection.Slight_left_CHANGED)
+                                || evt.getPropertyName().equals(TurnSelection.Merge_to_right_CHANGED)
+                                || evt.getPropertyName().equals(TurnSelection.Merge_to_left_CHANGED)) {
                             listBLanes.add((BLane) evt.getNewValue());
                             bLanesA.setLanes(listBLanes);
                             printChageLanes();
@@ -318,11 +324,11 @@ public class TurnSelectionBidirectional extends JPanel {
             final List<BLane> listBLanes = bLanesB.getLanes();
             for (int i = 0; i < numLanes; i++) {
                 BLane bLine = listBLanes.get(i);
-                final TurnSelection turnSelection = new TurnSelection(bLine);
+                final TurnSelection turnSelection = new TurnSelection(bLine, numLanes);
                 turnSelection.addPropertyChangeListener(new PropertyChangeListener() {
                     @Override
                     public void propertyChange(PropertyChangeEvent evt) {
-                        if (evt.getPropertyName().equals(TurnSelection.jRBLeft_CHANGED) || evt.getPropertyName().equals(TurnSelection.jRBRight_CHANGED) || evt.getPropertyName().equals(TurnSelection.jCBThrough_CHANGED)) {
+                        if (evt.getPropertyName().equals(TurnSelection.Left_CHANGED) || evt.getPropertyName().equals(TurnSelection.Right_CHANGED) || evt.getPropertyName().equals(TurnSelection.Through_CHANGED)) {
                             listBLanes.add((BLane) evt.getNewValue());
                             bLanesB.setLanes(listBLanes);
                             printChageLanes();
@@ -369,11 +375,17 @@ public class TurnSelectionBidirectional extends JPanel {
             final List<BLane> listBLanes = bLanesC.getLanes();
             for (int i = 0; i < numLanes; i++) {
                 BLane bLine = listBLanes.get(i);
-                final TurnSelection turnSelection = new TurnSelection(bLine);
+                final TurnSelection turnSelection = new TurnSelection(bLine, numLanes);
                 turnSelection.addPropertyChangeListener(new PropertyChangeListener() {
                     @Override
                     public void propertyChange(PropertyChangeEvent evt) {
-                        if (evt.getPropertyName().equals(TurnSelection.jRBLeft_CHANGED) || evt.getPropertyName().equals(TurnSelection.jRBRight_CHANGED) || evt.getPropertyName().equals(TurnSelection.jCBThrough_CHANGED)) {
+                        if (evt.getPropertyName().equals(TurnSelection.Left_CHANGED)
+                                || evt.getPropertyName().equals(TurnSelection.Right_CHANGED)
+                                || evt.getPropertyName().equals(TurnSelection.Through_CHANGED)
+                                || evt.getPropertyName().equals(TurnSelection.Slight_right_CHANGED)
+                                || evt.getPropertyName().equals(TurnSelection.Slight_left_CHANGED)
+                                || evt.getPropertyName().equals(TurnSelection.Merge_to_right_CHANGED)
+                                || evt.getPropertyName().equals(TurnSelection.Merge_to_left_CHANGED)) {
                             listBLanes.add((BLane) evt.getNewValue());
                             bLanesC.setLanes(listBLanes);
                             printChageLanes();
