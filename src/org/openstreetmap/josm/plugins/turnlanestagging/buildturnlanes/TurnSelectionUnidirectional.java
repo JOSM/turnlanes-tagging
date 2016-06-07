@@ -136,7 +136,13 @@ public class TurnSelectionUnidirectional extends JPanel {
             turnSelection.addPropertyChangeListener(new PropertyChangeListener() {
                 @Override
                 public void propertyChange(PropertyChangeEvent evt) {
-                    if (evt.getPropertyName().equals(turnSelection.Left_CHANGED) || evt.getPropertyName().equals(turnSelection.Right_CHANGED) || evt.getPropertyName().equals(turnSelection.Through_CHANGED)) {
+                    if (evt.getPropertyName().equals(TurnSelection.Left_CHANGED)
+                            || evt.getPropertyName().equals(TurnSelection.Right_CHANGED)
+                            || evt.getPropertyName().equals(TurnSelection.Through_CHANGED)
+                            || evt.getPropertyName().equals(TurnSelection.Slight_right_CHANGED)
+                            || evt.getPropertyName().equals(TurnSelection.Slight_left_CHANGED)
+                            || evt.getPropertyName().equals(TurnSelection.Merge_to_right_CHANGED)
+                            || evt.getPropertyName().equals(TurnSelection.Merge_to_left_CHANGED)) {
                         listBLines.add((BLane) evt.getNewValue());
                         valBRoad.getLanesUnid().setLanes(listBLines);
                         jtfChangeLanes.setText(valBRoad.getLanesUnid().getTagturns());

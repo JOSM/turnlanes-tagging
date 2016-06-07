@@ -58,6 +58,13 @@ public class TurnSelection extends JPanel {
         merge_to_right = new JCheckBox();
         merge_to_left = new JCheckBox();
 
+        //Unidirectional
+        if (bLine.getPosition() == 1 || bLine.getPosition() == numRoadLanes && (bLine.getType().equals("unid"))) {
+            forwardFirstLast();
+        } else {
+            forwareMidle();
+        }
+        //Bidirectional
         if (bLine.getPosition() == 1 || bLine.getPosition() == numRoadLanes && (bLine.getType().equals("forward") || bLine.getType().equals("backward"))) {
             if (bLine.getType().equals("forward")) {
                 forwardFirstLast();
@@ -81,7 +88,6 @@ public class TurnSelection extends JPanel {
         left.addActionListener(new LeftListener());
         right.addActionListener(new RightListener());
         through.addActionListener(new ThroughListener());
-
         slight_right.addActionListener(new Slight_rightListener());
         slight_left.addActionListener(new Slight_leftListener());
         merge_to_right.addActionListener(new Merge_to_rightListener());
@@ -94,8 +100,6 @@ public class TurnSelection extends JPanel {
 
     //left|left;through||…|right
     protected void builturn() {
-        String t = "";
-        String[] turns = new String[7];
         List<String> list = new ArrayList<>();
         //"reverse", "sharp_left", "left", "slight_left", "merge_to_right", "through", "merge_to_left", "slight_right", "right", "sharp_right"
         boolean status_left = left.isSelected();
@@ -133,55 +137,14 @@ public class TurnSelection extends JPanel {
         if (status_right) {
             list.add("right");
         }
-
-        t = list.toString().replace("[", "").replace("]", "").replace(", ", ";");
-
-//        //============================
-//        if (through.isSelected()) {
-//            t = "through";
-//        }
-//        if (left.isSelected()) {
-//            t = "left";
-//        }
-//        if (right.isSelected()) {
-//            t = "right";
-//        }
-//        //Combinaciones normales
-//        if (through.isSelected() && right.isSelected()) {
-//            t = "through;right";
-//        }
-//        if (left.isSelected() && through.isSelected()) {
-//            t = "left;through";
-//        }
-//        if (left.isSelected() && right.isSelected()) {
-//            t = "left;right";
-//        }
-//        if (left.isSelected() && through.isSelected() && right.isSelected()) {
-//            t = "left;through;right";
-//        }
-//        //combinaciones para both_ways
-//        if (through.isSelected() && bLine.getType().equals("both_ways")) {
-//            t = "reverse";
-//        }
-//        if (through.isSelected() && right.isSelected() && bLine.getType().equals("both_ways")) {
-//            t = "reverse;right";
-//        }
-//        if (left.isSelected() && through.isSelected() && bLine.getType().equals("both_ways")) {
-//            t = "left;reverse";
-//        }
-//        if (left.isSelected() && right.isSelected() && bLine.getType().equals("both_ways")) {
-//            t = "left;right";
-//        }
-//        if (left.isSelected() && through.isSelected() && right.isSelected() && bLine.getType().equals("both_ways")) {
-//            t = "left;reverse;right";
-//        }
+        String t = list.toString().replace("[", "").replace("]", "").replace(", ", ";");
         bLine.setTurn(t);
     }
 
     protected void setTurn() {
         String dirs[] = bLine.getTurn().split("\\;", -1);
 
-                //"reverse", "sharp_left", "left", "slight_left", "merge_to_right", "through", "merge_to_left", "slight_right", "right", "sharp_right"
+        //"reverse", "sharp_left", "left", "slight_left", "merge_to_right", "through", "merge_to_left", "slight_right", "right", "sharp_right"
         for (int i = 0; i < dirs.length; i++) {
 
             if (dirs[i].equals("left")) {
