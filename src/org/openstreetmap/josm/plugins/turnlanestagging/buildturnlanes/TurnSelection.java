@@ -63,6 +63,17 @@ public class TurnSelection extends JPanel {
         merge_to_left = new JCheckBox();
         reverse = new JCheckBox();
 
+        //ToolTipText
+        left.setToolTipText("left");
+        through.setToolTipText("through");
+        reversible.setToolTipText("reversible");
+        right.setToolTipText("right");
+        slight_right.setToolTipText("slight_right");
+        slight_left.setToolTipText("slight_left");
+        merge_to_right.setToolTipText("merge_to_right");
+        merge_to_left.setToolTipText("merge_to_left");
+        reverse.setToolTipText("reverse");
+
         //Unidirectional
         if (bLine.getType().equals("unid")) {
             if (bLine.getPosition() == 1) {
