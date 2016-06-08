@@ -285,7 +285,8 @@ public class TurnSelectionBidirectional extends JPanel {
                                 || evt.getPropertyName().equals(TurnSelection.Slight_right_CHANGED)
                                 || evt.getPropertyName().equals(TurnSelection.Slight_left_CHANGED)
                                 || evt.getPropertyName().equals(TurnSelection.Merge_to_right_CHANGED)
-                                || evt.getPropertyName().equals(TurnSelection.Merge_to_left_CHANGED)) {
+                                || evt.getPropertyName().equals(TurnSelection.Merge_to_left_CHANGED)
+                                || evt.getPropertyName().equals(TurnSelection.reverse_CHANGED)) {
                             listBLanes.add((BLane) evt.getNewValue());
                             bLanesA.setLanes(listBLanes);
                             printChageLanes();
@@ -385,7 +386,8 @@ public class TurnSelectionBidirectional extends JPanel {
                                 || evt.getPropertyName().equals(TurnSelection.Slight_right_CHANGED)
                                 || evt.getPropertyName().equals(TurnSelection.Slight_left_CHANGED)
                                 || evt.getPropertyName().equals(TurnSelection.Merge_to_right_CHANGED)
-                                || evt.getPropertyName().equals(TurnSelection.Merge_to_left_CHANGED)) {
+                                || evt.getPropertyName().equals(TurnSelection.Merge_to_left_CHANGED)
+                                || evt.getPropertyName().equals(TurnSelection.reverse_CHANGED)) {
                             listBLanes.add((BLane) evt.getNewValue());
                             bLanesC.setLanes(listBLanes);
                             printChageLanes();

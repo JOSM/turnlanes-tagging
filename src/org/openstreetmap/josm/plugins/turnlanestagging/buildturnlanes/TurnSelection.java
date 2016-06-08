@@ -26,6 +26,7 @@ public class TurnSelection extends JPanel {
     public static final String Slight_left_CHANGED = "slight_left Changed";
     public static final String Merge_to_right_CHANGED = "merge_to_right Changed";
     public static final String Merge_to_left_CHANGED = "merge_to_left Changed";
+    public static final String reverse_CHANGED = "reverse Changed";
 
 //    private JPanel jPTurnSelection;
     private JPanel jPOptions;
@@ -36,6 +37,8 @@ public class TurnSelection extends JPanel {
     private JCheckBox slight_left;
     private JCheckBox merge_to_right;
     private JCheckBox merge_to_left;
+    private JCheckBox reverse;
+
     BLane bLine;
     int numRoadLanes;
 
@@ -57,28 +60,45 @@ public class TurnSelection extends JPanel {
         slight_left = new JCheckBox();
         merge_to_right = new JCheckBox();
         merge_to_left = new JCheckBox();
+        reverse = new JCheckBox();
 
         //Unidirectional
-        if (bLine.getPosition() == 1 || bLine.getPosition() == numRoadLanes && (bLine.getType().equals("unid"))) {
-            forwardFirstLast();
-        } else {
-            forwareMidle();
-        }
-        //Bidirectional
-        if (bLine.getPosition() == 1 || bLine.getPosition() == numRoadLanes && (bLine.getType().equals("forward") || bLine.getType().equals("backward"))) {
-            if (bLine.getType().equals("forward")) {
-                forwardFirstLast();
-            }
-            if (bLine.getType().equals("backward")) {
-                backwardFirstLast();
-            }
-        } else {
-            if (bLine.getType().equals("forward")) {
+        if (bLine.getType().equals("unid")) {
+            if (bLine.getPosition() == 1) {
+                forwardFirst();
+            } else if (bLine.getPosition() == numRoadLanes) {
+                forwardLast();
+            } else {
                 forwareMidle();
             }
-            if (bLine.getType().equals("backward")) {
-                backwardMidle();
+        }
+
+        //Bidirectional
+        if (bLine.getType().equals("forward") || bLine.getType().equals("backward")) {
+            if (bLine.getPosition() == 1) {
+                if (bLine.getType().equals("forward")) {
+                    forwardFirst();
+                }
+                if (bLine.getType().equals("backward")) {
+                    backwardFirst();
+                }
+            } else if (bLine.getPosition() == numRoadLanes) {
+                if (bLine.getType().equals("forward")) {
+                    forwardLast();
+                }
+                if (bLine.getType().equals("backward")) {
+                    backwardLast();
+                }
+
+            } else {
+                if (bLine.getType().equals("forward")) {
+                    forwareMidle();
+                }
+                if (bLine.getType().equals("backward")) {
+                    backwardMidle();
+                }
             }
+
         }
 
         if (bLine.getType().equals("both_ways")) {
@@ -92,6 +112,7 @@ public class TurnSelection extends JPanel {
         slight_left.addActionListener(new Slight_leftListener());
         merge_to_right.addActionListener(new Merge_to_rightListener());
         merge_to_left.addActionListener(new Merge_to_leftListener());
+        reverse.addActionListener(new reverseListener());
 
         jPOptions.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Lane " + bLine.getPosition(), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, new java.awt.Color(102, 102, 102)));
         setTurn();
@@ -109,6 +130,11 @@ public class TurnSelection extends JPanel {
         boolean status_slight_left = slight_left.isSelected();
         boolean status_merge_to_right = merge_to_right.isSelected();
         boolean status_merge_to_left = merge_to_left.isSelected();
+        boolean status_reverse = reverse.isSelected();
+
+        if (status_reverse) {
+            list.add("reverse");
+        }
 
         if (status_left) {
             list.add("left");
@@ -122,8 +148,12 @@ public class TurnSelection extends JPanel {
             list.add("merge_to_right");
         }
 
-        if (status_through) {
+        if (status_through && (bLine.getType().equals("forward") || bLine.getType().equals("backward") || bLine.getType().equals("unid"))) {
             list.add("through");
+        }
+
+        if (status_through && bLine.getType().equals("both_ways")) {
+            list.add("reverse");
         }
 
         if (status_merge_to_left) {
@@ -139,6 +169,7 @@ public class TurnSelection extends JPanel {
         }
         String t = list.toString().replace("[", "").replace("]", "").replace(", ", ";");
         bLine.setTurn(t);
+
     }
 
     protected void setTurn() {
@@ -244,7 +275,16 @@ public class TurnSelection extends JPanel {
         }
     }
 
-    public void forwardFirstLast() {
+    private class reverseListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            builturn();
+            firePropertyChange(reverse_CHANGED, null, bLine);
+        }
+    }
+
+    public void forwardFirst() {
         slight_left.setIcon(ImageProvider.get("types", "slight_left-forward-off.png"));
         slight_right.setIcon(ImageProvider.get("types", "slight_right-forward-off.png"));
         left.setIcon(ImageProvider.get("types", "left-forward-off.png"));
@@ -252,6 +292,7 @@ public class TurnSelection extends JPanel {
         right.setIcon(ImageProvider.get("types", "right-forward-off.png"));
         merge_to_left.setIcon(ImageProvider.get("types", "merge_to_left-forward-off.png"));
         merge_to_right.setIcon(ImageProvider.get("types", "merge_to_right-forward-off.png"));
+        reverse.setIcon(ImageProvider.get("types", "reverse-forward-off.png"));
 
         slight_left.setSelectedIcon(ImageProvider.get("types", "slight_left-forward.png"));
         slight_right.setSelectedIcon(ImageProvider.get("types", "slight_right-forward.png"));
@@ -260,6 +301,7 @@ public class TurnSelection extends JPanel {
         right.setSelectedIcon(ImageProvider.get("types", "right-forward.png"));
         merge_to_left.setSelectedIcon(ImageProvider.get("types", "merge_to_left-forward.png"));
         merge_to_right.setSelectedIcon(ImageProvider.get("types", "merge_to_right-forward.png"));
+        reverse.setSelectedIcon(ImageProvider.get("types", "reverse-forward.png"));
 
         //slight_left
         gbc.gridx = 0;
@@ -281,9 +323,9 @@ public class TurnSelection extends JPanel {
 
         //Through
         gbc.gridx = 1;
-        gbc.gridy = 0;
-        gbc.gridheight = 3;
-        gbc.fill = GridBagConstraints.VERTICAL;
+        gbc.gridy = 1;
+        gbc.gridheight = 1;
+//        gbc.fill = GridBagConstraints.VERTICAL;
         jPOptions.add(through, gbc);
 
         //Right
@@ -293,17 +335,86 @@ public class TurnSelection extends JPanel {
         jPOptions.add(right, gbc);
 
         //merge_to_left
-        gbc.gridx = 0;
+        gbc.gridx = 2;
         gbc.gridy = 2;
         gbc.gridheight = 1;
         jPOptions.add(merge_to_left, gbc);
 
         //merge_to_right
-        gbc.gridx = 2;
+        gbc.gridx = 0;
         gbc.gridy = 2;
         gbc.gridheight = 1;
         jPOptions.add(merge_to_right, gbc);
 
+        //reverse
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        gbc.gridheight = 1;
+        jPOptions.add(reverse, gbc);
+
+    }
+
+    public void forwardLast() {
+        slight_left.setIcon(ImageProvider.get("types", "slight_left-forward-off.png"));
+        slight_right.setIcon(ImageProvider.get("types", "slight_right-forward-off.png"));
+        left.setIcon(ImageProvider.get("types", "left-forward-off.png"));
+        through.setIcon(ImageProvider.get("types", "through-forward-off.png"));
+        right.setIcon(ImageProvider.get("types", "right-forward-off.png"));
+        merge_to_left.setIcon(ImageProvider.get("types", "merge_to_left-forward-off.png"));
+        merge_to_right.setIcon(ImageProvider.get("types", "merge_to_right-forward-off.png"));
+        reverse.setIcon(ImageProvider.get("types", "reverse-forward-off.png"));
+
+        slight_left.setSelectedIcon(ImageProvider.get("types", "slight_left-forward.png"));
+        slight_right.setSelectedIcon(ImageProvider.get("types", "slight_right-forward.png"));
+        left.setSelectedIcon(ImageProvider.get("types", "left-forward.png"));
+        through.setSelectedIcon(ImageProvider.get("types", "through-forward.png"));
+        right.setSelectedIcon(ImageProvider.get("types", "right-forward.png"));
+        merge_to_left.setSelectedIcon(ImageProvider.get("types", "merge_to_left-forward.png"));
+        merge_to_right.setSelectedIcon(ImageProvider.get("types", "merge_to_right-forward.png"));
+        reverse.setSelectedIcon(ImageProvider.get("types", "reverse-forward.png"));
+
+        //slight_left
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridheight = 1;
+        jPOptions.add(slight_left, gbc);
+
+        //slight_right
+        gbc.gridx = 2;
+        gbc.gridy = 0;
+        gbc.gridheight = 1;
+        jPOptions.add(slight_right, gbc);
+
+        //left
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.gridheight = 1;
+        jPOptions.add(left, gbc);
+
+        //Through
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        gbc.gridheight = 1;
+//        gbc.fill = GridBagConstraints.VERTICAL;
+        jPOptions.add(through, gbc);
+
+        //Right
+        gbc.gridx = 2;
+        gbc.gridy = 1;
+        gbc.gridheight = 1;
+        jPOptions.add(right, gbc);
+
+        //merge_to_left
+        gbc.gridx = 2;
+        gbc.gridy = 2;
+        gbc.gridheight = 1;
+        jPOptions.add(merge_to_left, gbc);
+
+        //merge_to_right
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.gridheight = 1;
+        jPOptions.add(merge_to_right, gbc);
     }
 
     public void forwareMidle() {
@@ -343,9 +454,9 @@ public class TurnSelection extends JPanel {
 
         //Through
         gbc.gridx = 1;
-        gbc.gridy = 0;
-        gbc.gridheight = 3;
-        gbc.fill = GridBagConstraints.VERTICAL;
+        gbc.gridy = 1;
+        gbc.gridheight = 1;
+//        gbc.fill = GridBagConstraints.VERTICAL;
         jPOptions.add(through, gbc);
 
         //Right
@@ -353,23 +464,9 @@ public class TurnSelection extends JPanel {
         gbc.gridy = 1;
         gbc.gridheight = 1;
         jPOptions.add(right, gbc);
-
-//        //merge_to_left
-//        gbc.gridx = 0;
-//        gbc.gridy = 2;
-//        gbc.gridheight = 1;
-//        jPOptions.add(merge_to_left, gbc);
-//        merge_to_left.setVisible(false);
-//
-//        //merge_to_right
-//        gbc.gridx = 2;
-//        gbc.gridy = 2;
-//        gbc.gridheight = 1;
-//        jPOptions.add(merge_to_right, gbc);
-//        merge_to_right.setVisible(false);
     }
 
-    public void backwardFirstLast() {
+    public void backwardFirst() {
 
         slight_left.setIcon(ImageProvider.get("types", "slight_left-backward-off.png"));
         slight_right.setIcon(ImageProvider.get("types", "slight_right-backward-off.png"));
@@ -378,6 +475,7 @@ public class TurnSelection extends JPanel {
         right.setIcon(ImageProvider.get("types", "right-backward-off.png"));
         merge_to_left.setIcon(ImageProvider.get("types", "merge_to_left-backward-off.png"));
         merge_to_right.setIcon(ImageProvider.get("types", "merge_to_right-backward-off.png"));
+        reverse.setIcon(ImageProvider.get("types", "reverse-backward-off.png"));
 
         slight_left.setSelectedIcon(ImageProvider.get("types", "slight_left-backward.png"));
         slight_right.setSelectedIcon(ImageProvider.get("types", "slight_right-backward.png"));
@@ -386,47 +484,119 @@ public class TurnSelection extends JPanel {
         right.setSelectedIcon(ImageProvider.get("types", "right-backward.png"));
         merge_to_left.setSelectedIcon(ImageProvider.get("types", "merge_to_left-backward.png"));
         merge_to_right.setSelectedIcon(ImageProvider.get("types", "merge_to_right-backward.png"));
+        reverse.setSelectedIcon(ImageProvider.get("types", "reverse-backward.png"));
+
+        //reverse
+        gbc.gridx = 2;
+        gbc.gridy = 0;
+        gbc.gridheight = 1;
+        jPOptions.add(reverse, gbc);
 
         //merge_to_left
-        gbc.gridx = 0;
-        gbc.gridy = 0;
+        gbc.gridx = 2;
+        gbc.gridy = 1;
         gbc.gridheight = 1;
         jPOptions.add(merge_to_left, gbc);
 
         //merge_to_right
-        gbc.gridx = 2;
-        gbc.gridy = 0;
+        gbc.gridx = 0;
+        gbc.gridy = 1;
         gbc.gridheight = 1;
         jPOptions.add(merge_to_right, gbc);
 
         //left
         gbc.gridx = 0;
-        gbc.gridy = 1;
+        gbc.gridy = 2;
         gbc.gridheight = 1;
         jPOptions.add(left, gbc);
 
         //Through
         gbc.gridx = 1;
-        gbc.gridy = 0;
-        gbc.gridheight = 3;
-        gbc.fill = GridBagConstraints.VERTICAL;
+        gbc.gridy = 2;
+        gbc.gridheight = 1;
+//        gbc.fill = GridBagConstraints.VERTICAL;
         jPOptions.add(through, gbc);
 
         //Right
         gbc.gridx = 2;
-        gbc.gridy = 1;
+        gbc.gridy = 2;
         gbc.gridheight = 1;
         jPOptions.add(right, gbc);
 
         //slight_left
         gbc.gridx = 0;
-        gbc.gridy = 2;
+        gbc.gridy = 3;
         gbc.gridheight = 1;
         jPOptions.add(slight_left, gbc);
 
         //slight_right
         gbc.gridx = 2;
+        gbc.gridy = 3;
+        gbc.gridheight = 1;
+        jPOptions.add(slight_right, gbc);
+
+    }
+
+    public void backwardLast() {
+
+        slight_left.setIcon(ImageProvider.get("types", "slight_left-backward-off.png"));
+        slight_right.setIcon(ImageProvider.get("types", "slight_right-backward-off.png"));
+        left.setIcon(ImageProvider.get("types", "left-backward-off.png"));
+        through.setIcon(ImageProvider.get("types", "through-backward-off.png"));
+        right.setIcon(ImageProvider.get("types", "right-backward-off.png"));
+        merge_to_left.setIcon(ImageProvider.get("types", "merge_to_left-backward-off.png"));
+        merge_to_right.setIcon(ImageProvider.get("types", "merge_to_right-backward-off.png"));
+        reverse.setIcon(ImageProvider.get("types", "reverse-backward-off.png"));
+
+        slight_left.setSelectedIcon(ImageProvider.get("types", "slight_left-backward.png"));
+        slight_right.setSelectedIcon(ImageProvider.get("types", "slight_right-backward.png"));
+        left.setSelectedIcon(ImageProvider.get("types", "left-backward.png"));
+        through.setSelectedIcon(ImageProvider.get("types", "through-backward.png"));
+        right.setSelectedIcon(ImageProvider.get("types", "right-backward.png"));
+        merge_to_left.setSelectedIcon(ImageProvider.get("types", "merge_to_left-backward.png"));
+        merge_to_right.setSelectedIcon(ImageProvider.get("types", "merge_to_right-backward.png"));
+        reverse.setSelectedIcon(ImageProvider.get("types", "reverse-backward.png"));
+
+        //merge_to_left
+        gbc.gridx = 2;
+        gbc.gridy = 1;
+        gbc.gridheight = 1;
+        jPOptions.add(merge_to_left, gbc);
+
+        //merge_to_right
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.gridheight = 1;
+        jPOptions.add(merge_to_right, gbc);
+
+        //left
+        gbc.gridx = 0;
         gbc.gridy = 2;
+        gbc.gridheight = 1;
+        jPOptions.add(left, gbc);
+
+        //Through
+        gbc.gridx = 1;
+        gbc.gridy = 2;
+        gbc.gridheight = 1;
+//        gbc.fill = GridBagConstraints.VERTICAL;
+        jPOptions.add(through, gbc);
+
+        //Right
+        gbc.gridx = 2;
+        gbc.gridy = 2;
+        gbc.gridheight = 1;
+        jPOptions.add(right, gbc);
+
+        //slight_left
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        gbc.gridheight = 1;
+        jPOptions.add(slight_left, gbc);
+
+        //slight_right
+        gbc.gridx = 2;
+        gbc.gridy = 3;
         gbc.gridheight = 1;
         jPOptions.add(slight_right, gbc);
 
@@ -457,9 +627,9 @@ public class TurnSelection extends JPanel {
 
         //Through
         gbc.gridx = 1;
-        gbc.gridy = 0;
-        gbc.gridheight = 3;
-        gbc.fill = GridBagConstraints.VERTICAL;
+        gbc.gridy = 1;
+        gbc.gridheight = 1;
+//        gbc.fill = GridBagConstraints.VERTICAL;
         jPOptions.add(through, gbc);
 
         //Right
@@ -500,9 +670,9 @@ public class TurnSelection extends JPanel {
 
         //Through
         gbc.gridx = 1;
-        gbc.gridy = 0;
-        gbc.gridheight = 3;
-        gbc.fill = GridBagConstraints.VERTICAL;
+        gbc.gridy = 1;
+//        gbc.gridheight = 3;
+//        gbc.fill = GridBagConstraints.VERTICAL;
         jPOptions.add(through, gbc);
 
         //Right
