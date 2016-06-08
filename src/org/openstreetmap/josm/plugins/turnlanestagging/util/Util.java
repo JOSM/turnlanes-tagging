@@ -13,7 +13,7 @@ import org.openstreetmap.josm.gui.Notification;
  */
 public class Util {
 
-    public static Object deepClone(Object object) {
+    public static Object clone(Object object) {
         try {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ObjectOutputStream oos = new ObjectOutputStream(baos);

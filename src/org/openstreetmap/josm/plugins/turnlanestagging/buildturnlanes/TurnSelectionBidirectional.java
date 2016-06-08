@@ -431,9 +431,9 @@ public class TurnSelectionBidirectional extends JPanel {
         if (eventSpinerA) {
             if (jrbLaneForwardA.isSelected()) {
                 if (lanes >= bLanesA.getLanes().size()) {
-                    bLanesA = presetsData.addLanes((BLanes) Util.deepClone(bLanesA), "forward", lanes - bLanesA.getLanes().size());
+                    bLanesA = presetsData.addLanes((BLanes) Util.clone(bLanesA), "forward", lanes - bLanesA.getLanes().size());
                 } else {
-                    bLanesA = presetsData.removeLanes((BLanes) Util.deepClone(bLanesA), bLanesA.getLanes().size() - lanes);
+                    bLanesA = presetsData.removeLanes((BLanes) Util.clone(bLanesA), bLanesA.getLanes().size() - lanes);
                 }
 
                 bLanesA.setType("forward");
@@ -447,9 +447,9 @@ public class TurnSelectionBidirectional extends JPanel {
             } else {
 
                 if (lanes >= bLanesA.getLanes().size()) {
-                    bLanesA = presetsData.addLanes((BLanes) Util.deepClone(bLanesA), "backward", lanes - bLanesA.getLanes().size());
+                    bLanesA = presetsData.addLanes((BLanes) Util.clone(bLanesA), "backward", lanes - bLanesA.getLanes().size());
                 } else {
-                    bLanesA = presetsData.removeLanes((BLanes) Util.deepClone(bLanesA), bLanesA.getLanes().size() - lanes);
+                    bLanesA = presetsData.removeLanes((BLanes) Util.clone(bLanesA), bLanesA.getLanes().size() - lanes);
                 }
 
                 bLanesA.setType("backward");
@@ -484,9 +484,9 @@ public class TurnSelectionBidirectional extends JPanel {
             if (jrbLaneForwardC.isSelected()) {
 
                 if (lanes >= bLanesC.getLanes().size()) {
-                    bLanesC = presetsData.addLanes((BLanes) Util.deepClone(bLanesC), "forward", lanes - bLanesC.getLanes().size());
+                    bLanesC = presetsData.addLanes((BLanes) Util.clone(bLanesC), "forward", lanes - bLanesC.getLanes().size());
                 } else {
-                    bLanesC = presetsData.removeLanes((BLanes) Util.deepClone(bLanesC), bLanesC.getLanes().size() - lanes);
+                    bLanesC = presetsData.removeLanes((BLanes) Util.clone(bLanesC), bLanesC.getLanes().size() - lanes);
                 }
 
                 bLanesC.setType("forward");
@@ -499,9 +499,9 @@ public class TurnSelectionBidirectional extends JPanel {
 
             } else {
                 if (lanes >= bLanesC.getLanes().size()) {
-                    bLanesC = presetsData.addLanes((BLanes) Util.deepClone(bLanesC), "forward", lanes - bLanesC.getLanes().size());
+                    bLanesC = presetsData.addLanes((BLanes) Util.clone(bLanesC), "forward", lanes - bLanesC.getLanes().size());
                 } else {
-                    bLanesC = presetsData.removeLanes((BLanes) Util.deepClone(bLanesC), bLanesC.getLanes().size() - lanes);
+                    bLanesC = presetsData.removeLanes((BLanes) Util.clone(bLanesC), bLanesC.getLanes().size() - lanes);
                 }
                 bLanesC.setType("backward");
                 lanesC(bLanesC);

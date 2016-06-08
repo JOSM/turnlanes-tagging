@@ -77,4 +77,7 @@ public class BRoad implements Serializable {
         this.lanesUnid = Lanes;
     }
 
+    public String turns() {
+        return lanesA.getLanes().size() + "-" + lanesA.getTagturns() + "-" + lanesB.getLanes().size() + "-" + lanesB.getTagturns() + "-" + lanesC.getLanes().size() + "-" + lanesC.getTagturns();
+    }
 }
