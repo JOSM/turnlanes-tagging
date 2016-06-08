@@ -143,9 +143,9 @@ public class BuildTurnLanes extends JPanel {
             if (e.getClickCount() == 1) {
                 int rowNum = presetsTable.rowAtPoint(e.getPoint());
                 if (listPresetRoads.get(rowNum).getName().equals("Unidirectional")) {
-                    setLanesByRoadUnidirectional((BRoad) Util.deepClone(listPresetRoads.get(rowNum)));
+                    setLanesByRoadUnidirectional((BRoad) Util.clone(listPresetRoads.get(rowNum)));
                 } else {
-                    setLanesByRoadBidirectional((BRoad) Util.deepClone(listPresetRoads.get(rowNum)));
+                    setLanesByRoadBidirectional((BRoad) Util.clone(listPresetRoads.get(rowNum)));
                 }
             }
         }
@@ -158,9 +158,9 @@ public class BuildTurnLanes extends JPanel {
             if (e.getClickCount() == 1) {
                 int rowNum = lastEditsTable.rowAtPoint(e.getPoint());
                 if (listLastEditsRoads.get(rowNum).getName().equals("Unidirectional")) {
-                    setLanesByRoadUnidirectional((BRoad) Util.deepClone(listLastEditsRoads.get(rowNum)));
+                    setLanesByRoadUnidirectional((BRoad) Util.clone(listLastEditsRoads.get(rowNum)));
                 } else {
-                    setLanesByRoadBidirectional((BRoad) Util.deepClone(listLastEditsRoads.get(rowNum)));
+                    setLanesByRoadBidirectional((BRoad) Util.clone(listLastEditsRoads.get(rowNum)));
                 }
             }
         }
@@ -222,7 +222,7 @@ public class BuildTurnLanes extends JPanel {
         pnlContentDirectional = new JPanel();
         pnlBuildTurnLanes.add(pnlContentDirectional, BorderLayout.CENTER);
         //comment
-        // pnlBuildTurnLanes.add(jtfChangeRoad, BorderLayout.SOUTH);
+        pnlBuildTurnLanes.add(jtfChangeRoad, BorderLayout.SOUTH);
         add(pnlBuildTurnLanes, BorderLayout.SOUTH);
         //road change event
         jtfChangeRoad.getDocument().addDocumentListener(new SetRoadChangeRoadListener());
@@ -314,7 +314,14 @@ public class BuildTurnLanes extends JPanel {
     }
 
     public void addLastEditInTable() {
-        listLastEditsRoads.add(0, (BRoad) Util.deepClone(bRoad));
+        if (listLastEditsRoads.isEmpty()) {
+            listLastEditsRoads.add(0, (BRoad) Util.clone(bRoad));
+
+        } else {
+            if (!listLastEditsRoads.get(0).turns().equals(bRoad.turns())) {
+                listLastEditsRoads.add(0, (BRoad) Util.clone(bRoad));
+            }
+        }
         PresetsTableModel lasteditsTM = new PresetsTableModel(listLastEditsRoads);
         lastEditsTable.setModel(lasteditsTM);
     }
@@ -322,9 +329,9 @@ public class BuildTurnLanes extends JPanel {
     public void setLastEdit() {
         if (listLastEditsRoads.size() > 0) {
             if (listLastEditsRoads.get(0).getName().equals("Unidirectional")) {
-                setLanesByRoadUnidirectional((BRoad) Util.deepClone(listLastEditsRoads.get(0)));
+                setLanesByRoadUnidirectional((BRoad) Util.clone(listLastEditsRoads.get(0)));
             } else {
-                setLanesByRoadBidirectional((BRoad) Util.deepClone(listLastEditsRoads.get(0)));
+                setLanesByRoadBidirectional((BRoad) Util.clone(listLastEditsRoads.get(0)));
             }
         } else {
             startDefaultUnidirectional();

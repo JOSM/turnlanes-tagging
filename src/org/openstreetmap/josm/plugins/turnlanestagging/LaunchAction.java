@@ -27,6 +27,7 @@ public class LaunchAction extends JosmAction implements SelectionChangedListener
                 true);
         DataSet.addSelectionListener(this);
         setEnabled(false);
+      //  AddTagAction addTagAction = new AddTagAction();
     }
 
     @Override

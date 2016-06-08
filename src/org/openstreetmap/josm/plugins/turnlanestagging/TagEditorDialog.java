@@ -72,6 +72,7 @@ public class TagEditorDialog extends JDialog {
         setSize(PREFERRED_SIZE);
         setTitle(tr("Turn Lanes Editor"));
         setAlwaysOnTop(true);
+
         // Preset Panel
         JPanel pnlPresetGrid = buildPresetGridPanel();
         pnlPresetGrid.setBorder(BorderFactory.createEmptyBorder(0, 0, 5, 0));
@@ -87,10 +88,11 @@ public class TagEditorDialog extends JDialog {
         );
 
         splitPane.setOneTouchExpandable(true);
-        splitPane.setDividerLocation(330);
+        splitPane.setDividerLocation(430);
         getContentPane().add(splitPane, BorderLayout.CENTER);
         getContentPane().add(buildButtonRowPanel(), BorderLayout.SOUTH);
         getRootPane().registerKeyboardAction(cancelAction, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
+
     }
 
     //Build Buttons
@@ -122,7 +124,9 @@ public class TagEditorDialog extends JDialog {
             public void propertyChange(PropertyChangeEvent evt) {
                 if (evt.getPropertyName().equals(BuildTurnLanes.ROADCHANGED)) {
                     addTagOnRoad((BRoad) evt.getNewValue());
+                    okAction.focus();
                 }
+
             }
         });
         return buildTurnLanes;
@@ -189,6 +193,11 @@ public class TagEditorDialog extends JDialog {
                 return;
             }
             setEnabled(true);
+        }
+
+        public void focus() {
+            requestFocus();
+
         }
 
     }
@@ -348,7 +357,7 @@ public class TagEditorDialog extends JDialog {
     }
 
     public boolean isEmptyturnlane(String turns) {
-        List<String> turnsList = Arrays.asList("reverse", "sharp_left", "left", "slight_left", "merge_to_right", "through", "merge_to_left", "slight_right", "right", "sharp_right");
+        List<String> turnsList = Arrays.asList("reverse", "sharp_left", "left", "slight_left", "merge_to_right", "through", "reversible", "merge_to_left", "slight_right", "right", "sharp_right");
         for (String tl : turnsList) {
             if (turns.contains(tl)) {
                 return true;

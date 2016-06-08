@@ -7,7 +7,6 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import javax.swing.ButtonGroup;
 import javax.swing.JCheckBox;
@@ -18,7 +17,6 @@ import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.border.BevelBorder;
-import javax.swing.border.Border;
 import javax.swing.border.SoftBevelBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -275,11 +273,18 @@ public class TurnSelectionBidirectional extends JPanel {
             final List<BLane> listBLanes = bLanesA.getLanes();
             for (int i = 0; i < numLanes; i++) {
                 BLane bLine = listBLanes.get(i);
-                final TurnSelection turnSelection = new TurnSelection(bLine);
+                final TurnSelection turnSelection = new TurnSelection(bLine, numLanes);
                 turnSelection.addPropertyChangeListener(new PropertyChangeListener() {
                     @Override
                     public void propertyChange(PropertyChangeEvent evt) {
-                        if (evt.getPropertyName().equals(TurnSelection.jRBLeft_CHANGED) || evt.getPropertyName().equals(TurnSelection.jRBRight_CHANGED) || evt.getPropertyName().equals(TurnSelection.jCBThrough_CHANGED)) {
+                        if (evt.getPropertyName().equals(TurnSelection.Left_CHANGED)
+                                || evt.getPropertyName().equals(TurnSelection.Right_CHANGED)
+                                || evt.getPropertyName().equals(TurnSelection.Through_CHANGED)
+                                || evt.getPropertyName().equals(TurnSelection.Slight_right_CHANGED)
+                                || evt.getPropertyName().equals(TurnSelection.Slight_left_CHANGED)
+                                || evt.getPropertyName().equals(TurnSelection.Merge_to_right_CHANGED)
+                                || evt.getPropertyName().equals(TurnSelection.Merge_to_left_CHANGED)
+                                || evt.getPropertyName().equals(TurnSelection.Reverse_CHANGED)) {
                             listBLanes.add((BLane) evt.getNewValue());
                             bLanesA.setLanes(listBLanes);
                             printChageLanes();
@@ -318,11 +323,13 @@ public class TurnSelectionBidirectional extends JPanel {
             final List<BLane> listBLanes = bLanesB.getLanes();
             for (int i = 0; i < numLanes; i++) {
                 BLane bLine = listBLanes.get(i);
-                final TurnSelection turnSelection = new TurnSelection(bLine);
+                final TurnSelection turnSelection = new TurnSelection(bLine, numLanes);
                 turnSelection.addPropertyChangeListener(new PropertyChangeListener() {
                     @Override
                     public void propertyChange(PropertyChangeEvent evt) {
-                        if (evt.getPropertyName().equals(TurnSelection.jRBLeft_CHANGED) || evt.getPropertyName().equals(TurnSelection.jRBRight_CHANGED) || evt.getPropertyName().equals(TurnSelection.jCBThrough_CHANGED)) {
+                        if (evt.getPropertyName().equals(TurnSelection.Left_CHANGED)
+                                || evt.getPropertyName().equals(TurnSelection.Right_CHANGED)
+                                || evt.getPropertyName().equals(TurnSelection.Reversible_CHANGED)) {
                             listBLanes.add((BLane) evt.getNewValue());
                             bLanesB.setLanes(listBLanes);
                             printChageLanes();
@@ -369,11 +376,18 @@ public class TurnSelectionBidirectional extends JPanel {
             final List<BLane> listBLanes = bLanesC.getLanes();
             for (int i = 0; i < numLanes; i++) {
                 BLane bLine = listBLanes.get(i);
-                final TurnSelection turnSelection = new TurnSelection(bLine);
+                final TurnSelection turnSelection = new TurnSelection(bLine, numLanes);
                 turnSelection.addPropertyChangeListener(new PropertyChangeListener() {
                     @Override
                     public void propertyChange(PropertyChangeEvent evt) {
-                        if (evt.getPropertyName().equals(TurnSelection.jRBLeft_CHANGED) || evt.getPropertyName().equals(TurnSelection.jRBRight_CHANGED) || evt.getPropertyName().equals(TurnSelection.jCBThrough_CHANGED)) {
+                        if (evt.getPropertyName().equals(TurnSelection.Left_CHANGED)
+                                || evt.getPropertyName().equals(TurnSelection.Right_CHANGED)
+                                || evt.getPropertyName().equals(TurnSelection.Through_CHANGED)
+                                || evt.getPropertyName().equals(TurnSelection.Slight_right_CHANGED)
+                                || evt.getPropertyName().equals(TurnSelection.Slight_left_CHANGED)
+                                || evt.getPropertyName().equals(TurnSelection.Merge_to_right_CHANGED)
+                                || evt.getPropertyName().equals(TurnSelection.Merge_to_left_CHANGED)
+                                || evt.getPropertyName().equals(TurnSelection.Reverse_CHANGED)) {
                             listBLanes.add((BLane) evt.getNewValue());
                             bLanesC.setLanes(listBLanes);
                             printChageLanes();
@@ -417,9 +431,9 @@ public class TurnSelectionBidirectional extends JPanel {
         if (eventSpinerA) {
             if (jrbLaneForwardA.isSelected()) {
                 if (lanes >= bLanesA.getLanes().size()) {
-                    bLanesA = presetsData.addLanes((BLanes) Util.deepClone(bLanesA), "forward", lanes - bLanesA.getLanes().size());
+                    bLanesA = presetsData.addLanes((BLanes) Util.clone(bLanesA), "forward", lanes - bLanesA.getLanes().size());
                 } else {
-                    bLanesA = presetsData.removeLanes((BLanes) Util.deepClone(bLanesA), bLanesA.getLanes().size() - lanes);
+                    bLanesA = presetsData.removeLanes((BLanes) Util.clone(bLanesA), bLanesA.getLanes().size() - lanes);
                 }
 
                 bLanesA.setType("forward");
@@ -433,9 +447,9 @@ public class TurnSelectionBidirectional extends JPanel {
             } else {
 
                 if (lanes >= bLanesA.getLanes().size()) {
-                    bLanesA = presetsData.addLanes((BLanes) Util.deepClone(bLanesA), "backward", lanes - bLanesA.getLanes().size());
+                    bLanesA = presetsData.addLanes((BLanes) Util.clone(bLanesA), "backward", lanes - bLanesA.getLanes().size());
                 } else {
-                    bLanesA = presetsData.removeLanes((BLanes) Util.deepClone(bLanesA), bLanesA.getLanes().size() - lanes);
+                    bLanesA = presetsData.removeLanes((BLanes) Util.clone(bLanesA), bLanesA.getLanes().size() - lanes);
                 }
 
                 bLanesA.setType("backward");
@@ -470,9 +484,9 @@ public class TurnSelectionBidirectional extends JPanel {
             if (jrbLaneForwardC.isSelected()) {
 
                 if (lanes >= bLanesC.getLanes().size()) {
-                    bLanesC = presetsData.addLanes((BLanes) Util.deepClone(bLanesC), "forward", lanes - bLanesC.getLanes().size());
+                    bLanesC = presetsData.addLanes((BLanes) Util.clone(bLanesC), "forward", lanes - bLanesC.getLanes().size());
                 } else {
-                    bLanesC = presetsData.removeLanes((BLanes) Util.deepClone(bLanesC), bLanesC.getLanes().size() - lanes);
+                    bLanesC = presetsData.removeLanes((BLanes) Util.clone(bLanesC), bLanesC.getLanes().size() - lanes);
                 }
 
                 bLanesC.setType("forward");
@@ -485,9 +499,9 @@ public class TurnSelectionBidirectional extends JPanel {
 
             } else {
                 if (lanes >= bLanesC.getLanes().size()) {
-                    bLanesC = presetsData.addLanes((BLanes) Util.deepClone(bLanesC), "forward", lanes - bLanesC.getLanes().size());
+                    bLanesC = presetsData.addLanes((BLanes) Util.clone(bLanesC), "forward", lanes - bLanesC.getLanes().size());
                 } else {
-                    bLanesC = presetsData.removeLanes((BLanes) Util.deepClone(bLanesC), bLanesC.getLanes().size() - lanes);
+                    bLanesC = presetsData.removeLanes((BLanes) Util.clone(bLanesC), bLanesC.getLanes().size() - lanes);
                 }
                 bLanesC.setType("backward");
                 lanesC(bLanesC);
