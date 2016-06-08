@@ -112,23 +112,25 @@ public class TurnSelectionUnidirectional extends JPanel {
         return jpanelcontentSelections;
     }
 
-    public void lanes(BRoad road) {
+    public void lanes(BLanes bLanes) {
         jpanelcontentTurns.removeAll();
         //Clone objtects
-        valBRoad.setName(new String(road.getName()));
-        List<BLane> listbl = new ArrayList<>();
-        for (int k = 0; k < road.getLanesUnid().getLanes().size(); k++) {
-            BLane bl = new BLane("unid", new Integer(road.getLanesUnid().getLanes().get(k).getPosition()), new String(road.getLanesUnid().getLanes().get(k).getTurn()));
-            listbl.add(bl);
-        }
-        valBRoad.getLanesUnid().setLanes(listbl);
-        jpanelcontentTurns.setLayout(new GridLayout(1, valBRoad.getLanesUnid().getLanes().size()));
-        int numLanes = valBRoad.getLanesUnid().getLanes().size();
+       valBRoad.setName("Unidirectional");
+//        List<BLane> listbl = new ArrayList<>();
+//        for (int k = 0; k < road.getLanesUnid().getLanes().size(); k++) {
+//            BLane bl = new BLane("unid", new Integer(road.getLanesUnid().getLanes().get(k).getPosition()), new String(road.getLanesUnid().getLanes().get(k).getTurn()));
+//            listbl.add(bl);
+//        }
+//        valBRoad.getLanesUnid().setLanes(listbl);
+        int numLanes = bLanes.getLanes().size();
+        jpanelcontentTurns.setLayout(new GridLayout(1, numLanes));
 
         eventSpiner = false;
         spinner.setValue(numLanes);
         eventSpiner = true;
 
+        valBRoad.setLanesUnid(bLanes);
+        
         final List<BLane> listBLines = valBRoad.getLanesUnid().getLanes();
         for (int i = 0; i < numLanes; i++) {
             BLane bLine = listBLines.get(i);
@@ -158,7 +160,7 @@ public class TurnSelectionUnidirectional extends JPanel {
     }
 
     public void setDefault(BRoad bRoad) {
-        lanes(bRoad);
+        lanes(bRoad.getLanesUnid());
     }
 
     public BRoad getValBRoad() {
@@ -170,8 +172,16 @@ public class TurnSelectionUnidirectional extends JPanel {
         @Override
         public void stateChanged(ChangeEvent e) {
             int lanes = Integer.valueOf(spinner.getValue().toString());
+            valBRoad.setName("Unidirectional");
+            BLanes bLanes = new BLanes("unid");
             if (eventSpiner) {
-                lanes(presetsData.defaultRoadUnidirectional(lanes));
+                if (lanes >= valBRoad.getLanesUnid().getLanes().size()) {
+                    bLanes = presetsData.addLanes((BLanes) Util.clone(valBRoad.getLanesUnid()), "unid", lanes - valBRoad.getLanesUnid().getLanes().size());
+                } else {
+                    bLanes = presetsData.removeLanes((BLanes) Util.clone(valBRoad.getLanesUnid()), valBRoad.getLanesUnid().getLanes().size() - lanes);
+                }
+
+                lanes(bLanes);
             }
             eventSpiner = true;
         }
