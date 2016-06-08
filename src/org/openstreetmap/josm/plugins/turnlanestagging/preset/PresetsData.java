@@ -199,6 +199,19 @@ public class PresetsData {
     }
 
     public BLanes addLanes(BLanes bLanes, String type, int lanes) {
+        //remove  merge_to_left and merge_to_right fro midle lanes
+        for (int j = 1; j < bLanes.getLanes().size(); j++) {
+            String dirs[] = bLanes.getLanes().get(j).getTurn().split("\\;", -1);
+            List<String> list = new ArrayList<>();
+            for (int i = 0; i < dirs.length; i++) {
+                if (!dirs[i].equals("merge_to_right") && !dirs[i].equals("merge_to_left")) {
+                    list.add(dirs[i]);
+                }
+            }
+            String t = list.toString().replace("[", "").replace("]", "").replace(", ", ";");
+            bLanes.getLanes().get(j).setTurn(t);
+        }
+
         for (int m = 0; m < lanes; m++) {
             BLane bLine = new BLane(type, bLanes.getLanes().size() + 1, "");
             bLanes.getLanes().add(bLine);
