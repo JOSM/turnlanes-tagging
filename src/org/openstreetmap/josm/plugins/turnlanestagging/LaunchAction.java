@@ -18,11 +18,11 @@ import org.openstreetmap.josm.tools.Shortcut;
 public class LaunchAction extends JosmAction implements SelectionChangedListener {
 
     public LaunchAction() {
-        super(tr("Edit turn lanes tags"),
+        super(tr("Turn lanes tagging - editor"),
                 "turnlanes-tagging",
                 tr("Turn lanes tagging - Editor"),
-                Shortcut.registerShortcut("edit:launchturnlanestageditor ",
-                        tr("Tool: {0}", tr("Launches turn lane tag editor dialog")),
+                Shortcut.registerShortcut("edit:turnlanestaggingeditor",
+                        tr("Tool: {0}", tr("turn lanes tagging - editor")),
                         KeyEvent.VK_2, Shortcut.ALT_SHIFT),
                 true);
         DataSet.addSelectionListener(this);
