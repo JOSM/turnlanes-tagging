@@ -11,15 +11,21 @@ import java.util.List;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSpinner;
 import javax.swing.JTextField;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.SoftBevelBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import static org.openstreetmap.josm.gui.mappaint.mapcss.ExpressionFactory.Functions.tr;
 import org.openstreetmap.josm.plugins.turnlanestagging.bean.BLane;
+import org.openstreetmap.josm.plugins.turnlanestagging.bean.BLanes;
 import org.openstreetmap.josm.plugins.turnlanestagging.bean.BRoad;
 import org.openstreetmap.josm.plugins.turnlanestagging.preset.PresetsData;
+import org.openstreetmap.josm.plugins.turnlanestagging.util.Util;
 
 /**
  *
@@ -33,7 +39,8 @@ public class TurnSelectionUnidirectional extends JPanel {
 
     //Panel for create the number of lines.
     JPanel jpanelcontentSelections = null;
-    private JComboBox<Integer> jcbNumLanes = null;
+    JSpinner spinner = null;
+
     private final JTextField jtfChangeLanes = new JTextField();
 
     // Event Changed
@@ -47,6 +54,12 @@ public class TurnSelectionUnidirectional extends JPanel {
 
     //Preset Data
     PresetsData presetsData = new PresetsData();
+
+    int min = 1;
+    int max = 12;
+    int step = 1;
+    int initValue = 1;
+    boolean eventSpiner = true;
 
     //Constructor
     public TurnSelectionUnidirectional() {
@@ -91,26 +104,12 @@ public class TurnSelectionUnidirectional extends JPanel {
         jpanelcontentSelections = new JPanel(new GridLayout(1, 2));
         jpanelcontentSelections.setBorder(new SoftBevelBorder(BevelBorder.RAISED));
         //fill Combo Box
-        jcbNumLanes = new JComboBox<>();
-        for (int j = 0; j < 15; j++) {
-            jcbNumLanes.addItem(j + 1);
-        }
+        spinner = new JSpinner(new SpinnerNumberModel(initValue, min, max, step));
+
         jpanelcontentSelections.add(new JLabel(tr("Number of lanes")));
-        jpanelcontentSelections.add(jcbNumLanes);
-        jcbNumLanes.addActionListener(new JcbNumLanesListener());
+        jpanelcontentSelections.add(spinner);
+        spinner.addChangeListener(new SPinnerListener());
         return jpanelcontentSelections;
-    }
-
-    private class JcbNumLanesListener implements ActionListener {
-
-        @Override
-        public void actionPerformed(ActionEvent event) {
-            int selected = (int) jcbNumLanes.getSelectedItem();
-            if (clickLanesAction) {
-                lanes(presetsData.defaultRoadUnidirectional(selected));
-            }
-            clickLanesAction = true;
-        }
     }
 
     public void lanes(BRoad road) {
@@ -126,8 +125,9 @@ public class TurnSelectionUnidirectional extends JPanel {
         jpanelcontentTurns.setLayout(new GridLayout(1, valBRoad.getLanesUnid().getLanes().size()));
         int numLanes = valBRoad.getLanesUnid().getLanes().size();
 
-        clickLanesAction = false;
-        jcbNumLanes.setSelectedIndex(numLanes - 1);
+        eventSpiner = false;
+        spinner.setValue(numLanes);
+        eventSpiner = true;
 
         final List<BLane> listBLines = valBRoad.getLanesUnid().getLanes();
         for (int i = 0; i < numLanes; i++) {
@@ -163,6 +163,18 @@ public class TurnSelectionUnidirectional extends JPanel {
 
     public BRoad getValBRoad() {
         return valBRoad;
+    }
+
+    class SPinnerListener implements ChangeListener {
+
+        @Override
+        public void stateChanged(ChangeEvent e) {
+            int lanes = Integer.valueOf(spinner.getValue().toString());
+            if (eventSpiner) {
+                lanes(presetsData.defaultRoadUnidirectional(lanes));
+            }
+            eventSpiner = true;
+        }
     }
 
 }
