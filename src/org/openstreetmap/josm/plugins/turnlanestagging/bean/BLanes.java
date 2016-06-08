@@ -6,7 +6,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import org.openstreetmap.josm.plugins.turnlanestagging.util.Util;
 
 /**
  *
@@ -79,7 +78,7 @@ public class BLanes implements Serializable {
 
     private String sortTurns(String roadTurns) {
         //http://wiki.openstreetmap.org/wiki/Key:turn
-        List<String> turnsList = Arrays.asList("reverse", "sharp_left", "left", "slight_left", "merge_to_right", "through", "merge_to_left", "slight_right", "right", "sharp_right");
+        List<String> turnsList = Arrays.asList("reverse", "sharp_left", "left", "slight_left", "merge_to_right", "through", "reversible", "merge_to_left", "slight_right", "right", "sharp_right");
         List<String> roadTurnsList = Arrays.asList(roadTurns.split(";"));
         List<String> newRoadTurns = new ArrayList<>();
         for (String e : turnsList) {

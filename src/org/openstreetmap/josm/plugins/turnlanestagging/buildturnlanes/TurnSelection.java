@@ -20,16 +20,18 @@ public class TurnSelection extends JPanel {
     public static final String Left_CHANGED = "Left Changed";
     public static final String Right_CHANGED = "Right Changed";
     public static final String Through_CHANGED = "Through Changed";
+    public static final String Reversible_CHANGED = "Reversible Changed";
     public static final String Slight_right_CHANGED = "slight_right Changed";
     public static final String Slight_left_CHANGED = "slight_left Changed";
     public static final String Merge_to_right_CHANGED = "merge_to_right Changed";
     public static final String Merge_to_left_CHANGED = "merge_to_left Changed";
-    public static final String reverse_CHANGED = "reverse Changed";
+    public static final String Reverse_CHANGED = "reverse Changed";
 
 //    private JPanel jPTurnSelection;
     private JPanel jPOptions;
     private JCheckBox left;
     private JCheckBox through;
+    private JCheckBox reversible;
     private JCheckBox right;
     private JCheckBox slight_right;
     private JCheckBox slight_left;
@@ -53,6 +55,7 @@ public class TurnSelection extends JPanel {
         jPOptions = new JPanel(new GridBagLayout());
         left = new JCheckBox();
         through = new JCheckBox();
+        reversible = new JCheckBox();
         right = new JCheckBox();
         slight_right = new JCheckBox();
         slight_left = new JCheckBox();
@@ -106,11 +109,12 @@ public class TurnSelection extends JPanel {
         left.addActionListener(new LeftListener());
         right.addActionListener(new RightListener());
         through.addActionListener(new ThroughListener());
+        reversible.addActionListener(new ReversibleListener());
         slight_right.addActionListener(new Slight_rightListener());
         slight_left.addActionListener(new Slight_leftListener());
         merge_to_right.addActionListener(new Merge_to_rightListener());
         merge_to_left.addActionListener(new Merge_to_leftListener());
-        reverse.addActionListener(new reverseListener());
+        reverse.addActionListener(new ReverseListener());
 
         jPOptions.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Lane " + bLine.getPosition(), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, new java.awt.Color(102, 102, 102)));
         setTurn();
@@ -123,6 +127,7 @@ public class TurnSelection extends JPanel {
         //"reverse", "sharp_left", "left", "slight_left", "merge_to_right", "through", "merge_to_left", "slight_right", "right", "sharp_right"
         boolean status_left = left.isSelected();
         boolean status_through = through.isSelected();
+        boolean status_reversible = reversible.isSelected();
         boolean status_right = right.isSelected();
         boolean status_slight_right = slight_right.isSelected();
         boolean status_slight_left = slight_left.isSelected();
@@ -150,8 +155,8 @@ public class TurnSelection extends JPanel {
             list.add("through");
         }
 
-        if (status_through && bLine.getType().equals("both_ways")) {
-            list.add("reverse");
+        if (status_reversible) {
+            list.add("reversible");
         }
 
         if (status_merge_to_left) {
@@ -165,6 +170,7 @@ public class TurnSelection extends JPanel {
         if (status_right) {
             list.add("right");
         }
+
         String t = list.toString().replace("[", "").replace("]", "").replace(", ", ";");
         bLine.setTurn(t);
 
@@ -205,7 +211,11 @@ public class TurnSelection extends JPanel {
             }
 
             if (dirs[i].equals("reverse")) {
-                through.setSelected(true);
+                reverse.setSelected(true);
+            }
+
+            if (dirs[i].equals("reversible")) {
+                reversible.setSelected(true);
             }
         }
     }
@@ -234,6 +244,15 @@ public class TurnSelection extends JPanel {
         public void actionPerformed(ActionEvent ae) {
             builturn();
             firePropertyChange(Through_CHANGED, null, bLine);
+        }
+    }
+
+    private class ReversibleListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            builturn();
+            firePropertyChange(Reversible_CHANGED, null, bLine);
         }
     }
 
@@ -273,12 +292,12 @@ public class TurnSelection extends JPanel {
         }
     }
 
-    private class reverseListener implements ActionListener {
+    private class ReverseListener implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent ae) {
             builturn();
-            firePropertyChange(reverse_CHANGED, null, bLine);
+            firePropertyChange(Reverse_CHANGED, null, bLine);
         }
     }
 
@@ -653,11 +672,11 @@ public class TurnSelection extends JPanel {
     public void both_waysOne() {
 
         left.setIcon(ImageProvider.get("types", "left-forward-off.png"));
-        through.setIcon(ImageProvider.get("types", "reverse-both_ways-off.png"));
+        reversible.setIcon(ImageProvider.get("types", "reversible-both_ways-off.png"));
         right.setIcon(ImageProvider.get("types", "right-forward-off.png"));
 
         left.setSelectedIcon(ImageProvider.get("types", "left-forward.png"));
-        through.setSelectedIcon(ImageProvider.get("types", "reverse-both_ways.png"));
+        reversible.setSelectedIcon(ImageProvider.get("types", "reversible-both_ways.png"));
         right.setSelectedIcon(ImageProvider.get("types", "right-forward.png"));
 
         //left
@@ -669,9 +688,7 @@ public class TurnSelection extends JPanel {
         //Through
         gbc.gridx = 1;
         gbc.gridy = 1;
-//        gbc.gridheight = 3;
-//        gbc.fill = GridBagConstraints.VERTICAL;
-        jPOptions.add(through, gbc);
+        jPOptions.add(reversible, gbc);
 
         //Right
         gbc.gridx = 2;
