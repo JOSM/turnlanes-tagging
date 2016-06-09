@@ -6,7 +6,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
 import java.util.List;
 import javax.swing.ButtonGroup;
 import javax.swing.JCheckBox;
@@ -23,7 +22,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import static org.openstreetmap.josm.gui.mappaint.mapcss.ExpressionFactory.Functions.tr;
 import org.openstreetmap.josm.plugins.turnlanestagging.bean.BLane;
 import org.openstreetmap.josm.plugins.turnlanestagging.bean.BLanes;
 import org.openstreetmap.josm.plugins.turnlanestagging.bean.BRoad;
@@ -314,15 +312,17 @@ public class TurnSelectionBidirectional extends JPanel {
             if (bLanes.getType().equals("both_ways")) {
                 jchbothwayB.setSelected(true);
             }
+
             jpnlturnsB.setBorder(javax.swing.BorderFactory.createTitledBorder(null, bLanes.getType(), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, new java.awt.Color(102, 102, 102)));
             //Clone objtects
             bLanesB.setType(bLanes.getType());
-            List<BLane> listbl = new ArrayList<>();
-            for (int k = 0; k < bLanes.getLanes().size(); k++) {
-                BLane bl = new BLane(new String(bLanes.getType()), new Integer(bLanes.getLanes().get(k).getPosition()), new String(bLanes.getLanes().get(k).getTurn()));
-                listbl.add(bl);
-            }
-            bLanesB.setLanes(listbl);
+
+//            List<BLane> listbl = new ArrayList<>();
+//            for (int k = 0; k < bLanes.getLanes().size(); k++) {
+//                BLane bl = new BLane(new String(bLanes.getType()), new Integer(bLanes.getLanes().get(k).getPosition()), new String(bLanes.getLanes().get(k).getTurn()));
+//                listbl.add(bl);
+//            }
+//            bLanesB.setLanes(listbl);
             int numLanes = bLanesB.getLanes().size();
             jpnlturnsB.setLayout(new GridLayout(1, numLanes));
             final List<BLane> listBLanes = bLanesB.getLanes();
@@ -347,6 +347,7 @@ public class TurnSelectionBidirectional extends JPanel {
             jpnlturnsB.revalidate();
             jpnlturnsB.repaint();
         }
+        printChageLanes();
     }
 
     public void lanesC(BLanes bLanes) {
@@ -368,14 +369,6 @@ public class TurnSelectionBidirectional extends JPanel {
             }
             jpnlturnsC.setBorder(javax.swing.BorderFactory.createTitledBorder(null, bLanes.getType(), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, new java.awt.Color(102, 102, 102)));
             jpnlturnsC.removeAll();
-            //Clone objtects
-//            bLanesC.setType(bLanes.getType());
-//            List<BLane> listbl = new ArrayList<>();
-//            for (int k = 0; k < bLanes.getLanes().size(); k++) {
-//                BLane bl = new BLane(new String(bLanes.getType()), new Integer(bLanes.getLanes().get(k).getPosition()), new String(bLanes.getLanes().get(k).getTurn()));
-//                listbl.add(bl);
-//            }
-//            bLanesC.setLanes(listbl);
             int numLanes = bLanesC.getLanes().size();
             jpnlturnsC.setLayout(new GridLayout(1, numLanes));
             final List<BLane> listBLanes = bLanesC.getLanes();
@@ -474,8 +467,12 @@ public class TurnSelectionBidirectional extends JPanel {
 //        bLanes.setType("both_ways");
         if (jchbothwayB.isSelected()) {
             jpanelcontentTurns.add(jpnlturnsB, BorderLayout.CENTER);
-            lanesB(bLanes);
+            bLanesB = bLanes;
+            lanesB(bLanesB);
         } else {
+            bLanesB = presetsData.defaultLanes("both_ways", 0);
+            lanesB(bLanesB);
+
             jpnlturnsB.setBorder(null);
             jpnlturnsB.removeAll();
             jpnlturnsB.revalidate();
