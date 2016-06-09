@@ -332,7 +332,7 @@ public class BuildTurnLanes extends JPanel {
         PresetsTableModel lasteditsTM = new PresetsTableModel(listLastEditsRoads);
         lastEditsTable.setModel(lasteditsTM);
         lastEditsTable.getColumnModel().getColumn(2).setCellRenderer(new ImageRenderer());
-         Dimension d = scrollPane.getViewport().getExtentSize();
+        Dimension d = scrollPane.getViewport().getExtentSize();
         lastEditsTable.adjustColumnWidth(d.width);
     }
 
@@ -346,6 +346,13 @@ public class BuildTurnLanes extends JPanel {
         } else {
             startDefaultUnidirectional();
         }
+    }
+
+    public void clearSelection() {
+        presetsTable.clearSelection();
+        presetsTable.getSelectionModel().clearSelection();
+        lastEditsTable.clearSelection();
+        lastEditsTable.getSelectionModel().clearSelection();
     }
 
 }

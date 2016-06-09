@@ -173,6 +173,7 @@ public class TagEditorDialog extends JDialog {
             run();
             // Add on table
             buildTurnLanes.addLastEditInTable();
+            buildTurnLanes.clearSelection();
         }
 
         public void run() {
