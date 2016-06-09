@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
@@ -59,6 +60,7 @@ public class TagEditorDialog extends JDialog {
 
     private TagEditor tagEditor = null;
     private BuildTurnLanes buildTurnLanes = null;
+    private JButton jbOk = null;
     private OKAction okAction = null;
     private CancelAction cancelAction = null;
 
@@ -98,10 +100,9 @@ public class TagEditorDialog extends JDialog {
     //Build Buttons
     protected JPanel buildButtonRowPanel() {
         JPanel pnl = new JPanel(new FlowLayout(FlowLayout.CENTER));
-
-        pnl.add(new JButton(okAction = new OKAction()));
+        jbOk = new JButton(okAction = new OKAction());
+        pnl.add(jbOk);
         getModel().addPropertyChangeListener(okAction);
-
         pnl.add(new JButton(cancelAction = new CancelAction()));
         return pnl;
     }
@@ -124,7 +125,7 @@ public class TagEditorDialog extends JDialog {
             public void propertyChange(PropertyChangeEvent evt) {
                 if (evt.getPropertyName().equals(BuildTurnLanes.ROADCHANGED)) {
                     addTagOnRoad((BRoad) evt.getNewValue());
-                    okAction.focus();
+                    jbOk.requestFocus();
                 }
 
             }
@@ -195,12 +196,6 @@ public class TagEditorDialog extends JDialog {
             }
             setEnabled(true);
         }
-
-        public void focus() {
-            requestFocus();
-
-        }
-
     }
 
     public boolean addOneway() {
@@ -310,15 +305,15 @@ public class TagEditorDialog extends JDialog {
         tagEditor.getModel().applyKeyValuePair(new KeyValuePair("lanes:both_ways", null));
         tagEditor.getModel().applyKeyValuePair(new KeyValuePair("turn:lanes:backward", null));
         tagEditor.getModel().applyKeyValuePair(new KeyValuePair("lanes:backward", null));
-//        tagEditor.getModel().applyKeyValuePair(new KeyValuePair("oneway", null));
+        //        tagEditor.getModel().applyKeyValuePair(new KeyValuePair("oneway", null));
         if (bRoad.getName().equals("Unidirectional")) {
             if (isEmptyturnlane(bRoad.getLanesUnid().getTagturns())) {
                 tagEditor.getModel().applyKeyValuePair(new KeyValuePair("turn:lanes", bRoad.getLanesUnid().getTagturns()));
             }
             tagEditor.getModel().applyKeyValuePair(new KeyValuePair("lanes", String.valueOf(bRoad.getLanesUnid().getLanes().size())));
-//            if (!addOneway()) {
-//                tagEditor.getModel().applyKeyValuePair(new KeyValuePair("oneway", "yes"));
-//            }
+        //            if (!addOneway()) {
+            //                tagEditor.getModel().applyKeyValuePair(new KeyValuePair("oneway", "yes"));
+            //            }
         } else {
             if (!bRoad.getLanesA().getLanes().isEmpty()) {
                 if (bRoad.getLanesA().getType().equals("forward")) {
