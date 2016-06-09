@@ -7,6 +7,7 @@ import java.beans.PropertyChangeListener;
 import java.util.List;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
@@ -71,7 +72,10 @@ public class TurnSelectionUnidirectional extends JPanel {
         jpanelContentLane.setBorder(new SoftBevelBorder(BevelBorder.RAISED));
         jpanelcontentTurns = new JPanel();
         jpanelcontentTurns.setBorder(javax.swing.BorderFactory.createTitledBorder(null, tr("Lanes"), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, new java.awt.Color(102, 102, 102)));
-        jpanelContentLane.add(jpanelcontentTurns);
+        JScrollPane jsp = new JScrollPane(jpanelcontentTurns);
+        jsp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        jsp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+        jpanelContentLane.add(jsp);
         add(jpanelContentLane, BorderLayout.CENTER);
         //add(jtfChangeLanes, BorderLayout.SOUTH);
         //Event Road Listenr
@@ -111,7 +115,7 @@ public class TurnSelectionUnidirectional extends JPanel {
     public void lanes(BLanes bLanes) {
         jpanelcontentTurns.removeAll();
         //Clone objtects
-       valBRoad.setName("Unidirectional");
+        valBRoad.setName("Unidirectional");
 //        List<BLane> listbl = new ArrayList<>();
 //        for (int k = 0; k < road.getLanesUnid().getLanes().size(); k++) {
 //            BLane bl = new BLane("unid", new Integer(road.getLanesUnid().getLanes().get(k).getPosition()), new String(road.getLanesUnid().getLanes().get(k).getTurn()));
@@ -126,7 +130,7 @@ public class TurnSelectionUnidirectional extends JPanel {
         eventSpiner = true;
 
         valBRoad.setLanesUnid(bLanes);
-        
+
         final List<BLane> listBLines = valBRoad.getLanesUnid().getLanes();
         for (int i = 0; i < numLanes; i++) {
             BLane bLine = listBLines.get(i);

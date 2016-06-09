@@ -13,6 +13,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
@@ -22,6 +23,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import static org.openstreetmap.josm.gui.mappaint.mapcss.ExpressionFactory.Functions.tr;
 import org.openstreetmap.josm.plugins.turnlanestagging.bean.BLane;
 import org.openstreetmap.josm.plugins.turnlanestagging.bean.BLanes;
 import org.openstreetmap.josm.plugins.turnlanestagging.bean.BRoad;
@@ -93,7 +95,10 @@ public class TurnSelectionBidirectional extends JPanel {
         //add on Main Panel
         setLayout(new BorderLayout());
         add(buildselect(), BorderLayout.NORTH);
-        add(buildturn(), BorderLayout.CENTER);
+        JScrollPane jsp = new JScrollPane(buildturn());
+        jsp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        jsp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+        add(jsp, BorderLayout.CENTER);
         //add(jtfChangeLanes, BorderLayout.SOUTH);
         jtfChangeLanes.getDocument().addDocumentListener(new SetLanesChangeListener());
     }
