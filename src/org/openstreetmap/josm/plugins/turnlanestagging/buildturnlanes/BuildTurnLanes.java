@@ -1,6 +1,7 @@
 package org.openstreetmap.josm.plugins.turnlanestagging.buildturnlanes;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -29,6 +30,8 @@ import org.openstreetmap.josm.plugins.turnlanestagging.bean.BRoad;
 import org.openstreetmap.josm.plugins.turnlanestagging.preset.PresetsData;
 import org.openstreetmap.josm.plugins.turnlanestagging.preset.PresetsTable;
 import org.openstreetmap.josm.plugins.turnlanestagging.preset.PresetsTableModel;
+import org.openstreetmap.josm.plugins.turnlanestagging.preset.ImageRenderer;
+
 import org.openstreetmap.josm.plugins.turnlanestagging.util.Util;
 
 /**
@@ -94,6 +97,8 @@ public class BuildTurnLanes extends JPanel {
         presetsTableModel = new PresetsTableModel(listPresetRoads);
         //print on table
         presetsTable = new PresetsTable(presetsTableModel);
+        presetsTable.getColumnModel().getColumn(2).setCellRenderer(new ImageRenderer());
+        presetsTable.setSelectionBackground(new Color(145, 195, 242));
         scrollPane = new JScrollPane(presetsTable);
         scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -118,6 +123,8 @@ public class BuildTurnLanes extends JPanel {
         lastEditsTableModel = new PresetsTableModel(lastEditsRoads);
         //print on table
         lastEditsTable = new PresetsTable(lastEditsTableModel);
+        lastEditsTable.getColumnModel().getColumn(2).setCellRenderer(new ImageRenderer());
+        lastEditsTable.setSelectionBackground(new Color(252, 215, 121));
         lastEditsScrollPane = new JScrollPane(lastEditsTable);
         lastEditsScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         lastEditsScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -324,6 +331,9 @@ public class BuildTurnLanes extends JPanel {
         }
         PresetsTableModel lasteditsTM = new PresetsTableModel(listLastEditsRoads);
         lastEditsTable.setModel(lasteditsTM);
+        lastEditsTable.getColumnModel().getColumn(2).setCellRenderer(new ImageRenderer());
+         Dimension d = scrollPane.getViewport().getExtentSize();
+        lastEditsTable.adjustColumnWidth(d.width);
     }
 
     public void setLastEdit() {
