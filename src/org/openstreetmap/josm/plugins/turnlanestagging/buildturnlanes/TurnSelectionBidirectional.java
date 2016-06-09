@@ -262,15 +262,6 @@ public class TurnSelectionBidirectional extends JPanel {
             }
             jpnlturnsA.setBorder(javax.swing.BorderFactory.createTitledBorder(null, bLanes.getType(), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, new java.awt.Color(102, 102, 102)));
             jpnlturnsA.removeAll();
-            //Clone objtects
-
-//            bLanesA.setType(bLanes.getType());
-//            List<BLane> listbl = new ArrayList<>();
-//            for (int k = 0; k < bLanes.getLanes().size(); k++) {
-//                BLane bl = new BLane(new String(bLanes.getType()), new Integer(bLanes.getLanes().get(k).getPosition()), new String(bLanes.getLanes().get(k).getTurn()));
-//                listbl.add(bl);
-//            }
-//            bLanesA.setLanes(listbl);
             int numLanes = bLanesA.getLanes().size();
             jpnlturnsA.setLayout(new GridLayout(1, numLanes));
             final List<BLane> listBLanes = bLanesA.getLanes();
@@ -314,15 +305,7 @@ public class TurnSelectionBidirectional extends JPanel {
             }
 
             jpnlturnsB.setBorder(javax.swing.BorderFactory.createTitledBorder(null, bLanes.getType(), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, new java.awt.Color(102, 102, 102)));
-            //Clone objtects
             bLanesB.setType(bLanes.getType());
-
-//            List<BLane> listbl = new ArrayList<>();
-//            for (int k = 0; k < bLanes.getLanes().size(); k++) {
-//                BLane bl = new BLane(new String(bLanes.getType()), new Integer(bLanes.getLanes().get(k).getPosition()), new String(bLanes.getLanes().get(k).getTurn()));
-//                listbl.add(bl);
-//            }
-//            bLanesB.setLanes(listbl);
             int numLanes = bLanesB.getLanes().size();
             jpnlturnsB.setLayout(new GridLayout(1, numLanes));
             final List<BLane> listBLanes = bLanesB.getLanes();

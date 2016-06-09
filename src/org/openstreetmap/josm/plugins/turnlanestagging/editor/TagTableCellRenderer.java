@@ -1,4 +1,3 @@
-// License: GPL. For details, see LICENSE file.
 package org.openstreetmap.josm.plugins.turnlanestagging.editor;
 
 import static org.openstreetmap.josm.tools.I18n.tr;

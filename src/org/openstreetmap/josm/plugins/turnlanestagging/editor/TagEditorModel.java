@@ -66,7 +66,6 @@ public class TagEditorModel extends org.openstreetmap.josm.gui.tagging.TagEditor
                     // only overwrite an existing value if the preset
                     // proposes a value. I.e. don't overwrite
                     // existing values for tag 'name' with an empty string
-                    //
                     if (tag.getValue() != null) {
                         tagModel.setValue(tag.getValue());
                     }
