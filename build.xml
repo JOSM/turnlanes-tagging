@@ -5,10 +5,10 @@
     <property name="plugin.version" value="v0.0.1"/>
     <property name="plugin.author" value="Rub21"/>
     <property name="plugin.class" value="org.openstreetmap.josm.plugins.turnlanestagging.TurnLanesTaggingPlugin"/>   
-    <property name="plugin.description" value="Editor to add turn lanes tags in highways, it also contain some common turn lanes."/>
-    <property name="plugin.link" value=""/>
+    <property name="plugin.description" value="Easy editor to add turn lanes tags in highways"/>
+    <property name="plugin.link" value="https://github.com/mapbox/turnlanes-tagging"/>
     <property name="plugin.canloadatruntime" value="true"/>
-    <property name="plugin.icon" value="..."/>
-    <property name="plugin.link" value="..."/>
+    <property name="plugin.icon" value="images/turnlanes-tagging.png"/>
+    <property name="plugin.canloadatruntime" value="true"/>
     <import file="../build-common.xml"/>
 </project>
