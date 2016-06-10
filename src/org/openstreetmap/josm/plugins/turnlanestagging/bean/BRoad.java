@@ -9,7 +9,6 @@ import java.io.Serializable;
 public class BRoad implements Serializable {
 
     String name;
-//    List<BLane> lanes;
     private BLanes lanesUnid = new BLanes();
     private BLanes lanesA = new BLanes();
     private BLanes lanesB = new BLanes();

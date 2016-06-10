@@ -55,7 +55,7 @@ public class TagEditorDialog extends JDialog {
         return instance;
     }
 
-    static public final Dimension PREFERRED_SIZE = new Dimension(800, 550);
+    static public final Dimension PREFERRED_SIZE = new Dimension(750, 500);
 
     private TagEditor tagEditor = null;
     private BuildTurnLanes buildTurnLanes = null;
@@ -89,7 +89,7 @@ public class TagEditorDialog extends JDialog {
         );
 
         splitPane.setOneTouchExpandable(true);
-        splitPane.setDividerLocation(430);
+        splitPane.setDividerLocation(400);
         getContentPane().add(splitPane, BorderLayout.CENTER);
         getContentPane().add(buildButtonRowPanel(), BorderLayout.SOUTH);
         getRootPane().registerKeyboardAction(cancelAction, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
@@ -304,15 +304,11 @@ public class TagEditorDialog extends JDialog {
         tagEditor.getModel().applyKeyValuePair(new KeyValuePair("lanes:both_ways", null));
         tagEditor.getModel().applyKeyValuePair(new KeyValuePair("turn:lanes:backward", null));
         tagEditor.getModel().applyKeyValuePair(new KeyValuePair("lanes:backward", null));
-        //        tagEditor.getModel().applyKeyValuePair(new KeyValuePair("oneway", null));
         if (bRoad.getName().equals("Unidirectional")) {
             if (isEmptyturnlane(bRoad.getLanesUnid().getTagturns())) {
                 tagEditor.getModel().applyKeyValuePair(new KeyValuePair("turn:lanes", bRoad.getLanesUnid().getTagturns()));
             }
             tagEditor.getModel().applyKeyValuePair(new KeyValuePair("lanes", String.valueOf(bRoad.getLanesUnid().getLanes().size())));
-            //            if (!addOneway()) {
-            //                tagEditor.getModel().applyKeyValuePair(new KeyValuePair("oneway", "yes"));
-            //            }
         } else {
             if (!bRoad.getLanesA().getLanes().isEmpty()) {
                 if (bRoad.getLanesA().getType().equals("forward")) {

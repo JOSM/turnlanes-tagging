@@ -12,6 +12,8 @@ Easy editor to add turn lanes tags in highways.
 *Add turn lanes in bidirectional road*
 ![turnlanes91-21](https://cloud.githubusercontent.com/assets/1152236/15969751/fa089a46-2ef6-11e6-9dd1-683fa25e527d.gif)
 
+Default shortcut `Alt+Shift+2`
+
 # Functionalities :
 
 - The plugin is enabled  after highway selection.

@@ -1,8 +1,6 @@
 package org.openstreetmap.josm.plugins.turnlanestagging.preset;
 
-import java.util.AbstractList;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import org.openstreetmap.josm.plugins.turnlanestagging.bean.BLane;
 import org.openstreetmap.josm.plugins.turnlanestagging.bean.BRoad;

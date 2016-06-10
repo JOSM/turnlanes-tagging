@@ -353,7 +353,6 @@ public class TurnSelection extends JPanel {
         gbc.gridx = 1;
         gbc.gridy = 1;
         gbc.gridheight = 1;
-//        gbc.fill = GridBagConstraints.VERTICAL;
         jPOptions.add(through, gbc);
 
         //Right
@@ -423,7 +422,6 @@ public class TurnSelection extends JPanel {
         gbc.gridx = 1;
         gbc.gridy = 1;
         gbc.gridheight = 1;
-//        gbc.fill = GridBagConstraints.VERTICAL;
         jPOptions.add(through, gbc);
 
         //Right
@@ -484,7 +482,6 @@ public class TurnSelection extends JPanel {
         gbc.gridx = 1;
         gbc.gridy = 1;
         gbc.gridheight = 1;
-//        gbc.fill = GridBagConstraints.VERTICAL;
         jPOptions.add(through, gbc);
 
         //Right
@@ -542,7 +539,6 @@ public class TurnSelection extends JPanel {
         gbc.gridx = 1;
         gbc.gridy = 2;
         gbc.gridheight = 1;
-//        gbc.fill = GridBagConstraints.VERTICAL;
         jPOptions.add(through, gbc);
 
         //Right
@@ -607,7 +603,6 @@ public class TurnSelection extends JPanel {
         gbc.gridx = 1;
         gbc.gridy = 2;
         gbc.gridheight = 1;
-//        gbc.fill = GridBagConstraints.VERTICAL;
         jPOptions.add(through, gbc);
 
         //Right
@@ -657,7 +652,6 @@ public class TurnSelection extends JPanel {
         gbc.gridx = 1;
         gbc.gridy = 1;
         gbc.gridheight = 1;
-//        gbc.fill = GridBagConstraints.VERTICAL;
         jPOptions.add(through, gbc);
 
         //Right

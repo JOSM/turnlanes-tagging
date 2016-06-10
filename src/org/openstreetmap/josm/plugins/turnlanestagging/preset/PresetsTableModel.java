@@ -3,13 +3,14 @@ package org.openstreetmap.josm.plugins.turnlanestagging.preset;
 
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
+import static org.openstreetmap.josm.gui.mappaint.mapcss.ExpressionFactory.Functions.tr;
 import org.openstreetmap.josm.plugins.turnlanestagging.bean.BRoad;
 
 public class PresetsTableModel extends AbstractTableModel {
 
     List<BRoad> listBRoad;
     Class[] columns = {Object.class, Object.class, Object.class};
-    String titles[] = {"Directional", "Number of lanes", "Turn lanes"};
+    String titles[] = {tr("Directional"), tr("Number of lanes"), tr("Turn lanes")};
 
     public PresetsTableModel(List<BRoad> list) {
         super();
