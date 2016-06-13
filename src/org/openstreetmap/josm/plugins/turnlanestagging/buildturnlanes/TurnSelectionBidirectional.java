@@ -265,7 +265,8 @@ public class TurnSelectionBidirectional extends JPanel {
             int numLanes = bLanesA.getLanes().size();
             jpnlturnsA.setLayout(new GridLayout(1, numLanes));
             final List<BLane> listBLanes = bLanesA.getLanes();
-            for (int i = 0; i < numLanes; i++) {
+
+            for (int i = numLanes - 1; i >= 0; i--) {
                 BLane bLine = listBLanes.get(i);
                 final TurnSelection turnSelection = new TurnSelection(bLine, numLanes);
                 turnSelection.addPropertyChangeListener(new PropertyChangeListener() {

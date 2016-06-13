@@ -518,19 +518,19 @@ public class TurnSelection extends JPanel {
         jPOptions.add(reverse, gbc);
 
         //merge_to_left
-        gbc.gridx = 2;
+        gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.gridheight = 1;
         jPOptions.add(merge_to_left, gbc);
 
         //merge_to_right
-        gbc.gridx = 0;
+        gbc.gridx = 2;
         gbc.gridy = 1;
         gbc.gridheight = 1;
         jPOptions.add(merge_to_right, gbc);
 
         //left
-        gbc.gridx = 0;
+        gbc.gridx = 2;
         gbc.gridy = 2;
         gbc.gridheight = 1;
         jPOptions.add(left, gbc);
@@ -542,19 +542,19 @@ public class TurnSelection extends JPanel {
         jPOptions.add(through, gbc);
 
         //Right
-        gbc.gridx = 2;
+        gbc.gridx = 0;
         gbc.gridy = 2;
         gbc.gridheight = 1;
         jPOptions.add(right, gbc);
 
         //slight_left
-        gbc.gridx = 0;
+        gbc.gridx = 2;
         gbc.gridy = 3;
         gbc.gridheight = 1;
         jPOptions.add(slight_left, gbc);
 
         //slight_right
-        gbc.gridx = 2;
+        gbc.gridx = 0;
         gbc.gridy = 3;
         gbc.gridheight = 1;
         jPOptions.add(slight_right, gbc);
@@ -582,19 +582,19 @@ public class TurnSelection extends JPanel {
         reverse.setSelectedIcon(ImageProvider.get("types", "reverse-backward.png"));
 
         //merge_to_left
-        gbc.gridx = 2;
+        gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.gridheight = 1;
         jPOptions.add(merge_to_left, gbc);
 
         //merge_to_right
-        gbc.gridx = 0;
+        gbc.gridx = 2;
         gbc.gridy = 1;
         gbc.gridheight = 1;
         jPOptions.add(merge_to_right, gbc);
 
         //left
-        gbc.gridx = 0;
+        gbc.gridx = 2;
         gbc.gridy = 2;
         gbc.gridheight = 1;
         jPOptions.add(left, gbc);
@@ -606,19 +606,19 @@ public class TurnSelection extends JPanel {
         jPOptions.add(through, gbc);
 
         //Right
-        gbc.gridx = 2;
+        gbc.gridx = 0;
         gbc.gridy = 2;
         gbc.gridheight = 1;
         jPOptions.add(right, gbc);
 
         //slight_left
-        gbc.gridx = 0;
+        gbc.gridx = 2;
         gbc.gridy = 3;
         gbc.gridheight = 1;
         jPOptions.add(slight_left, gbc);
 
         //slight_right
-        gbc.gridx = 2;
+        gbc.gridx = 0;
         gbc.gridy = 3;
         gbc.gridheight = 1;
         jPOptions.add(slight_right, gbc);
@@ -643,7 +643,7 @@ public class TurnSelection extends JPanel {
         merge_to_right.setSelectedIcon(ImageProvider.get("types", "merge_to_right-backward.png"));
 
         //left
-        gbc.gridx = 0;
+        gbc.gridx = 2;
         gbc.gridy = 1;
         gbc.gridheight = 1;
         jPOptions.add(left, gbc);
@@ -655,19 +655,19 @@ public class TurnSelection extends JPanel {
         jPOptions.add(through, gbc);
 
         //Right
-        gbc.gridx = 2;
+        gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.gridheight = 1;
         jPOptions.add(right, gbc);
 
         //slight_left
-        gbc.gridx = 0;
+        gbc.gridx = 2;
         gbc.gridy = 2;
         gbc.gridheight = 1;
         jPOptions.add(slight_left, gbc);
 
         //slight_right
-        gbc.gridx = 2;
+        gbc.gridx = 0;
         gbc.gridy = 2;
         gbc.gridheight = 1;
         jPOptions.add(slight_right, gbc);
