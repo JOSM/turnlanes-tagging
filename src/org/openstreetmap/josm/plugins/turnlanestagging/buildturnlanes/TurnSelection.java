@@ -127,7 +127,7 @@ public class TurnSelection extends JPanel {
         merge_to_left.addActionListener(new Merge_to_leftListener());
         reverse.addActionListener(new ReverseListener());
 
-        jPOptions.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Lane " + bLine.getPosition(), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, new java.awt.Color(102, 102, 102)));
+        jPOptions.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Lane " + bLine.getPosition(), javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Abyssinica SIL", 0, 10), java.awt.Color.gray));
         setTurn();
         add(jPOptions);
     }
@@ -374,7 +374,7 @@ public class TurnSelection extends JPanel {
         jPOptions.add(merge_to_right, gbc);
 
         //reverse
-        gbc.gridx = 0;
+        gbc.gridx = 2;
         gbc.gridy = 3;
         gbc.gridheight = 1;
         jPOptions.add(reverse, gbc);
@@ -512,7 +512,7 @@ public class TurnSelection extends JPanel {
         reverse.setSelectedIcon(ImageProvider.get("types", "reverse-backward.png"));
 
         //reverse
-        gbc.gridx = 2;
+        gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.gridheight = 1;
         jPOptions.add(reverse, gbc);

@@ -255,12 +255,16 @@ public class TurnSelectionBidirectional extends JPanel {
         eventSpinerA = true;
 
         if (bLanes.getLanes().size() > 0) {
+            String txt;
             if (bLanes.getType().equals("forward")) {
                 jrbLaneForwardA.setSelected(true);
+                txt = "Left - Forward - Right";
             } else {
                 jrbLaneBackwardA.setSelected(true);
+                txt = "Right - Backward - Left";
             }
-            jpnlturnsA.setBorder(javax.swing.BorderFactory.createTitledBorder(null, bLanes.getType(), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, new java.awt.Color(102, 102, 102)));
+
+            jpnlturnsA.setBorder(javax.swing.BorderFactory.createTitledBorder(null, txt, javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.CENTER, null, new java.awt.Color(102, 102, 102)));
             jpnlturnsA.removeAll();
             int numLanes = bLanesA.getLanes().size();
             jpnlturnsA.setLayout(new GridLayout(1, numLanes));
@@ -305,7 +309,7 @@ public class TurnSelectionBidirectional extends JPanel {
                 jchbothwayB.setSelected(true);
             }
 
-            jpnlturnsB.setBorder(javax.swing.BorderFactory.createTitledBorder(null, bLanes.getType(), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, new java.awt.Color(102, 102, 102)));
+            jpnlturnsB.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Both ways", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.CENTER, null, new java.awt.Color(102, 102, 102)));
             bLanesB.setType(bLanes.getType());
             int numLanes = bLanesB.getLanes().size();
             jpnlturnsB.setLayout(new GridLayout(1, numLanes));
@@ -346,12 +350,16 @@ public class TurnSelectionBidirectional extends JPanel {
         spinnerC.setValue(bLanes.getLanes().size());
         eventSpinerC = true;
         if (bLanes.getLanes().size() > 0) {
+            String txt;
+
             if (bLanes.getType().equals("forward")) {
                 jrbLaneForwardC.setSelected(true);
+                txt = "Left - Forward - Right";
             } else {
                 jrbLaneBackwardC.setSelected(true);
+                txt = "Right - Backward - Left";
             }
-            jpnlturnsC.setBorder(javax.swing.BorderFactory.createTitledBorder(null, bLanes.getType(), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, new java.awt.Color(102, 102, 102)));
+            jpnlturnsC.setBorder(javax.swing.BorderFactory.createTitledBorder(null, txt, javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.CENTER, null, new java.awt.Color(102, 102, 102)));
             jpnlturnsC.removeAll();
             int numLanes = bLanesC.getLanes().size();
             jpnlturnsC.setLayout(new GridLayout(1, numLanes));
