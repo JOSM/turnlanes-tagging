@@ -127,7 +127,7 @@ public class TurnSelection extends JPanel {
         merge_to_left.addActionListener(new Merge_to_leftListener());
         reverse.addActionListener(new ReverseListener());
 
-        jPOptions.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Lane " + bLine.getPosition(), javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Abyssinica SIL", 0, 10), java.awt.Color.gray));
+        jPOptions.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Lane " + bLine.getPosition(), javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Abyssinica SIL", 0, 11), java.awt.Color.gray));
         setTurn();
         add(jPOptions);
     }

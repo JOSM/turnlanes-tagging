@@ -274,10 +274,10 @@ public class TurnSelectionBidirectional extends JPanel {
             String txt;
             if (bLanes.getType().equals("forward")) {
                 jrbLaneForwardA.setSelected(true);
-                txt = "Left - Forward - Right";
+                txt = "Left <- Forward -> Right";
             } else {
                 jrbLaneBackwardA.setSelected(true);
-                txt = "Right - Backward - Left";
+                txt = "Right <- Backward -> Left";
             }
 
             jpnlturnsA.setBorder(javax.swing.BorderFactory.createTitledBorder(null, txt, javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.CENTER, null, new java.awt.Color(102, 102, 102)));
@@ -370,10 +370,10 @@ public class TurnSelectionBidirectional extends JPanel {
 
             if (bLanes.getType().equals("forward")) {
                 jrbLaneForwardC.setSelected(true);
-                txt = "Left - Forward - Right";
+                txt = "Left <- Forward -> Right";
             } else {
                 jrbLaneBackwardC.setSelected(true);
-                txt = "Right - Backward - Left";
+                txt = "Right <- Backward -> Left";
             }
             jpnlturnsC.setBorder(javax.swing.BorderFactory.createTitledBorder(null, txt, javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.CENTER, null, new java.awt.Color(102, 102, 102)));
             jpnlturnsC.removeAll();
