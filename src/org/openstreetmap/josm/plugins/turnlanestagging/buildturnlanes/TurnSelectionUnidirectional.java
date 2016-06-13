@@ -2,6 +2,8 @@ package org.openstreetmap.josm.plugins.turnlanestagging.buildturnlanes;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.List;
@@ -71,7 +73,7 @@ public class TurnSelectionUnidirectional extends JPanel {
         jpanelContentLane = new JPanel(new GridLayout(1, 1));
         jpanelContentLane.setBorder(new SoftBevelBorder(BevelBorder.RAISED));
         jpanelcontentTurns = new JPanel();
-        
+
         jpanelcontentTurns.setBorder(javax.swing.BorderFactory.createTitledBorder(null, tr("Left <- Lanes -> Right"), javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.CENTER, null, new java.awt.Color(102, 102, 102)));
         JScrollPane jsp = new JScrollPane(jpanelcontentTurns);
         jsp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -110,6 +112,19 @@ public class TurnSelectionUnidirectional extends JPanel {
         jpanelcontentSelections.add(new JLabel(tr("Number of lanes")));
         jpanelcontentSelections.add(spinner);
         spinner.addChangeListener(new SPinnerListener());
+        spinner.addMouseWheelListener(new MouseWheelListener() {
+            @Override
+            public void mouseWheelMoved(MouseWheelEvent e) {
+                if (e.getScrollType() != MouseWheelEvent.WHEEL_UNIT_SCROLL) {
+                    return;
+                }
+                Integer value = (Integer) spinner.getValue();
+                value -= e.getUnitsToScroll() / 3;
+                if (value <= max && value >= min) {
+                    spinner.setValue(value);
+                }
+            }
+        });
         return jpanelcontentSelections;
     }
 
