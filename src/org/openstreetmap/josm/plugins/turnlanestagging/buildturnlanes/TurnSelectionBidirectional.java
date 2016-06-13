@@ -6,6 +6,8 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.List;
@@ -143,6 +145,19 @@ public class TurnSelectionBidirectional extends JPanel {
         spinnerA = new JSpinner(new SpinnerNumberModel(initValue, min, max, step));
         jpnContentSpinnerA.add(spinnerA);
         spinnerA.addChangeListener(new SPinnerListenerA());
+        spinnerA.addMouseWheelListener(new MouseWheelListener() {
+            @Override
+            public void mouseWheelMoved(MouseWheelEvent e) {
+                if (e.getScrollType() != MouseWheelEvent.WHEEL_UNIT_SCROLL) {
+                    return;
+                }
+                Integer value = (Integer) spinnerA.getValue();
+                value -= e.getUnitsToScroll() / 3;
+                if (value <= max && value >= min) {
+                    spinnerA.setValue(value);
+                }
+            }
+        });
 
         //add compnents in A
         jpnlSelectWardA.add(jrbLaneForwardA);
@@ -181,6 +196,20 @@ public class TurnSelectionBidirectional extends JPanel {
         spinnerC = new JSpinner(new SpinnerNumberModel(initValue, min, max, step));
         jpnContentSpinnerC.add(spinnerC);
         spinnerC.addChangeListener(new SPinnerListenerC());
+        spinnerC.addMouseWheelListener(new MouseWheelListener() {
+            @Override
+            public void mouseWheelMoved(MouseWheelEvent e) {
+                if (e.getScrollType() != MouseWheelEvent.WHEEL_UNIT_SCROLL) {
+                    return;
+                }
+                Integer value = (Integer) spinnerC.getValue();
+                value -= e.getUnitsToScroll() / 3;
+                if (value <= max && value >= min) {
+                    spinnerC.setValue(value);
+                }
+            }
+        });
+
         jpnlSelectWardC.setBorder(new SoftBevelBorder(BevelBorder.RAISED));
 
         //add compnents in C
