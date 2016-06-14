@@ -108,7 +108,6 @@ public class TurnSelectionUnidirectional extends JPanel {
         jpanelcontentSelections.setBorder(new SoftBevelBorder(BevelBorder.RAISED));
         //fill Combo Box
         spinner = new JSpinner(new SpinnerNumberModel(initValue, min, max, step));
-
         jpanelcontentSelections.add(new JLabel(tr("Number of lanes")));
         jpanelcontentSelections.add(spinner);
         spinner.addChangeListener(new SPinnerListener());

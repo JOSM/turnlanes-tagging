@@ -1,6 +1,7 @@
 package org.openstreetmap.josm.plugins.turnlanestagging.buildturnlanes;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -129,7 +130,7 @@ public class TurnSelectionBidirectional extends JPanel {
     public JPanel buildselect() {
 
         jpanelcontent = new JPanel(new GridLayout(1, 1));
-        jpanelcontentSelections = new JPanel(new GridBagLayout());
+        jpanelcontentSelections = new JPanel(new BorderLayout());
         // A
         jpanelcontentA = new JPanel(new GridLayout(1, 1));
         jpnlSelectWardA = new JPanel(new GridLayout(1, 3));
@@ -220,21 +221,10 @@ public class TurnSelectionBidirectional extends JPanel {
         jpnlturnsC = new JPanel();
         jpanelcontentC.add(jpnlSelectWardC);
 
-        //Add all Selection panels
-        gbc.gridx = 0;
-        gbc.gridwidth = 4;
-        gbc.gridy = 0;
-        jpanelcontentSelections.add(jpanelcontentA);
+        jpanelcontentSelections.add(jpanelcontentA, BorderLayout.LINE_START);
+        jpanelcontentSelections.add(jpanelcontentB, BorderLayout.CENTER);
+        jpanelcontentSelections.add(jpanelcontentC, BorderLayout.LINE_END);
 
-        gbc.gridx = 2;
-        gbc.gridwidth = 2;
-        gbc.gridy = 0;
-        jpanelcontentSelections.add(jpanelcontentB);
-
-        gbc.gridx = 6;
-        gbc.gridwidth = 4;
-        gbc.gridy = 0;
-        jpanelcontentSelections.add(jpanelcontentC);
         //Add All turns lanes
         jpanelcontent.add(jpanelcontentSelections);
         return jpanelcontent;
@@ -501,7 +491,6 @@ public class TurnSelectionBidirectional extends JPanel {
 
     private void listenerB() {
         BLanes bLanes = presetsData.defaultLanes("both_ways", 1);
-//        bLanes.setType("both_ways");
         if (jchbothwayB.isSelected()) {
             jpanelcontentTurns.add(jpnlturnsB, BorderLayout.CENTER);
             bLanesB = bLanes;
