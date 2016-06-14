@@ -1,0 +1,31 @@
+svn, version 1.8.8 (r1568071)
+   compiled Aug 20 2015, 12:51:30 on x86_64-pc-linux-gnu
+
+Copyright (C) 2013 The Apache Software Foundation.
+This software consists of contributions made by many people;
+see the NOTICE file for more information.
+Subversion is open source software, see http://subversion.apache.org/
+
+The following repository access (RA) modules are available:
+
+* ra_svn : Module for accessing a repository using the svn network protocol.
+  - with Cyrus SASL authentication
+  - handles 'svn' scheme
+* ra_local : Module for accessing a repository on local disk.
+  - handles 'file' scheme
+* ra_serf : Module for accessing a repository via WebDAV protocol using serf.
+  - using serf 1.3.3
+  - handles 'http' scheme
+  - handles 'https' scheme
+
+svn: E155010: Commit failed (details follow):
+svn: E155010: '/home/ruben/apps/josm/plugins/turnlanes-tagging/src/org/openstreetmap/josm/plugins/turnlanestagging/preset/ui/PresetsTableModel.java' is scheduled for addition, but is missing
+Updating '.':
+svn: E670003: Unable to connect to a repository at URL 'http://svn.openstreetmap.org/applications/editors/josm/plugins'
+svn: E670003: Temporary failure in name resolution
+Skipped '../dist/home/ruben/apps/josm/dist/turnlanes-tagging.jar'
+Summary of conflicts:
+  Skipped paths: 1
+svn: E670003: Commit failed (details follow):
+svn: E670003: Unable to connect to a repository at URL 'http://svn.openstreetmap.org/applications/editors/josm/dist'
+svn: E670003: Temporary failure in name resolution
