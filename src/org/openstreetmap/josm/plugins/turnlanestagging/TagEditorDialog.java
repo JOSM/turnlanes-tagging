@@ -55,7 +55,7 @@ public class TagEditorDialog extends JDialog {
         return instance;
     }
 
-    static public final Dimension PREFERRED_SIZE = new Dimension(750, 500);
+    static public final Dimension PREFERRED_SIZE = new Dimension(750, 700);
 
     private TagEditor tagEditor = null;
     private BuildTurnLanes buildTurnLanes = null;
@@ -87,9 +87,10 @@ public class TagEditorDialog extends JDialog {
                 pnlPresetGrid,
                 pnlTagGrid
         );
-
+        
+        setMinimumSize(new Dimension(750, 500));
         splitPane.setOneTouchExpandable(true);
-        splitPane.setDividerLocation(400);
+        splitPane.setDividerLocation(450);
         getContentPane().add(splitPane, BorderLayout.CENTER);
         getContentPane().add(buildButtonRowPanel(), BorderLayout.SOUTH);
         getRootPane().registerKeyboardAction(cancelAction, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);

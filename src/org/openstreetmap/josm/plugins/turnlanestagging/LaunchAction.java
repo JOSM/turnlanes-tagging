@@ -8,6 +8,7 @@ import org.openstreetmap.josm.actions.JosmAction;
 import org.openstreetmap.josm.data.SelectionChangedListener;
 import org.openstreetmap.josm.data.osm.DataSet;
 import org.openstreetmap.josm.data.osm.OsmPrimitive;
+import org.openstreetmap.josm.gui.Notification;
 import static org.openstreetmap.josm.gui.mappaint.mapcss.ExpressionFactory.Functions.tr;
 import org.openstreetmap.josm.tools.Shortcut;
 
@@ -43,9 +44,15 @@ public class LaunchAction extends JosmAction implements SelectionChangedListener
         if (!isEnabled()) {
             return;
         }
-        TagEditorDialog dialog = TagEditorDialog.getInstance();
-        dialog.startEditSession();
-        dialog.setVisible(true);
+        Collection<OsmPrimitive> selection = Main.main.getCurrentDataSet().getSelected();
+        if (selection.size() < 2) {
+            TagEditorDialog dialog = TagEditorDialog.getInstance();
+            dialog.startEditSession();
+            dialog.setVisible(true);
+        } else {
+            new Notification(tr("Select only a segment of the highway")).show();
+        }
+
     }
 
     public boolean isRoad() {

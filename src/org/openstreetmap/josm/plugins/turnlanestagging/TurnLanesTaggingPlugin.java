@@ -15,7 +15,7 @@ LaunchAction action;
     public TurnLanesTaggingPlugin(PluginInformation info) {
         super(info);
         action = new LaunchAction();
-        MainMenu.add(Main.main.menu.editMenu, action);
+        MainMenu.add(Main.main.menu.dataMenu, action);
     }
 }
 
