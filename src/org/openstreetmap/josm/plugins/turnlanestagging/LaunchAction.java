@@ -44,7 +44,6 @@ public class LaunchAction extends JosmAction implements SelectionChangedListener
         if (!isEnabled()) {
             return;
         }
-
         Collection<OsmPrimitive> selection = Main.main.getCurrentDataSet().getSelected();
         if (selection.size() < 2) {
             TagEditorDialog dialog = TagEditorDialog.getInstance();
