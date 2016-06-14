@@ -77,11 +77,11 @@ public class TurnSelection extends JPanel {
         //Unidirectional
         if (bLine.getType().equals("unid")) {
             if (bLine.getPosition() == 1) {
-                forwardFirst();
+                unidFirst();
             } else if (bLine.getPosition() == numRoadLanes) {
-                forwardLast();
+                unidLast();
             } else {
-                forwareMidle();
+                unidMidle();
             }
         }
 
@@ -701,5 +701,183 @@ public class TurnSelection extends JPanel {
         gbc.gridheight = 1;
         jPOptions.add(right, gbc);
 
+    }
+
+    public void unidFirst() {
+        slight_left.setIcon(ImageProvider.get("types", "slight_left-forward-off.png"));
+        slight_right.setIcon(ImageProvider.get("types", "slight_right-forward-off.png"));
+        left.setIcon(ImageProvider.get("types", "left-forward-off.png"));
+        through.setIcon(ImageProvider.get("types", "through-forward-off.png"));
+        right.setIcon(ImageProvider.get("types", "right-forward-off.png"));
+        merge_to_left.setIcon(ImageProvider.get("types", "merge_to_left-forward-off.png"));
+        merge_to_right.setIcon(ImageProvider.get("types", "merge_to_right-forward-off.png"));
+        reverse.setIcon(ImageProvider.get("types", "reverse-unid-off.png"));
+
+        slight_left.setSelectedIcon(ImageProvider.get("types", "slight_left-forward.png"));
+        slight_right.setSelectedIcon(ImageProvider.get("types", "slight_right-forward.png"));
+        left.setSelectedIcon(ImageProvider.get("types", "left-forward.png"));
+        through.setSelectedIcon(ImageProvider.get("types", "through-forward.png"));
+        right.setSelectedIcon(ImageProvider.get("types", "right-forward.png"));
+        merge_to_left.setSelectedIcon(ImageProvider.get("types", "merge_to_left-forward.png"));
+        merge_to_right.setSelectedIcon(ImageProvider.get("types", "merge_to_right-forward.png"));
+        reverse.setSelectedIcon(ImageProvider.get("types", "reverse-unid.png"));
+
+        //slight_left
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridheight = 1;
+        jPOptions.add(slight_left, gbc);
+
+        //slight_right
+        gbc.gridx = 2;
+        gbc.gridy = 0;
+        gbc.gridheight = 1;
+        jPOptions.add(slight_right, gbc);
+
+        //left
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.gridheight = 1;
+        jPOptions.add(left, gbc);
+
+        //Through
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        gbc.gridheight = 1;
+        jPOptions.add(through, gbc);
+
+        //Right
+        gbc.gridx = 2;
+        gbc.gridy = 1;
+        gbc.gridheight = 1;
+        jPOptions.add(right, gbc);
+
+        //merge_to_left
+        gbc.gridx = 2;
+        gbc.gridy = 2;
+        gbc.gridheight = 1;
+        jPOptions.add(merge_to_left, gbc);
+
+        //merge_to_right
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.gridheight = 1;
+        jPOptions.add(merge_to_right, gbc);
+
+        //reverse
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        gbc.gridheight = 1;
+        jPOptions.add(reverse, gbc);
+
+    }
+
+    public void unidLast() {
+        slight_left.setIcon(ImageProvider.get("types", "slight_left-forward-off.png"));
+        slight_right.setIcon(ImageProvider.get("types", "slight_right-forward-off.png"));
+        left.setIcon(ImageProvider.get("types", "left-forward-off.png"));
+        through.setIcon(ImageProvider.get("types", "through-forward-off.png"));
+        right.setIcon(ImageProvider.get("types", "right-forward-off.png"));
+        merge_to_left.setIcon(ImageProvider.get("types", "merge_to_left-forward-off.png"));
+        merge_to_right.setIcon(ImageProvider.get("types", "merge_to_right-forward-off.png"));
+        reverse.setIcon(ImageProvider.get("types", "reverse-forward-off.png"));
+
+        slight_left.setSelectedIcon(ImageProvider.get("types", "slight_left-forward.png"));
+        slight_right.setSelectedIcon(ImageProvider.get("types", "slight_right-forward.png"));
+        left.setSelectedIcon(ImageProvider.get("types", "left-forward.png"));
+        through.setSelectedIcon(ImageProvider.get("types", "through-forward.png"));
+        right.setSelectedIcon(ImageProvider.get("types", "right-forward.png"));
+        merge_to_left.setSelectedIcon(ImageProvider.get("types", "merge_to_left-forward.png"));
+        merge_to_right.setSelectedIcon(ImageProvider.get("types", "merge_to_right-forward.png"));
+
+        //slight_left
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridheight = 1;
+        jPOptions.add(slight_left, gbc);
+
+        //slight_right
+        gbc.gridx = 2;
+        gbc.gridy = 0;
+        gbc.gridheight = 1;
+        jPOptions.add(slight_right, gbc);
+
+        //left
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.gridheight = 1;
+        jPOptions.add(left, gbc);
+
+        //Through
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        gbc.gridheight = 1;
+        jPOptions.add(through, gbc);
+
+        //Right
+        gbc.gridx = 2;
+        gbc.gridy = 1;
+        gbc.gridheight = 1;
+        jPOptions.add(right, gbc);
+
+        //merge_to_left
+        gbc.gridx = 2;
+        gbc.gridy = 2;
+        gbc.gridheight = 1;
+        jPOptions.add(merge_to_left, gbc);
+
+        //merge_to_right
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.gridheight = 1;
+        jPOptions.add(merge_to_right, gbc);
+    }
+
+    public void unidMidle() {
+        slight_left.setIcon(ImageProvider.get("types", "slight_left-forward-off.png"));
+        slight_right.setIcon(ImageProvider.get("types", "slight_right-forward-off.png"));
+        left.setIcon(ImageProvider.get("types", "left-forward-off.png"));
+        through.setIcon(ImageProvider.get("types", "through-forward-off.png"));
+        right.setIcon(ImageProvider.get("types", "right-forward-off.png"));
+        merge_to_left.setIcon(ImageProvider.get("types", "merge_to_left-forward-off.png"));
+        merge_to_right.setIcon(ImageProvider.get("types", "merge_to_right-forward-off.png"));
+
+        slight_left.setSelectedIcon(ImageProvider.get("types", "slight_left-forward.png"));
+        slight_right.setSelectedIcon(ImageProvider.get("types", "slight_right-forward.png"));
+        left.setSelectedIcon(ImageProvider.get("types", "left-forward.png"));
+        through.setSelectedIcon(ImageProvider.get("types", "through-forward.png"));
+        right.setSelectedIcon(ImageProvider.get("types", "right-forward.png"));
+        merge_to_left.setSelectedIcon(ImageProvider.get("types", "merge_to_left-forward.png"));
+        merge_to_right.setSelectedIcon(ImageProvider.get("types", "merge_to_right-forward.png"));
+
+        //slight_left
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridheight = 1;
+        jPOptions.add(slight_left, gbc);
+
+        //slight_right
+        gbc.gridx = 2;
+        gbc.gridy = 0;
+        gbc.gridheight = 1;
+        jPOptions.add(slight_right, gbc);
+
+        //left
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.gridheight = 1;
+        jPOptions.add(left, gbc);
+
+        //Through
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        gbc.gridheight = 1;
+        jPOptions.add(through, gbc);
+
+        //Right
+        gbc.gridx = 2;
+        gbc.gridy = 1;
+        gbc.gridheight = 1;
+        jPOptions.add(right, gbc);
     }
 }
