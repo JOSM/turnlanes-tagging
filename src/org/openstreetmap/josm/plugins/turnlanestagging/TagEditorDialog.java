@@ -56,7 +56,7 @@ public class TagEditorDialog extends JDialog {
     }
 
     static public final Dimension PREFERRED_SIZE = new Dimension(750, 700);
-
+    static public final Dimension MIN_SIZE = new Dimension(750, 500);
     private TagEditor tagEditor = null;
     private BuildTurnLanes buildTurnLanes = null;
     private JButton jbOk = null;
@@ -87,8 +87,8 @@ public class TagEditorDialog extends JDialog {
                 pnlPresetGrid,
                 pnlTagGrid
         );
-        
-        setMinimumSize(new Dimension(750, 500));
+
+        setMinimumSize(MIN_SIZE);
         splitPane.setOneTouchExpandable(true);
         splitPane.setDividerLocation(400);
         getContentPane().add(splitPane, BorderLayout.CENTER);

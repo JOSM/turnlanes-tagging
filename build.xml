@@ -2,7 +2,6 @@
 <project name="turnlanes-tagging" default="dist" basedir=".">
     <property name="commit.message" value="Turn Lanes Tagging"/>
     <property name="plugin.main.version" value="8151"/>
-    <property name="plugin.version" value="v0.0.1"/>
     <property name="plugin.author" value="Rub21"/>
     <property name="plugin.class" value="org.openstreetmap.josm.plugins.turnlanestagging.TurnLanesTaggingPlugin"/>   
     <property name="plugin.description" value="Easy editor to add turn lanes tags in highways"/>
