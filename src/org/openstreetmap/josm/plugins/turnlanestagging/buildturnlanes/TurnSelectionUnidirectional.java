@@ -74,7 +74,7 @@ public class TurnSelectionUnidirectional extends JPanel {
         jpanelContentLane.setBorder(new SoftBevelBorder(BevelBorder.RAISED));
         jpanelcontentTurns = new JPanel();
 
-        jpanelcontentTurns.setBorder(javax.swing.BorderFactory.createTitledBorder(null, tr("Left <- Lanes -> Right"), javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.CENTER, null, new java.awt.Color(102, 102, 102)));
+        jpanelcontentTurns.setBorder(javax.swing.BorderFactory.createTitledBorder(null, tr("Lanes"), javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.CENTER, null, new java.awt.Color(102, 102, 102)));
         JScrollPane jsp = new JScrollPane(jpanelcontentTurns);
         jsp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         jsp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
