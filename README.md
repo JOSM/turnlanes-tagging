@@ -1,6 +1,6 @@
 # TurnLanes-tagging plugin for JOSM
 
-Easy editor to add turn lanes tags in highways.
+Editor to add turn lanes tags in highways.
 
 *Add turn lanes in unidirectional road*
 ![turnlanes91-21](https://cloud.githubusercontent.com/assets/1152236/15969096/08082a88-2ef4-11e6-91f0-5895294bfefd.gif)
