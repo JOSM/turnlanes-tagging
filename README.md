@@ -5,10 +5,6 @@ Easy editor to add turn lanes tags in highways.
 *Add turn lanes in unidirectional road*
 ![turnlanes91-21](https://cloud.githubusercontent.com/assets/1152236/15969096/08082a88-2ef4-11e6-91f0-5895294bfefd.gif)
 
-<!-- 
-![turnlanes910](https://cloud.githubusercontent.com/assets/1152236/15968525/cc6d5676-2ef1-11e6-9c4d-6ff779949fcb.gif)
- -->
-
 *Add turn lanes in bidirectional road*
 ![turnlanes91-21](https://cloud.githubusercontent.com/assets/1152236/15969751/fa089a46-2ef6-11e6-9dd1-683fa25e527d.gif)
 
