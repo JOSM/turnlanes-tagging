@@ -5,6 +5,9 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowFocusListener;
+import java.awt.event.WindowListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
@@ -37,6 +40,7 @@ import org.openstreetmap.josm.plugins.turnlanestagging.preset.PresetsData;
 import org.openstreetmap.josm.plugins.turnlanestagging.util.Util;
 import static org.openstreetmap.josm.tools.I18n.tr;
 import org.openstreetmap.josm.tools.ImageProvider;
+import java.awt.event.*;
 
 public class TagEditorDialog extends JDialog {
 
@@ -51,7 +55,25 @@ public class TagEditorDialog extends JDialog {
     static public TagEditorDialog getInstance() {
         if (instance == null) {
             instance = new TagEditorDialog();
+            instance.setAlwaysOnTop(true);
         }
+
+        Main.addWindowSwitchListener(new Main.WindowSwitchListener() {
+            @Override
+            public void toOtherApplication() {
+                instance.toBack();
+                instance.setAlwaysOnTop(false);
+                System.out.println("to other application");
+            }
+
+            @Override
+            public void fromOtherApplication() {
+                instance.toFront();
+                instance.setAlwaysOnTop(true);
+                System.out.println("from other application");
+            }
+        });
+
         return instance;
     }
 
@@ -72,7 +94,6 @@ public class TagEditorDialog extends JDialog {
         setModal(false);
         setSize(PREFERRED_SIZE);
         setTitle(tr("Turn Lanes Editor"));
-        setAlwaysOnTop(true);
 
         // Preset Panel
         JPanel pnlPresetGrid = buildPresetGridPanel();
