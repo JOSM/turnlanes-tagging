@@ -55,22 +55,25 @@ public class TagEditorDialog extends JDialog {
     static public TagEditorDialog getInstance() {
         if (instance == null) {
             instance = new TagEditorDialog();
-//            instance.setAlwaysOnTop(true);
+            instance.setAlwaysOnTop(true);
         }
 
-//        Main.addWindowSwitchListener(new Main.WindowSwitchListener() {
-//            @Override
-//            public void toOtherApplication() {
-//                instance.toBack();
-//                instance.setAlwaysOnTop(false);
-//            }
-//
-//            @Override
-//            public void fromOtherApplication() {
-//                instance.toFront();
-//                instance.setAlwaysOnTop(true);
-//            }
-//        });
+        Main.addWindowSwitchListener(new Main.WindowSwitchListener() {
+            @Override
+            public void toOtherApplication() {
+                instance.toBack();
+                instance.setAlwaysOnTop(false);
+                System.out.println("to other application");
+            }
+
+            @Override
+            public void fromOtherApplication() {
+                instance.toFront();
+                instance.setAlwaysOnTop(true);
+                System.out.println("from other application");
+            }
+        });
+
         return instance;
     }
     
@@ -91,7 +94,6 @@ public class TagEditorDialog extends JDialog {
         setModal(false);
         setSize(PREFERRED_SIZE);
         setTitle(tr("Turn Lanes Editor"));
-        setAlwaysOnTop(true);
         // Preset Panel
         JPanel pnlPresetGrid = buildPresetGridPanel();
         pnlPresetGrid.setBorder(BorderFactory.createEmptyBorder(0, 0, 5, 0));
