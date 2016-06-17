@@ -171,6 +171,7 @@ public class TagEditorDialog extends ExtendedDialog {
             // Add on table
             buildTurnLanes.addLastEditInTable();
             buildTurnLanes.clearSelection();
+            
         }
 
         public void run() {
@@ -352,5 +353,11 @@ public class TagEditorDialog extends ExtendedDialog {
             }
         }
         return false;
+    }
+
+    public boolean set() {
+
+        return tagEditor.isEnabled();
+
     }
 }
