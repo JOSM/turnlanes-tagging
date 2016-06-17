@@ -37,22 +37,16 @@ public class LaunchAction extends JosmAction implements SelectionChangedListener
 
     @Override
     public void selectionChanged(Collection<? extends OsmPrimitive> newSelection) {
-        setEnabled(newSelection != null && newSelection.size() > 0 && isRoad());
+        setEnabled(newSelection != null && newSelection.size() == 1 && isRoad());
     }
 
     protected void launchEditor() {
         if (!isEnabled()) {
             return;
         }
-        Collection<OsmPrimitive> selection = Main.main.getCurrentDataSet().getSelected();
-        if (selection.size() < 2) {
-            TagEditorDialog dialog = TagEditorDialog.getInstance();
-            dialog.startEditSession();
-            dialog.setVisible(true);
-        } else {
-            new Notification(tr("Select only a segment of the highway")).show();
-        }
-
+        TagEditorDialog dialog = TagEditorDialog.getInstance();
+        dialog.startEditSession();
+        dialog.setVisible(true);
     }
 
     public boolean isRoad() {
