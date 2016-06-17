@@ -38,20 +38,20 @@ import org.openstreetmap.josm.tools.ImageProvider;
 import org.openstreetmap.josm.gui.ExtendedDialog;
 import static org.openstreetmap.josm.tools.I18n.tr;
 
-public class TagEditorDialog extends ExtendedDialog {
+public class TurnLanesEditorDialog extends ExtendedDialog {
 
     // Unique instance      
-    static private TagEditorDialog instance = null;
+    static private TurnLanesEditorDialog instance = null;
 
     //constructor
-    protected TagEditorDialog() {
+    protected TurnLanesEditorDialog() {
         super(Main.parent, "", null, false, false);
         build();
     }
 
-    static public TagEditorDialog getInstance() {
+    static public TurnLanesEditorDialog getInstance() {
         if (instance == null) {
-            instance = new TagEditorDialog();
+            instance = new TurnLanesEditorDialog();
         }
         return instance;
     }
@@ -171,6 +171,7 @@ public class TagEditorDialog extends ExtendedDialog {
             // Add on table
             buildTurnLanes.addLastEditInTable();
             buildTurnLanes.clearSelection();
+            
         }
 
         public void run() {
@@ -352,5 +353,9 @@ public class TagEditorDialog extends ExtendedDialog {
             }
         }
         return false;
+    }
+    
+    public void setEnableOK(boolean active){
+        jbOk.setEnabled(active);
     }
 }
