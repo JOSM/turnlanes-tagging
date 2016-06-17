@@ -17,7 +17,7 @@ import org.openstreetmap.josm.tools.Shortcut;
  */
 public class LaunchAction extends JosmAction implements SelectionChangedListener {
 
-    private boolean isselection = false;
+    private boolean isLaunch = false;
 
     public LaunchAction() {
         super(tr("Turn lanes tagging - editor"),
@@ -33,15 +33,20 @@ public class LaunchAction extends JosmAction implements SelectionChangedListener
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        isselection = true;
+        isLaunch = true;
         launchEditor();
     }
 
     @Override
     public void selectionChanged(Collection<? extends OsmPrimitive> newSelection) {
         setEnabled(newSelection != null && newSelection.size() == 1 && isRoad());
-        if (isselection && TagEditorDialog.getInstance().isVisible()) {
+        TurnLanesEditorDialog.getInstance().setEnableOK(true);
+        if (isLaunch && TurnLanesEditorDialog.getInstance().isVisible()) {
             launchEditor();
+        }
+        //disable ok buton
+        if (!isRoad() || newSelection.size() > 1) {
+            TurnLanesEditorDialog.getInstance().setEnableOK(false);
         }
     }
 
@@ -49,7 +54,7 @@ public class LaunchAction extends JosmAction implements SelectionChangedListener
         if (!isEnabled()) {
             return;
         }
-        TagEditorDialog dialog = TagEditorDialog.getInstance();
+        TurnLanesEditorDialog dialog = TurnLanesEditorDialog.getInstance();
         dialog.startEditSession();
         dialog.setVisible(true);
     }
