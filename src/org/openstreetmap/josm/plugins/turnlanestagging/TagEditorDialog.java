@@ -5,9 +5,6 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowFocusListener;
-import java.awt.event.WindowListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
@@ -22,7 +19,6 @@ import static javax.swing.Action.SMALL_ICON;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComponent;
-import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.KeyStroke;
@@ -38,47 +34,30 @@ import org.openstreetmap.josm.plugins.turnlanestagging.preset.PresetsTableModel;
 import org.openstreetmap.josm.plugins.turnlanestagging.buildturnlanes.BuildTurnLanes;
 import org.openstreetmap.josm.plugins.turnlanestagging.preset.PresetsData;
 import org.openstreetmap.josm.plugins.turnlanestagging.util.Util;
-import static org.openstreetmap.josm.tools.I18n.tr;
 import org.openstreetmap.josm.tools.ImageProvider;
-import java.awt.event.*;
+import org.openstreetmap.josm.gui.ExtendedDialog;
+import static org.openstreetmap.josm.tools.I18n.tr;
 
-public class TagEditorDialog extends JDialog {
+public class TagEditorDialog extends ExtendedDialog {
 
     // Unique instance      
     static private TagEditorDialog instance = null;
 
     //constructor
     protected TagEditorDialog() {
+        super(Main.parent, "", null, false, false);
         build();
     }
-    
+
     static public TagEditorDialog getInstance() {
         if (instance == null) {
             instance = new TagEditorDialog();
-            instance.setAlwaysOnTop(true);
         }
-
-        Main.addWindowSwitchListener(new Main.WindowSwitchListener() {
-            @Override
-            public void toOtherApplication() {
-                instance.toBack();
-                instance.setAlwaysOnTop(false);
-                System.out.println("to other application");
-            }
-
-            @Override
-            public void fromOtherApplication() {
-                instance.toFront();
-                instance.setAlwaysOnTop(true);
-                System.out.println("from other application");
-            }
-        });
-
         return instance;
     }
-    
+
     static public final Dimension PREFERRED_SIZE = new Dimension(750, 700);
-    static public final Dimension MIN_SIZE = new Dimension(750, 500);
+    static public final Dimension MIN_SIZE = new Dimension(700, 500);
     private TagEditor tagEditor = null;
     private BuildTurnLanes buildTurnLanes = null;
     private JButton jbOk = null;
@@ -87,7 +66,7 @@ public class TagEditorDialog extends JDialog {
 
     // Last Editions 
     List<BRoad> lastEdits = new ArrayList<>();
-    
+
     protected void build() {
         //Parameters for Dialog
         getContentPane().setLayout(new BorderLayout());
@@ -97,24 +76,21 @@ public class TagEditorDialog extends JDialog {
         // Preset Panel
         JPanel pnlPresetGrid = buildPresetGridPanel();
         pnlPresetGrid.setBorder(BorderFactory.createEmptyBorder(0, 0, 5, 0));
-
         // Tag Panel
         JPanel pnlTagGrid = buildTagGridPanel();
-
         //Split the Preset an dTag panel
         JSplitPane splitPane = new JSplitPane(
                 JSplitPane.VERTICAL_SPLIT,
                 pnlPresetGrid,
                 pnlTagGrid
         );
-        
+
         setMinimumSize(MIN_SIZE);
         splitPane.setOneTouchExpandable(true);
         splitPane.setDividerLocation(400);
         getContentPane().add(splitPane, BorderLayout.CENTER);
         getContentPane().add(buildButtonRowPanel(), BorderLayout.SOUTH);
         getRootPane().registerKeyboardAction(cancelAction, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
-        
     }
 
     //Build Buttons
@@ -132,7 +108,7 @@ public class TagEditorDialog extends JDialog {
         tagEditor = new TagEditor();
         return tagEditor;
     }
-    
+
     public TagEditorModel getModel() {
         return tagEditor.getModel();
     }
@@ -147,16 +123,16 @@ public class TagEditorDialog extends JDialog {
                     addTagOnRoad((BRoad) evt.getNewValue());
                     jbOk.requestFocus();
                 }
-                
+
             }
         });
         return buildTurnLanes;
     }
-    
+
     public PresetsTableModel getPressetTableModel() {
         return buildTurnLanes.getModel();
     }
-    
+
     public void startEditSession() {
         tagEditor.getModel().clearAppliedPresets();
         tagEditor.getModel().initFromJOSMSelection();
@@ -166,29 +142,29 @@ public class TagEditorDialog extends JDialog {
 
     //Buton Actions
     class CancelAction extends AbstractAction {
-        
+
         public CancelAction() {
             putValue(NAME, tr("Cancel"));
             putValue(SMALL_ICON, ImageProvider.get("cancel"));
             putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0));
             putValue(SHORT_DESCRIPTION, tr("Abort tag editing and close dialog"));
         }
-        
+
         @Override
         public void actionPerformed(ActionEvent arg0) {
             setVisible(false);
         }
     }
-    
+
     class OKAction extends AbstractAction implements PropertyChangeListener {
-        
+
         public OKAction() {
             putValue(NAME, tr("OK"));
             putValue(SMALL_ICON, ImageProvider.get("ok"));
             putValue(SHORT_DESCRIPTION, tr("Apply edited tags and close dialog"));
             putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke("ctrl ENTER"));
         }
-        
+
         @Override
         public void actionPerformed(ActionEvent e) {
             run();
@@ -196,7 +172,7 @@ public class TagEditorDialog extends JDialog {
             buildTurnLanes.addLastEditInTable();
             buildTurnLanes.clearSelection();
         }
-        
+
         public void run() {
             tagEditor.stopEditing();
             setVisible(false);
@@ -205,7 +181,7 @@ public class TagEditorDialog extends JDialog {
             ds.fireSelectionChanged();
             Main.parent.repaint(); // repaint all
         }
-        
+
         @Override
         public void propertyChange(PropertyChangeEvent evt) {
             if (!evt.getPropertyName().equals(TagEditorModel.PROP_DIRTY)) {
@@ -217,7 +193,7 @@ public class TagEditorDialog extends JDialog {
             setEnabled(true);
         }
     }
-    
+
     public boolean addOneway() {
         Collection<OsmPrimitive> selection = Main.main.getCurrentDataSet().getSelected();
         for (OsmPrimitive element : selection) {
@@ -227,7 +203,7 @@ public class TagEditorDialog extends JDialog {
         }
         return false;
     }
-    
+
     public void setRoadProperties() {
         //Set the selection Roads
         PresetsData presetsData = new PresetsData();
@@ -314,7 +290,7 @@ public class TagEditorDialog extends JDialog {
             }
         }
     }
-    
+
     public void addTagOnRoad(BRoad bRoad) {
         //Clear
         tagEditor.getModel().applyKeyValuePair(new KeyValuePair("turn:lanes", null));
@@ -367,7 +343,7 @@ public class TagEditorDialog extends JDialog {
         }
         tagEditor.repaint();
     }
-    
+
     public boolean isEmptyturnlane(String turns) {
         List<String> turnsList = Arrays.asList("reverse", "sharp_left", "left", "slight_left", "merge_to_right", "through", "reversible", "merge_to_left", "slight_right", "right", "sharp_right");
         for (String tl : turnsList) {
