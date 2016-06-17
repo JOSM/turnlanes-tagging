@@ -55,9 +55,8 @@ public class TurnLanesEditorDialog extends ExtendedDialog {
         }
         return instance;
     }
-
     static public final Dimension PREFERRED_SIZE = new Dimension(750, 700);
-    static public final Dimension MIN_SIZE = new Dimension(700, 500);
+    static public final Dimension MIN_SIZE = new Dimension(630, 500);
     private TagEditor tagEditor = null;
     private BuildTurnLanes buildTurnLanes = null;
     private JButton jbOk = null;
@@ -73,6 +72,8 @@ public class TurnLanesEditorDialog extends ExtendedDialog {
         setModal(false);
         setSize(PREFERRED_SIZE);
         setTitle(tr("Turn Lanes Editor"));
+        setLocation(90, 90);
+        pack();
         // Preset Panel
         JPanel pnlPresetGrid = buildPresetGridPanel();
         pnlPresetGrid.setBorder(BorderFactory.createEmptyBorder(0, 0, 5, 0));
