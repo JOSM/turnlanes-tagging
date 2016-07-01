@@ -11,6 +11,7 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.Collection;
 import java.util.List;
 import javax.swing.ButtonGroup;
 import javax.swing.JCheckBox;
@@ -27,11 +28,14 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import org.openstreetmap.josm.Main;
+import org.openstreetmap.josm.data.osm.OsmPrimitive;
 import org.openstreetmap.josm.plugins.turnlanestagging.bean.BLane;
 import org.openstreetmap.josm.plugins.turnlanestagging.bean.BLanes;
 import org.openstreetmap.josm.plugins.turnlanestagging.bean.BRoad;
 import org.openstreetmap.josm.plugins.turnlanestagging.preset.PresetsData;
 import org.openstreetmap.josm.plugins.turnlanestagging.util.Util;
+import org.openstreetmap.josm.tools.RightAndLefthandTraffic;
 
 /**
  *
@@ -49,9 +53,10 @@ public class TurnSelectionBidirectional extends JPanel {
     JPanel jpanelcontentA = null;
     private JPanel jpnlSelectWardA = null;
     private JPanel jpnlturnsA = null;
-    private ButtonGroup bgWardA = null;
-    private JRadioButton jrbLaneForwardA = null;
-    private JRadioButton jrbLaneBackwardA = null;
+//    private ButtonGroup bgWardA = null;
+//    private JRadioButton jrbLaneForwardA = null;
+//    private JRadioButton jrbLaneBackwardA = null;
+    private JLabel labelA = null;
     JPanel jpnContentSpinnerA = null;
     JSpinner spinnerA = null;
     //B
@@ -63,9 +68,11 @@ public class TurnSelectionBidirectional extends JPanel {
     JPanel jpanelcontentC = null;
     private JPanel jpnlSelectWardC = null;
     private JPanel jpnlturnsC = null;
-    private ButtonGroup bgWardC = null;
-    private JRadioButton jrbLaneForwardC = null;
-    private JRadioButton jrbLaneBackwardC = null;
+//    private ButtonGroup bgWardC = null;
+//    private JRadioButton jrbLaneForwardC = null;
+//    private JRadioButton jrbLaneBackwardC = null;
+
+    private JLabel labelC = null;
     JPanel jpnContentSpinnerC = null;
     JSpinner spinnerC = null;
 
@@ -130,18 +137,18 @@ public class TurnSelectionBidirectional extends JPanel {
     public JPanel buildselect() {
 
         jpanelcontent = new JPanel(new GridLayout(1, 1));
-        jpanelcontentSelections = new JPanel(new BorderLayout());
+        jpanelcontentSelections = new JPanel(new GridBagLayout());
         // A
         jpanelcontentA = new JPanel(new GridLayout(1, 1));
-        jpnlSelectWardA = new JPanel(new GridLayout(1, 3));
-        bgWardA = new ButtonGroup();
-        jrbLaneForwardA = new JRadioButton("Forward");
-        jrbLaneBackwardA = new JRadioButton("Backward");
-        bgWardA.add(jrbLaneForwardA);
-        bgWardA.add(jrbLaneBackwardA);
-        jrbLaneForwardA.addActionListener(actionListenerA);
-        jrbLaneBackwardA.addActionListener(actionListenerA);
+        jpnlSelectWardA = new JPanel(new BorderLayout(5, 5));
 
+//        bgWardA = new ButtonGroup();
+//        jrbLaneForwardA = new JRadioButton("Forward");
+//        jrbLaneBackwardA = new JRadioButton("Backward");
+//        bgWardA.add(jrbLaneForwardA);
+//        bgWardA.add(jrbLaneBackwardA);
+//        jrbLaneForwardA.addActionListener(actionListenerA);
+//        jrbLaneBackwardA.addActionListener(actionListenerA);
         jpnContentSpinnerA = new JPanel(new GridLayout(1, 1));
         spinnerA = new JSpinner(new SpinnerNumberModel(initValue, min, max, step));
         jpnContentSpinnerA.add(spinnerA);
@@ -161,9 +168,11 @@ public class TurnSelectionBidirectional extends JPanel {
         });
 
         //add compnents in A
-        jpnlSelectWardA.add(jrbLaneForwardA);
-        jpnlSelectWardA.add(jrbLaneBackwardA);
-        jpnlSelectWardA.add(jpnContentSpinnerA);
+//        jpnlSelectWardA.add(jrbLaneForwardA);
+//        jpnlSelectWardA.add(jrbLaneBackwardA);
+        labelA = new JLabel("Forward");
+        jpnlSelectWardA.add(labelA, BorderLayout.LINE_START);
+        jpnlSelectWardA.add(jpnContentSpinnerA, BorderLayout.LINE_END);
         jpnlSelectWardA.setBorder(new SoftBevelBorder(BevelBorder.RAISED));
 
         jpnlturnsA = new JPanel();
@@ -184,15 +193,15 @@ public class TurnSelectionBidirectional extends JPanel {
 
         // C
         jpanelcontentC = new JPanel(new GridLayout(1, 1));
-        jpnlSelectWardC = new JPanel(new GridLayout(1, 3));
-        bgWardC = new ButtonGroup();
-        jrbLaneForwardC = new JRadioButton("Forward");
-        jrbLaneBackwardC = new JRadioButton("Backward");
-        bgWardC.add(jrbLaneForwardC);
-        bgWardC.add(jrbLaneBackwardC);
+        jpnlSelectWardC = new JPanel(new BorderLayout(5, 5));
+//        bgWardC = new ButtonGroup();
+//        jrbLaneForwardC = new JRadioButton("Forward");
+//        jrbLaneBackwardC = new JRadioButton("Backward");
+//        bgWardC.add(jrbLaneForwardC);
+//        bgWardC.add(jrbLaneBackwardC);
 
-        jrbLaneForwardC.addActionListener(actionListenerC);
-        jrbLaneBackwardC.addActionListener(actionListenerC);
+//        jrbLaneForwardC.addActionListener(actionListenerC);
+//        jrbLaneBackwardC.addActionListener(actionListenerC);
         jpnContentSpinnerC = new JPanel(new GridLayout(1, 1));
         spinnerC = new JSpinner(new SpinnerNumberModel(initValue, min, max, step));
         jpnContentSpinnerC.add(spinnerC);
@@ -214,16 +223,31 @@ public class TurnSelectionBidirectional extends JPanel {
         jpnlSelectWardC.setBorder(new SoftBevelBorder(BevelBorder.RAISED));
 
         //add compnents in C
-        jpnlSelectWardC.add(jrbLaneForwardC);
-        jpnlSelectWardC.add(jrbLaneBackwardC);
-        jpnlSelectWardC.add(jpnContentSpinnerC);
-
+//        jpnlSelectWardC.add(jrbLaneForwardC);
+//        jpnlSelectWardC.add(jrbLaneBackwardC);
+        labelC = new JLabel("Backward");
+        jpnlSelectWardC.add(labelC, BorderLayout.LINE_START);
+        jpnlSelectWardC.add(jpnContentSpinnerC, BorderLayout.LINE_END);
         jpnlturnsC = new JPanel();
         jpanelcontentC.add(jpnlSelectWardC);
 
-        jpanelcontentSelections.add(jpanelcontentA, BorderLayout.LINE_START);
-        jpanelcontentSelections.add(jpanelcontentB, BorderLayout.CENTER);
-        jpanelcontentSelections.add(jpanelcontentC, BorderLayout.LINE_END);
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 5;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
+        jpanelcontentSelections.add(jpanelcontentA, gbc);
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        gbc.weightx = 1;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
+        jpanelcontentSelections.add(jpanelcontentB, gbc);
+        gbc.gridx = 2;
+        gbc.gridy = 0;
+        gbc.weightx = 5;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        jpanelcontentSelections.add(jpanelcontentC, gbc);
 
         //Add All turns lanes
         jpanelcontent.add(jpanelcontentSelections);
@@ -282,8 +306,17 @@ public class TurnSelectionBidirectional extends JPanel {
         jpnlturnsA.removeAll();
         jpnlturnsA.revalidate();
         jpnlturnsA.repaint();
-        jrbLaneForwardA.setSelected(false);
-        jrbLaneBackwardA.setSelected(false);
+
+        if (isRightHandTraffic()) {
+            labelA.setText("Backward Lanes");
+            bLanes.setType("backward");
+        } else {
+            labelA.setText("Forward Lanes");
+            bLanes.setType("forward");
+        }
+
+//        jrbLaneForwardA.setSelected(false);
+//        jrbLaneBackwardA.setSelected(false);
         //change without event
         eventSpinerA = false;
         spinnerA.setValue(bLanes.getLanes().size());
@@ -292,10 +325,10 @@ public class TurnSelectionBidirectional extends JPanel {
         if (bLanes.getLanes().size() > 0) {
             String txt;
             if (bLanes.getType().equals("forward")) {
-                jrbLaneForwardA.setSelected(true);
+//                jrbLaneForwardA.setSelected(true);
                 txt = "Forward";
             } else {
-                jrbLaneBackwardA.setSelected(true);
+//                jrbLaneBackwardA.setSelected(true);
                 txt = "Backward";
             }
 
@@ -378,20 +411,29 @@ public class TurnSelectionBidirectional extends JPanel {
         jpnlturnsC.removeAll();
         jpnlturnsC.revalidate();
         jpnlturnsC.repaint();
-        jrbLaneForwardC.setSelected(false);
-        jrbLaneBackwardC.setSelected(false);
+//        jrbLaneForwardC.setSelected(false);
+//        jrbLaneBackwardC.setSelected(false);
+        if (isRightHandTraffic()) {
+            labelC.setText("Forward Lanes");
+            bLanes.setType("forward");
+        } else {
+            labelC.setText("Backward Lanes");
+            bLanes.setType("backward");
+        }
+
         //change without event
         eventSpinerC = false;
         spinnerC.setValue(bLanes.getLanes().size());
         eventSpinerC = true;
+
         if (bLanes.getLanes().size() > 0) {
             String txt;
 
             if (bLanes.getType().equals("forward")) {
-                jrbLaneForwardC.setSelected(true);
+//                jrbLaneForwardC.setSelected(true);
                 txt = "Forward";
             } else {
-                jrbLaneBackwardC.setSelected(true);
+//                jrbLaneBackwardC.setSelected(true);
                 txt = "Backward";
             }
             jpnlturnsC.setBorder(javax.swing.BorderFactory.createTitledBorder(null, txt, javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.CENTER, null, new java.awt.Color(102, 102, 102)));
@@ -454,23 +496,7 @@ public class TurnSelectionBidirectional extends JPanel {
         int lanes = Integer.valueOf(spinnerA.getValue().toString());
 
         if (eventSpinerA) {
-            if (jrbLaneForwardA.isSelected()) {
-                if (lanes >= bLanesA.getLanes().size()) {
-                    bLanesA = presetsData.addLanes((BLanes) Util.clone(bLanesA), "forward", lanes - bLanesA.getLanes().size());
-                } else {
-                    bLanesA = presetsData.removeLanes((BLanes) Util.clone(bLanesA), bLanesA.getLanes().size() - lanes);
-                }
-
-                bLanesA.setType("forward");
-                lanesA(bLanesA);
-
-                //change to backward
-                jrbLaneBackwardC.setSelected(true);
-                bLanesC.setType("backward");
-                lanesC(bLanesC);
-
-            } else {
-
+            if (isRightHandTraffic()) {
                 if (lanes >= bLanesA.getLanes().size()) {
                     bLanesA = presetsData.addLanes((BLanes) Util.clone(bLanesA), "backward", lanes - bLanesA.getLanes().size());
                 } else {
@@ -480,9 +506,25 @@ public class TurnSelectionBidirectional extends JPanel {
                 bLanesA.setType("backward");
                 lanesA(bLanesA);
 
-                //change to forward
-                jrbLaneForwardC.setSelected(true);
+                //change to backward
+//                jrbLaneBackwardC.setSelected(true);
                 bLanesC.setType("forward");
+                lanesC(bLanesC);
+
+            } else {
+
+                if (lanes >= bLanesA.getLanes().size()) {
+                    bLanesA = presetsData.addLanes((BLanes) Util.clone(bLanesA), "forward", lanes - bLanesA.getLanes().size());
+                } else {
+                    bLanesA = presetsData.removeLanes((BLanes) Util.clone(bLanesA), bLanesA.getLanes().size() - lanes);
+                }
+
+                bLanesA.setType("forward");
+                lanesA(bLanesA);
+
+                //change to forward
+//                jrbLaneForwardC.setSelected(true);
+                bLanesC.setType("backward");
                 lanesC(bLanesC);
             }
         }
@@ -509,7 +551,7 @@ public class TurnSelectionBidirectional extends JPanel {
     private void listenerC() {
         int lanes = Integer.valueOf(spinnerC.getValue().toString());
         if (eventSpinerC) {
-            if (jrbLaneForwardC.isSelected()) {
+            if (isRightHandTraffic()) {
 
                 if (lanes >= bLanesC.getLanes().size()) {
                     bLanesC = presetsData.addLanes((BLanes) Util.clone(bLanesC), "forward", lanes - bLanesC.getLanes().size());
@@ -521,7 +563,7 @@ public class TurnSelectionBidirectional extends JPanel {
                 lanesC(bLanesC);
 
                 //change to backward
-                jrbLaneBackwardA.setSelected(true);
+//                jrbLaneBackwardA.setSelected(true);
                 bLanesA.setType("backward");
                 lanesA(bLanesA);
 
@@ -535,11 +577,20 @@ public class TurnSelectionBidirectional extends JPanel {
                 lanesC(bLanesC);
 
                 //change to forward
-                jrbLaneBackwardA.setSelected(true);
+//                jrbLaneBackwardA.setSelected(true);
                 bLanesA.setType("forward");
                 lanesA(bLanesA);
             }
         }
         eventSpinerC = true;
+    }
+
+    public boolean isRightHandTraffic() {
+        Collection<OsmPrimitive> selection = Main.main.getCurrentDataSet().getSelected();
+        boolean flag = false;
+        for (OsmPrimitive element : selection) {
+            flag = RightAndLefthandTraffic.isRightHandTraffic(element.getBBox().getCenter());
+        }
+        return flag;
     }
 }
