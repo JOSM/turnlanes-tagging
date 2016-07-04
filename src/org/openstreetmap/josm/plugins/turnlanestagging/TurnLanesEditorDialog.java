@@ -303,6 +303,7 @@ public class TurnLanesEditorDialog extends ExtendedDialog {
         tagEditor.getModel().applyKeyValuePair(new KeyValuePair("lanes:both_ways", null));
         tagEditor.getModel().applyKeyValuePair(new KeyValuePair("turn:lanes:backward", null));
         tagEditor.getModel().applyKeyValuePair(new KeyValuePair("lanes:backward", null));
+        
         if (bRoad.getName().equals("Unidirectional")) {
             if (isEmptyturnlane(bRoad.getLanesUnid().getTagturns())) {
                 tagEditor.getModel().applyKeyValuePair(new KeyValuePair("turn:lanes", bRoad.getLanesUnid().getTagturns()));
