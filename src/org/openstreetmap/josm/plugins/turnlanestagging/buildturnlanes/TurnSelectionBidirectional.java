@@ -315,7 +315,7 @@ public class TurnSelectionBidirectional extends JPanel {
 
             for (int i = numLanes - 1; i >= 0; i--) {
                 BLane bLine = listBLanes.get(i);
-                final TurnSelection turnSelection = new TurnSelection(bLine, numLanes);
+                final TurnSelection turnSelection = new TurnSelection(bLine, numLanes, isRightHandTraffic());
                 turnSelection.addPropertyChangeListener(new PropertyChangeListener() {
                     @Override
                     public void propertyChange(PropertyChangeEvent evt) {
@@ -359,7 +359,7 @@ public class TurnSelectionBidirectional extends JPanel {
             final List<BLane> listBLanes = bLanesB.getLanes();
             for (int i = 0; i < numLanes; i++) {
                 BLane bLine = listBLanes.get(i);
-                final TurnSelection turnSelection = new TurnSelection(bLine, numLanes);
+                final TurnSelection turnSelection = new TurnSelection(bLine, numLanes, isRightHandTraffic());
                 turnSelection.addPropertyChangeListener(new PropertyChangeListener() {
                     @Override
                     public void propertyChange(PropertyChangeEvent evt) {
@@ -413,7 +413,7 @@ public class TurnSelectionBidirectional extends JPanel {
             final List<BLane> listBLanes = bLanesC.getLanes();
             for (int i = 0; i < numLanes; i++) {
                 BLane bLine = listBLanes.get(i);
-                final TurnSelection turnSelection = new TurnSelection(bLine, numLanes);
+                final TurnSelection turnSelection = new TurnSelection(bLine, numLanes, isRightHandTraffic());
                 turnSelection.addPropertyChangeListener(new PropertyChangeListener() {
                     @Override
                     public void propertyChange(PropertyChangeEvent evt) {

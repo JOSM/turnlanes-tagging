@@ -41,13 +41,15 @@ public class TurnSelection extends JPanel {
 
     BLane bLine;
     int numRoadLanes;
+    boolean isRightHand;
 
     GridBagConstraints gbc = new GridBagConstraints();
 
-    public TurnSelection(BLane bl, int numRoadLanes) {
+    public TurnSelection(BLane bl, int numRoadLanes, boolean isRightHand) {
         super();
         this.bLine = bl;
         this.numRoadLanes = numRoadLanes;
+        this.isRightHand = isRightHand;
         init();
     }
 
@@ -320,7 +322,6 @@ public class TurnSelection extends JPanel {
         right.setIcon(ImageProvider.get("types", "right-forward-off.png"));
         merge_to_left.setIcon(ImageProvider.get("types", "merge_to_left-forward-off.png"));
         merge_to_right.setIcon(ImageProvider.get("types", "merge_to_right-forward-off.png"));
-        reverse.setIcon(ImageProvider.get("types", "reverse-forward-off.png"));
 
         slight_left.setSelectedIcon(ImageProvider.get("types", "slight_left-forward.png"));
         slight_right.setSelectedIcon(ImageProvider.get("types", "slight_right-forward.png"));
@@ -329,7 +330,6 @@ public class TurnSelection extends JPanel {
         right.setSelectedIcon(ImageProvider.get("types", "right-forward.png"));
         merge_to_left.setSelectedIcon(ImageProvider.get("types", "merge_to_left-forward.png"));
         merge_to_right.setSelectedIcon(ImageProvider.get("types", "merge_to_right-forward.png"));
-        reverse.setSelectedIcon(ImageProvider.get("types", "reverse-forward.png"));
 
         //slight_left
         gbc.gridx = 0;
@@ -373,11 +373,22 @@ public class TurnSelection extends JPanel {
         gbc.gridheight = 1;
         jPOptions.add(merge_to_right, gbc);
 
-        //reverse
-        gbc.gridx = 2;
-        gbc.gridy = 3;
-        gbc.gridheight = 1;
-        jPOptions.add(reverse, gbc);
+        if (isRightHand) {
+            reverse.setIcon(ImageProvider.get("types", "reverse-righthand-forward-off.png"));
+            reverse.setSelectedIcon(ImageProvider.get("types", "reverse-righthand-forward.png"));
+            gbc.gridx = 0;
+            gbc.gridy = 3;
+            gbc.gridheight = 1;
+            jPOptions.add(reverse, gbc);
+        } else {
+            //reverse
+            reverse.setIcon(ImageProvider.get("types", "reverse-lefthand-forward-off.png"));
+            reverse.setSelectedIcon(ImageProvider.get("types", "reverse-lefthand-forward.png"));
+            gbc.gridx = 2;
+            gbc.gridy = 3;
+            gbc.gridheight = 1;
+            jPOptions.add(reverse, gbc);
+        }
 
     }
 
@@ -500,7 +511,6 @@ public class TurnSelection extends JPanel {
         right.setIcon(ImageProvider.get("types", "right-backward-off.png"));
         merge_to_left.setIcon(ImageProvider.get("types", "merge_to_left-backward-off.png"));
         merge_to_right.setIcon(ImageProvider.get("types", "merge_to_right-backward-off.png"));
-        reverse.setIcon(ImageProvider.get("types", "reverse-backward-off.png"));
 
         slight_left.setSelectedIcon(ImageProvider.get("types", "slight_left-backward.png"));
         slight_right.setSelectedIcon(ImageProvider.get("types", "slight_right-backward.png"));
@@ -509,13 +519,25 @@ public class TurnSelection extends JPanel {
         right.setSelectedIcon(ImageProvider.get("types", "right-backward.png"));
         merge_to_left.setSelectedIcon(ImageProvider.get("types", "merge_to_left-backward.png"));
         merge_to_right.setSelectedIcon(ImageProvider.get("types", "merge_to_right-backward.png"));
-        reverse.setSelectedIcon(ImageProvider.get("types", "reverse-backward.png"));
 
-        //reverse
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.gridheight = 1;
-        jPOptions.add(reverse, gbc);
+        if (isRightHand) {
+            //reverse righthand
+            reverse.setIcon(ImageProvider.get("types", "reverse-righthand-backward-off.png"));
+            reverse.setSelectedIcon(ImageProvider.get("types", "reverse-righthand-backward.png"));
+            gbc.gridx = 2;
+            gbc.gridy = 0;
+            gbc.gridheight = 1;
+            jPOptions.add(reverse, gbc);
+
+        } else {
+            //reverse lefthand
+            reverse.setIcon(ImageProvider.get("types", "reverse-lefthand-backward-off.png"));
+            reverse.setSelectedIcon(ImageProvider.get("types", "reverse-lefthand-backward.png"));
+            gbc.gridx = 0;
+            gbc.gridy = 0;
+            gbc.gridheight = 1;
+            jPOptions.add(reverse, gbc);
+        }
 
         //merge_to_left
         gbc.gridx = 0;
