@@ -186,7 +186,7 @@ public class TurnSelectionBidirectional extends JPanel {
         jpnlSelectWardB.setBorder(new SoftBevelBorder(BevelBorder.RAISED));
 
         //add compnents in B
-        jpnlSelectWardB.add(new JLabel("Both Way"));
+        jpnlSelectWardB.add(new JLabel("Both Way Lane"));
         jpnlSelectWardB.add(jchbothwayB);
         jpnlturnsB = new JPanel();
         jpanelcontentB.add(jpnlSelectWardB);
