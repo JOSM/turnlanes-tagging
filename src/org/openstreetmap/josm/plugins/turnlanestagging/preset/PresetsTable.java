@@ -3,7 +3,6 @@ package org.openstreetmap.josm.plugins.turnlanestagging.preset;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.TableColumnModel;
-import javax.swing.table.TableModel;
 
 public class PresetsTable extends JTable {
 

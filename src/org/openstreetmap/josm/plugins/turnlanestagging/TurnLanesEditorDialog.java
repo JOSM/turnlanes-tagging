@@ -36,6 +36,7 @@ import org.openstreetmap.josm.plugins.turnlanestagging.preset.PresetsData;
 import org.openstreetmap.josm.plugins.turnlanestagging.util.Util;
 import org.openstreetmap.josm.tools.ImageProvider;
 import org.openstreetmap.josm.gui.ExtendedDialog;
+import org.openstreetmap.josm.gui.tagging.presets.TaggingPreset;
 import static org.openstreetmap.josm.tools.I18n.tr;
 
 public class TurnLanesEditorDialog extends ExtendedDialog {
@@ -172,7 +173,7 @@ public class TurnLanesEditorDialog extends ExtendedDialog {
             // Add on table
             buildTurnLanes.addLastEditInTable();
             buildTurnLanes.clearSelection();
-            
+
         }
 
         public void run() {
@@ -295,15 +296,15 @@ public class TurnLanesEditorDialog extends ExtendedDialog {
 
     public void addTagOnRoad(BRoad bRoad) {
         //Clear
-        tagEditor.getModel().applyKeyValuePair(new KeyValuePair("turn:lanes", null));
-        tagEditor.getModel().applyKeyValuePair(new KeyValuePair("lanes", null));
-        tagEditor.getModel().applyKeyValuePair(new KeyValuePair("turn:lanes:forward", null));
-        tagEditor.getModel().applyKeyValuePair(new KeyValuePair("lanes:forward", null));
-        tagEditor.getModel().applyKeyValuePair(new KeyValuePair("turn:lanes:both_ways", null));
-        tagEditor.getModel().applyKeyValuePair(new KeyValuePair("lanes:both_ways", null));
-        tagEditor.getModel().applyKeyValuePair(new KeyValuePair("turn:lanes:backward", null));
-        tagEditor.getModel().applyKeyValuePair(new KeyValuePair("lanes:backward", null));
-        
+        tagEditor.getModel().delete("turn:lanes");
+        tagEditor.getModel().delete("lanes");
+        tagEditor.getModel().delete("turn:lanes:forward");
+        tagEditor.getModel().delete("lanes:forward");
+        tagEditor.getModel().delete("turn:lanes:both_ways");
+        tagEditor.getModel().delete("lanes:both_ways");
+        tagEditor.getModel().delete("turn:lanes:backward");
+        tagEditor.getModel().delete("lanes:backward");
+
         if (bRoad.getName().equals("Unidirectional")) {
             if (isEmptyturnlane(bRoad.getLanesUnid().getTagturns())) {
                 tagEditor.getModel().applyKeyValuePair(new KeyValuePair("turn:lanes", bRoad.getLanesUnid().getTagturns()));
@@ -356,8 +357,8 @@ public class TurnLanesEditorDialog extends ExtendedDialog {
         }
         return false;
     }
-    
-    public void setEnableOK(boolean active){
+
+    public void setEnableOK(boolean active) {
         jbOk.setEnabled(active);
     }
 }
