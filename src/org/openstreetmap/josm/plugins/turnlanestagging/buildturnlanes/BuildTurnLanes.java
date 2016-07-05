@@ -3,6 +3,8 @@ package org.openstreetmap.josm.plugins.turnlanestagging.buildturnlanes;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -51,7 +53,6 @@ public class BuildTurnLanes extends JPanel {
     private PresetsTable lastEditsTable = null;
     private PresetsTableModel lastEditsTableModel = null;
     // Config
-    private JPanel jpConfig = null;
     private static JCheckBox jcNone = null;
 
     //Main Content
@@ -86,6 +87,8 @@ public class BuildTurnLanes extends JPanel {
 
     // Event Changed
     public static final String ROADCHANGED = "RoadChanged";
+
+    GridBagConstraints gbc = new GridBagConstraints();
 
     //Constructor
     public BuildTurnLanes() {
@@ -148,16 +151,6 @@ public class BuildTurnLanes extends JPanel {
         return lastEditsScrollPane;
     }
 
-    protected JPanel buildConfigPanel() {
-        jpConfig = new JPanel();
-        jpConfig.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "None ", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Abyssinica SIL", 0, 11), java.awt.Color.gray));
-        jcNone = new JCheckBox("Use None in empty");
-        jcNone.addActionListener(jcNoneActionListener);
-        jpConfig.add(jcNone);
-        return jpConfig;
-
-    }
-
     private class ClickAdapter extends MouseAdapter {
 
         @Override
@@ -195,21 +188,46 @@ public class BuildTurnLanes extends JPanel {
     // Build Radio Butons and add Actions
     protected JPanel buildDirectionalOptions() {
         //Directional options
-        pnlDirectionalOptions = new JPanel(new GridLayout(1, 2, 5, 5));
+        pnlDirectionalOptions = new JPanel(new GridBagLayout());
+
         pnlUnidirectionalOptions = new JPanel(new BorderLayout());
         pnlBidirectionalOptions = new JPanel(new BorderLayout());
         pnlUnidirectionalOptions.setBorder(new SoftBevelBorder(BevelBorder.RAISED));
         pnlBidirectionalOptions.setBorder(new SoftBevelBorder(BevelBorder.RAISED));
-//        pnlDirectionalOptions.setBorder(new SoftBevelBorder(BevelBorder.RAISED));
+        //pnlDirectionalOptions.setBorder(new SoftBevelBorder(BevelBorder.RAISED));
         btdirectional = new ButtonGroup();
-        jrbUnidirectional = new JRadioButton("Unidirectional");
-        jrbBidirectional = new JRadioButton("Bidirectional");
+        jrbUnidirectional = new JRadioButton(tr("Unidirectional road"));
+        jrbUnidirectional.setToolTipText(tr("Build unidirectional road"));
+        jrbBidirectional = new JRadioButton(tr("Bidirectional road"));
+        jrbBidirectional.setToolTipText(tr("Build bidirectional road"));
+
         btdirectional.add(jrbUnidirectional);
         btdirectional.add(jrbBidirectional);
         pnlUnidirectionalOptions.add(jrbUnidirectional, BorderLayout.CENTER);
         pnlBidirectionalOptions.add(jrbBidirectional, BorderLayout.CENTER);
-        pnlDirectionalOptions.add(pnlUnidirectionalOptions);
-        pnlDirectionalOptions.add(pnlBidirectionalOptions);
+
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 4;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        pnlDirectionalOptions.add(pnlUnidirectionalOptions, gbc);
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        gbc.weightx = 4;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        pnlDirectionalOptions.add(pnlBidirectionalOptions, gbc);
+        //None Option
+        JPanel jpNoneOpt = new JPanel(new BorderLayout());
+        jpNoneOpt.setBorder(new SoftBevelBorder(BevelBorder.RAISED));
+        jcNone = new JCheckBox(tr("Use \"none\""));
+        jcNone.setToolTipText(tr("use \"none\" instead of empty values"));
+        jcNone.addActionListener(jcNoneActionListener);
+        gbc.gridx = 2;
+        gbc.gridy = 0;
+        gbc.weightx = 1;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        jpNoneOpt.add(jcNone);
+        pnlDirectionalOptions.add(jpNoneOpt, gbc);
         jrbUnidirectional.addActionListener(actionListenerUnidirectional);
         jrbBidirectional.addActionListener(actionListenerBidirectional);
         return pnlDirectionalOptions;
@@ -237,8 +255,6 @@ public class BuildTurnLanes extends JPanel {
         JTabbedPane jTabbedPane = new JTabbedPane();
         jTabbedPane.addTab(tr("Preset turn lanes"), buildPresetTable());
         jTabbedPane.addTab(tr("Recently turn lanes edits"), buildLastEditsTable());
-        jTabbedPane.addTab(tr("Settings"), buildConfigPanel());
-
         add(jTabbedPane, BorderLayout.CENTER);
         //turnlanes builder
         pnlBuildTurnLanes = new JPanel(new BorderLayout());
@@ -246,7 +262,7 @@ public class BuildTurnLanes extends JPanel {
         pnlContentDirectional = new JPanel();
         pnlBuildTurnLanes.add(pnlContentDirectional, BorderLayout.CENTER);
         //comment
-        //        pnlBuildTurnLanes.add(jtfChangeRoad, BorderLayout.SOUTH);
+        //pnlBuildTurnLanes.add(jtfChangeRoad, BorderLayout.SOUTH);
         add(pnlBuildTurnLanes, BorderLayout.SOUTH);
         //road change event
         jtfChangeRoad.getDocument().addDocumentListener(new SetRoadChangeRoadListener());
