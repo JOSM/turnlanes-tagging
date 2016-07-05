@@ -146,7 +146,7 @@ public class TagEditorModel extends org.openstreetmap.josm.gui.tagging.TagEditor
      */
     public void updateJOSMSelection() {
         ArrayList<Command> commands = new ArrayList<>();
-        Collection<OsmPrimitive> selection = Main.main.getCurrentDataSet().getSelected();
+        Collection<OsmPrimitive> selection = Main.getLayerManager().getEditDataSet().getSelected();
         if (selection == null)
             return;
         for (TagModel tag : tags) {
@@ -173,7 +173,7 @@ public class TagEditorModel extends org.openstreetmap.josm.gui.tagging.TagEditor
      * initializes the model with the tags in the current JOSM selection
      */
     public void initFromJOSMSelection() {
-        Collection<OsmPrimitive> selection = Main.main.getCurrentDataSet().getSelected();
+        Collection<OsmPrimitive> selection = Main.getLayerManager().getEditDataSet().getSelected();
         clear();
         for (OsmPrimitive element : selection) {
             for (String key : element.keySet()) {

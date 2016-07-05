@@ -177,7 +177,7 @@ public class TurnLanesEditorDialog extends ExtendedDialog {
             tagEditor.stopEditing();
             setVisible(false);
             tagEditor.getModel().updateJOSMSelection();
-            DataSet ds = Main.main.getCurrentDataSet();
+            DataSet ds = Main.getLayerManager().getEditDataSet();
             ds.fireSelectionChanged();
             Main.parent.repaint(); // repaint all
         }
@@ -195,7 +195,7 @@ public class TurnLanesEditorDialog extends ExtendedDialog {
     }
 
     public boolean addOneway() {
-        Collection<OsmPrimitive> selection = Main.main.getCurrentDataSet().getSelected();
+        Collection<OsmPrimitive> selection = Main.getLayerManager().getEditDataSet().getSelected();
         for (OsmPrimitive element : selection) {
             if (element.hasDirectionKeys()) {
                 return true;
@@ -210,7 +210,7 @@ public class TurnLanesEditorDialog extends ExtendedDialog {
         BRoad bRoad = new BRoad();
         //set as unidirectional as first
         bRoad.setName("Unidirectional");
-        Collection<OsmPrimitive> selection = Main.main.getCurrentDataSet().getSelected();
+        Collection<OsmPrimitive> selection = Main.getLayerManager().getEditDataSet().getSelected();
         for (OsmPrimitive element : selection) {
             for (String key : element.keySet()) {
                 //Unidirectional

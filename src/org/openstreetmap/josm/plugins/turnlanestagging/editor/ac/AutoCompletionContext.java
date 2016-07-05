@@ -14,10 +14,10 @@ public class AutoCompletionContext {
     }
 
     public void initFromJOSMSelection() {
-        selectionIncludesNodes = ! Main.main.getCurrentDataSet().getSelectedNodes().isEmpty();
-        selectionIncludesWays = !Main.main.getCurrentDataSet().getSelectedWays().isEmpty();
-        selectionIncludesRelations = !Main.main.getCurrentDataSet().getSelectedRelations().isEmpty();
-        selectionEmpty = (Main.main.getCurrentDataSet().getSelected().size() == 0);
+        selectionIncludesNodes = ! Main.getLayerManager().getEditDataSet().getSelectedNodes().isEmpty();
+        selectionIncludesWays = !Main.getLayerManager().getEditDataSet().getSelectedWays().isEmpty();
+        selectionIncludesRelations = !Main.getLayerManager().getEditDataSet().getSelectedRelations().isEmpty();
+        selectionEmpty = (Main.getLayerManager().getEditDataSet().getSelected().size() == 0);
     }
 
     public boolean isSelectionEmpty() {
