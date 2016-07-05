@@ -41,11 +41,9 @@ import org.openstreetmap.josm.tools.RightAndLefthandTraffic;
 public class TurnSelectionBidirectional extends JPanel {
 
     public static final String LINESCHANGEDBIDIRECTIONAL = "BidirectionalLinesChanged";
-
     JPanel jpanelcontent = null;
     JPanel jpanelcontentSelections = null;
     JPanel jpanelcontentTurns = null;
-
     //A
     JPanel jpanelcontentA = null;
     private JPanel jpnlSelectWardA = null;
@@ -65,27 +63,22 @@ public class TurnSelectionBidirectional extends JPanel {
     private JLabel labelC = null;
     JPanel jpnContentSpinnerC = null;
     JSpinner spinnerC = null;
-
     //Jtext
     private final JTextField jtfChangeLanes = new JTextField();
-
     //Values road
     BRoad valBRoad = new BRoad();
     BLanes bLanesA = new BLanes();
     BLanes bLanesB = new BLanes();
     BLanes bLanesC = new BLanes();
-
     //Preset Data
     PresetsData presetsData = new PresetsData();
     int min = 1;
     int max = 10;
     int step = 1;
     int initValue = 1;
-
     //Avoid event after change spiner
     boolean eventSpinerA = true;
     boolean eventSpinerC = true;
-
     GridBagConstraints gbc = new GridBagConstraints();
 
     public TurnSelectionBidirectional() {
@@ -131,7 +124,6 @@ public class TurnSelectionBidirectional extends JPanel {
         // A
         jpanelcontentA = new JPanel(new GridLayout(1, 1));
         jpnlSelectWardA = new JPanel(new BorderLayout(5, 5));
-
         jpnContentSpinnerA = new JPanel(new GridLayout(1, 1));
         spinnerA = new JSpinner(new SpinnerNumberModel(initValue, min, max, step));
         jpnContentSpinnerA.add(spinnerA);
@@ -154,10 +146,8 @@ public class TurnSelectionBidirectional extends JPanel {
         jpnlSelectWardA.add(labelA, BorderLayout.LINE_START);
         jpnlSelectWardA.add(jpnContentSpinnerA, BorderLayout.LINE_END);
         jpnlSelectWardA.setBorder(new SoftBevelBorder(BevelBorder.RAISED));
-
         jpnlturnsA = new JPanel();
         jpanelcontentA.add(jpnlSelectWardA);
-
         //B
         jpanelcontentB = new JPanel(new GridLayout(1, 1));
         jpnlSelectWardB = new JPanel(new GridBagLayout());
@@ -170,18 +160,14 @@ public class TurnSelectionBidirectional extends JPanel {
         gbc.gridy = 0;
         gbc.weightx = 4;
         gbc.fill = GridBagConstraints.HORIZONTAL;
-
         jpnlSelectWardB.add(new JLabel("Both way lane"), gbc);
-
         gbc.gridx = 1;
         gbc.gridy = 0;
         gbc.weightx = 1;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         jpnlSelectWardB.add(jchbothwayB, gbc);
-
         jpnlturnsB = new JPanel();
         jpanelcontentB.add(jpnlSelectWardB);
-
         // C
         jpanelcontentC = new JPanel(new GridLayout(1, 1));
         jpnlSelectWardC = new JPanel(new BorderLayout(5, 5));

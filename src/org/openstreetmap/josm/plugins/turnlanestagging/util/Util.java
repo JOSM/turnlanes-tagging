@@ -4,6 +4,8 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.Arrays;
+import java.util.List;
 import javax.swing.JOptionPane;
 import org.openstreetmap.josm.gui.Notification;
 
@@ -42,5 +44,25 @@ public class Util {
 
     public static void notification(String str) {
         new Notification(str).show();
+    }
+
+    public static boolean isEmptyturnlane(String turns) {
+        List<String> turnsList = Arrays.asList("reverse", "sharp_left", "left", "slight_left", "merge_to_right", "through", "reversible", "merge_to_left", "slight_right", "right", "sharp_right");
+        for (String tl : turnsList) {
+            if (turns.contains(tl)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static String setNoneOnEmpty(String turn) {
+        if (turn.startsWith("|")) {
+            turn = "none" + turn;
+        }
+        if (turn.endsWith("|")) {
+            turn = turn + "none";
+        }
+        return turn.replaceAll("(\\|)(\\|)", "$1none$2");
     }
 }
