@@ -524,7 +524,7 @@ public class TurnSelectionBidirectional extends JPanel {
     }
 
     public boolean isRightHandTraffic() {
-        Collection<OsmPrimitive> selection = Main.main.getCurrentDataSet().getSelected();
+        Collection<OsmPrimitive> selection = Main.getLayerManager().getEditDataSet().getSelected();
         boolean flag = false;
         for (OsmPrimitive element : selection) {
             flag = RightAndLefthandTraffic.isRightHandTraffic(element.getBBox().getCenter());

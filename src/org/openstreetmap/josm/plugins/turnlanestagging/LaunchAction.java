@@ -60,7 +60,7 @@ public class LaunchAction extends JosmAction implements SelectionChangedListener
     }
 
     public boolean isRoad() {
-        Collection<OsmPrimitive> selection = Main.main.getCurrentDataSet().getSelected();
+        Collection<OsmPrimitive> selection = Main.getLayerManager().getEditDataSet().getSelected();
         for (OsmPrimitive element : selection) {
             for (String key : element.keySet()) {
                 if (key.equals("highway")) {
