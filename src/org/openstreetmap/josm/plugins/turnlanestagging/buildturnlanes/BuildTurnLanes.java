@@ -15,6 +15,7 @@ import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.ButtonGroup;
+import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
@@ -48,6 +49,9 @@ public class BuildTurnLanes extends JPanel {
     private JScrollPane lastEditsScrollPane = null;
     private PresetsTable lastEditsTable = null;
     private PresetsTableModel lastEditsTableModel = null;
+    // Config
+    private JPanel jpConfig = null;
+    private static JCheckBox jcNone = null;
 
     //Main Content
     private JPanel pnlBuildTurnLanes = null;
@@ -143,6 +147,15 @@ public class BuildTurnLanes extends JPanel {
         return lastEditsScrollPane;
     }
 
+    protected JPanel buildConfigPanel() {
+        jpConfig = new JPanel();
+        jpConfig.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "None ", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Abyssinica SIL", 0, 11), java.awt.Color.gray));
+        jcNone = new JCheckBox("Use None in empty");
+        jpConfig.add(jcNone);
+        return jpConfig;
+
+    }
+
     private class ClickAdapter extends MouseAdapter {
 
         @Override
@@ -222,6 +235,8 @@ public class BuildTurnLanes extends JPanel {
         JTabbedPane jTabbedPane = new JTabbedPane();
         jTabbedPane.addTab(tr("Preset turn lanes"), buildPresetTable());
         jTabbedPane.addTab(tr("Recently turn lanes edits"), buildLastEditsTable());
+        jTabbedPane.addTab(tr("Settings"), buildConfigPanel());
+
         add(jTabbedPane, BorderLayout.CENTER);
         //turnlanes builder
         pnlBuildTurnLanes = new JPanel(new BorderLayout());
@@ -244,6 +259,7 @@ public class BuildTurnLanes extends JPanel {
         public void propertyChange(PropertyChangeEvent evt) {
             if (evt.getPropertyName().equals(TurnSelectionUnidirectional.LINESCHANGED)) {
                 bRoad = (BRoad) evt.getNewValue();
+                bRoad.setNone(jcNone.isSelected());
                 jtfChangeRoad.setText(bRoad.getLanesUnid().getTagturns());
             }
         }
@@ -256,6 +272,7 @@ public class BuildTurnLanes extends JPanel {
         public void propertyChange(PropertyChangeEvent evt) {
             if (evt.getPropertyName().equals(TurnSelectionBidirectional.LINESCHANGEDBIDIRECTIONAL)) {
                 bRoad = (BRoad) evt.getNewValue();
+                bRoad.setNone(jcNone.isSelected());
                 String t = bRoad.getLanesA().getTagturns() + "==" + bRoad.getLanesB().getTagturns() + "==" + bRoad.getLanesC().getTagturns();
                 bRoad.setName("Bidirectional");
                 jtfChangeRoad.setText(t);

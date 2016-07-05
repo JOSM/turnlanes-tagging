@@ -13,6 +13,7 @@ public class BRoad implements Serializable {
     private BLanes lanesA = new BLanes();
     private BLanes lanesB = new BLanes();
     private BLanes lanesC = new BLanes();
+    private boolean none;
 
     public BRoad() {
     }
@@ -74,6 +75,14 @@ public class BRoad implements Serializable {
 
     public void setLanesUnid(BLanes Lanes) {
         this.lanesUnid = Lanes;
+    }
+
+    public boolean isNone() {
+        return none;
+    }
+
+    public void setNone(boolean none) {
+        this.none = none;
     }
 
     public String turns() {
