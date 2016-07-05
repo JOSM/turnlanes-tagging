@@ -14,6 +14,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
@@ -71,9 +72,9 @@ public class BuildTurnLanes extends JPanel {
     public static JTextField jtfChangeRoad = new JTextField();
 
     // Data to fill  the  table
-    List<BRoad> listPresetRoads = null;
+    static List<BRoad> listPresetRoads = null;
     PresetsData presetsData = new PresetsData();
-    List<BRoad> listLastEditsRoads = new ArrayList<>();
+    static List<BRoad> listLastEditsRoads = new ArrayList<>();
 
     //Road
     public static BRoad bRoad = new BRoad();
@@ -98,7 +99,7 @@ public class BuildTurnLanes extends JPanel {
     // Build Table and add Actions
     protected JScrollPane buildPresetTable() {
         listPresetRoads = new ArrayList<>(presetsData.dataPreset());
-        presetsTableModel = new PresetsTableModel(listPresetRoads);
+        presetsTableModel = new PresetsTableModel(listPresetRoads, false);
         //print on table
         presetsTable = new PresetsTable(presetsTableModel);
         presetsTable.getColumnModel().getColumn(2).setCellRenderer(new ImageRenderer());
@@ -124,7 +125,7 @@ public class BuildTurnLanes extends JPanel {
     // Build Table and add Actions
     protected JScrollPane buildLastEditsTable() {
         List<BRoad> lastEditsRoads = new ArrayList<>();
-        lastEditsTableModel = new PresetsTableModel(lastEditsRoads);
+        lastEditsTableModel = new PresetsTableModel(lastEditsRoads, false);
         //print on table
         lastEditsTable = new PresetsTable(lastEditsTableModel);
         lastEditsTable.getColumnModel().getColumn(2).setCellRenderer(new ImageRenderer());
@@ -151,6 +152,7 @@ public class BuildTurnLanes extends JPanel {
         jpConfig = new JPanel();
         jpConfig.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "None ", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Abyssinica SIL", 0, 11), java.awt.Color.gray));
         jcNone = new JCheckBox("Use None in empty");
+        jcNone.addActionListener(jcNoneActionListener);
         jpConfig.add(jcNone);
         return jpConfig;
 
@@ -259,7 +261,6 @@ public class BuildTurnLanes extends JPanel {
         public void propertyChange(PropertyChangeEvent evt) {
             if (evt.getPropertyName().equals(TurnSelectionUnidirectional.LINESCHANGED)) {
                 bRoad = (BRoad) evt.getNewValue();
-                bRoad.setNone(jcNone.isSelected());
                 jtfChangeRoad.setText(bRoad.getLanesUnid().getTagturns());
             }
         }
@@ -272,10 +273,8 @@ public class BuildTurnLanes extends JPanel {
         public void propertyChange(PropertyChangeEvent evt) {
             if (evt.getPropertyName().equals(TurnSelectionBidirectional.LINESCHANGEDBIDIRECTIONAL)) {
                 bRoad = (BRoad) evt.getNewValue();
-                bRoad.setNone(jcNone.isSelected());
-                String t = bRoad.getLanesA().getTagturns() + "==" + bRoad.getLanesB().getTagturns() + "==" + bRoad.getLanesC().getTagturns();
                 bRoad.setName("Bidirectional");
-                jtfChangeRoad.setText(t);
+                jtfChangeRoad.setText(bRoad.getLanesA().getTagturns() + ";" + bRoad.getLanesB().getTagturns() + ";" + bRoad.getLanesC().getTagturns());
             }
         }
     }
@@ -284,6 +283,7 @@ public class BuildTurnLanes extends JPanel {
 
         @Override
         public void insertUpdate(DocumentEvent e) {
+            bRoad.setNone(jcNone.isSelected());
             firePropertyChange(ROADCHANGED, null, bRoad);
         }
 
@@ -346,7 +346,7 @@ public class BuildTurnLanes extends JPanel {
                 listLastEditsRoads.add(0, (BRoad) Util.clone(bRoad));
             }
         }
-        PresetsTableModel lasteditsTM = new PresetsTableModel(listLastEditsRoads);
+        PresetsTableModel lasteditsTM = new PresetsTableModel(listLastEditsRoads, jcNone.isSelected());//check aqui
         lastEditsTable.setModel(lasteditsTM);
         lastEditsTable.getColumnModel().getColumn(2).setCellRenderer(new ImageRenderer());
         Dimension d = scrollPane.getViewport().getExtentSize();
@@ -372,4 +372,27 @@ public class BuildTurnLanes extends JPanel {
         lastEditsTable.getSelectionModel().clearSelection();
     }
 
+    ActionListener jcNoneActionListener = new ActionListener() {
+        public void actionPerformed(ActionEvent actionEvent) {
+            AbstractButton abstractButton = (AbstractButton) actionEvent.getSource();
+            boolean selected = abstractButton.getModel().isSelected();
+            //update the preset with none
+            PresetsTableModel presetsTableModel = new PresetsTableModel(listPresetRoads, selected);
+            presetsTable.setModel(presetsTableModel);
+            presetsTable.getColumnModel().getColumn(2).setCellRenderer(new ImageRenderer());
+            presetsTable.adjustColumnWidth(scrollPane.getViewport().getExtentSize().width);
+            // Update last editions
+            PresetsTableModel lasteditsTM = new PresetsTableModel(listLastEditsRoads, selected);
+            lastEditsTable.setModel(lasteditsTM);
+            lastEditsTable.getColumnModel().getColumn(2).setCellRenderer(new ImageRenderer());
+            lastEditsTable.adjustColumnWidth(scrollPane.getViewport().getExtentSize().width);
+            //change turn in road
+            bRoad.setNone(selected);
+            if (bRoad.getName().equals("Unidirectional")) {
+                jtfChangeRoad.setText(bRoad.getLanesUnid().getTagturns());
+            } else {
+                jtfChangeRoad.setText(bRoad.getLanesA().getTagturns() + ";" + bRoad.getLanesB().getTagturns() + ";" + bRoad.getLanesC().getTagturns());
+            }
+        }
+    };
 }

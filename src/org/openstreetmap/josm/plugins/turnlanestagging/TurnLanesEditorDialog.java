@@ -55,7 +55,7 @@ public class TurnLanesEditorDialog extends ExtendedDialog {
         return instance;
     }
     static public final Dimension PREFERRED_SIZE = new Dimension(750, 700);
-    static public final Dimension MIN_SIZE = new Dimension(630, 500);
+    static public final Dimension MIN_SIZE = new Dimension(630, 600);
     private TagEditor tagEditor = null;
     private BuildTurnLanes buildTurnLanes = null;
     private JButton jbOk = null;
@@ -87,7 +87,7 @@ public class TurnLanesEditorDialog extends ExtendedDialog {
 
         setMinimumSize(MIN_SIZE);
         splitPane.setOneTouchExpandable(true);
-        splitPane.setDividerLocation(400);
+        splitPane.setDividerLocation(380);
         getContentPane().add(splitPane, BorderLayout.CENTER);
         getContentPane().add(buildButtonRowPanel(), BorderLayout.SOUTH);
         getRootPane().registerKeyboardAction(cancelAction, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
