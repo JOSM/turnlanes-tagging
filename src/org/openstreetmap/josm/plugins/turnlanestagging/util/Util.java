@@ -5,9 +5,13 @@ import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import javax.swing.JOptionPane;
+import org.openstreetmap.josm.Main;
+import org.openstreetmap.josm.data.osm.OsmPrimitive;
 import org.openstreetmap.josm.gui.Notification;
+import org.openstreetmap.josm.tools.RightAndLefthandTraffic;
 
 /**
  *
@@ -64,5 +68,14 @@ public class Util {
             turn = turn + "none";
         }
         return turn.replaceAll("(\\|)(\\|)", "$1none$2");
+    }
+
+    public static boolean isRightHandTraffic() {
+        Collection<OsmPrimitive> selection = Main.getLayerManager().getEditDataSet().getSelected();
+        boolean flag = false;
+        for (OsmPrimitive element : selection) {
+            flag = RightAndLefthandTraffic.isRightHandTraffic(element.getBBox().getCenter());
+        }
+        return flag;
     }
 }

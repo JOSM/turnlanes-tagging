@@ -228,11 +228,20 @@ public class TurnLanesEditorDialog extends ExtendedDialog {
                     bRoad.setName("Unidirectional");
                 } //Bidirectional
                 else if (key.equals("turn:lanes:forward")) {
-                    bRoad.getLanesA().setStringLanes("forward", element.get(key));
-                    bRoad.getLanesA().setType("forward");
-                    bRoad.setName("Bidirectional");
-                    if (element.hasKey("lanes:forward") && Util.isInt(element.get("lanes:forward")) && Integer.valueOf(element.get("lanes:forward")) != bRoad.getLanesA().getLanes().size()) {
-                        new Notification(tr(" The number of lanes:forward has fixed according number of turns")).show();
+                    if (Util.isRightHandTraffic()) {
+                        bRoad.getLanesC().setStringLanes("forward", element.get(key));
+                        bRoad.getLanesC().setType("forward");
+                        bRoad.setName("Bidirectional");
+                        if (element.hasKey("lanes:forward") && Util.isInt(element.get("lanes:forward")) && Integer.valueOf(element.get("lanes:forward")) != bRoad.getLanesC().getLanes().size()) {
+                            new Notification(tr(" The number of lanes:forward has fixed according number of turns")).show();
+                        }
+                    } else {
+                        bRoad.getLanesA().setStringLanes("forward", element.get(key));
+                        bRoad.getLanesA().setType("forward");
+                        bRoad.setName("Bidirectional");
+                        if (element.hasKey("lanes:forward") && Util.isInt(element.get("lanes:forward")) && Integer.valueOf(element.get("lanes:forward")) != bRoad.getLanesA().getLanes().size()) {
+                            new Notification(tr(" The number of lanes:forward has fixed according number of turns")).show();
+                        }
                     }
                 } else if (key.equals("turn:lanes:both_ways")) {
                     bRoad.getLanesB().setStringLanes("both_ways", element.get(key));
@@ -242,25 +251,46 @@ public class TurnLanesEditorDialog extends ExtendedDialog {
                         new Notification(tr(" The number of lanes:both_ways has fixed according number of turns")).show();
                     }
                 } else if (key.equals("turn:lanes:backward")) {
-                    bRoad.getLanesC().setStringLanes("backward", element.get(key));
-                    bRoad.getLanesC().setType("backward");
-                    bRoad.setName("Bidirectional");
-                    if (element.hasKey("lanes:backward") && Util.isInt(element.get("lanes:backward")) && Integer.valueOf(element.get("lanes:backward")) != bRoad.getLanesC().getLanes().size()) {
-                        new Notification(tr(" The number of lanes:backward has fixed according number of turns")).show();
+                    if (Util.isRightHandTraffic()) {
+                        bRoad.getLanesA().setStringLanes("backward", element.get(key));
+                        bRoad.getLanesA().setType("backward");
+                        bRoad.setName("Bidirectional");
+                        if (element.hasKey("lanes:backward") && Util.isInt(element.get("lanes:backward")) && Integer.valueOf(element.get("lanes:backward")) != bRoad.getLanesA().getLanes().size()) {
+                            new Notification(tr(" The number of lanes:backward has fixed according number of turns")).show();
+                        }
+                    } else {
+                        bRoad.getLanesC().setStringLanes("backward", element.get(key));
+                        bRoad.getLanesC().setType("backward");
+                        bRoad.setName("Bidirectional");
+                        if (element.hasKey("lanes:backward") && Util.isInt(element.get("lanes:backward")) && Integer.valueOf(element.get("lanes:backward")) != bRoad.getLanesC().getLanes().size()) {
+                            new Notification(tr(" The number of lanes:backward has fixed according number of turns")).show();
+                        }
                     }
                 } //in case the road has just lanes
                 else if (key.equals("lanes:forward") && Util.isInt(element.get(key)) && !element.hasKey("turn:lanes:forward")) {
-                    bRoad.setLanesA(presetsData.defaultLanes("forward", Integer.valueOf(element.get(key))));
-                    bRoad.getLanesA().setType("forward");
-                    bRoad.setName("Bidirectional");
+                    if (Util.isRightHandTraffic()) {
+                        bRoad.setLanesC(presetsData.defaultLanes("forward", Integer.valueOf(element.get(key))));
+                        bRoad.getLanesC().setType("forward");
+                        bRoad.setName("Bidirectional");
+                    } else {
+                        bRoad.setLanesA(presetsData.defaultLanes("forward", Integer.valueOf(element.get(key))));
+                        bRoad.getLanesA().setType("forward");
+                        bRoad.setName("Bidirectional");
+                    }
                 } else if (key.equals("lanes:both_ways") && Util.isInt(element.get(key)) && !element.hasKey("turn:lanes:both_ways")) {
                     bRoad.setLanesB(presetsData.defaultLanes("both_ways", Integer.valueOf(element.get(key))));
                     bRoad.getLanesB().setType("both_ways");
                     bRoad.setName("Bidirectional");
                 } else if (key.equals("lanes:backward") && Util.isInt(element.get(key)) && !element.hasKey("turn:lanes:backward")) {
-                    bRoad.setLanesC(presetsData.defaultLanes("backward", Integer.valueOf(element.get(key))));
-                    bRoad.getLanesC().setType("backward");
-                    bRoad.setName("Bidirectional");
+                    if (Util.isRightHandTraffic()) {
+                        bRoad.setLanesA(presetsData.defaultLanes("backward", Integer.valueOf(element.get(key))));
+                        bRoad.getLanesA().setType("backward");
+                        bRoad.setName("Bidirectional");
+                    } else {
+                        bRoad.setLanesC(presetsData.defaultLanes("backward", Integer.valueOf(element.get(key))));
+                        bRoad.getLanesC().setType("backward");
+                        bRoad.setName("Bidirectional");
+                    }
                 }
                 //Notifications
                 if (key.equals("oneway") && element.get(key).equals("-1")) {
