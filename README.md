@@ -20,7 +20,7 @@ TurnLanes-tagging Editor plugin provides an alternative way to add [turn:lanes t
 
 Default shortcut `Alt+Shift+2`
 
-## Its main features are:
+## The main features are:
 
 - The plugin is enabled after the highway is selected.
 - The plugin contains the combinations of most common preset turn lanes according mapbox-data-team
