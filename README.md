@@ -2,7 +2,7 @@
 
 TurnLanes-tagging Editor plugin provides an alternative way to add [turn:lanes tags](http://wiki.openstreetmap.org/wiki/Key:turn#Turning_indications_per_lane) on highways
 
-## Installation
+## Installing the plugin
 
 ![turnlanes91-21](https://cloud.githubusercontent.com/assets/1152236/16094397/b7184c3c-3305-11e6-8294-1a1af89a3e60.gif)
 
