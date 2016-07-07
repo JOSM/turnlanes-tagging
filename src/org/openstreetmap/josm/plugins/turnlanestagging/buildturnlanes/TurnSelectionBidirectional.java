@@ -272,7 +272,7 @@ public class TurnSelectionBidirectional extends JPanel {
         jpnlturnsA.revalidate();
         jpnlturnsA.repaint();
 
-        if (isRightHandTraffic()) {
+        if (Util.isRightHandTraffic()) {
             labelA.setText("Number of backward lanes");
             bLanes.setType("backward");
         } else {
@@ -301,7 +301,7 @@ public class TurnSelectionBidirectional extends JPanel {
 
             for (int i = numLanes - 1; i >= 0; i--) {
                 BLane bLine = listBLanes.get(i);
-                final TurnSelection turnSelection = new TurnSelection(bLine, numLanes, isRightHandTraffic());
+                final TurnSelection turnSelection = new TurnSelection(bLine, numLanes, Util.isRightHandTraffic());
                 turnSelection.addPropertyChangeListener(new PropertyChangeListener() {
                     @Override
                     public void propertyChange(PropertyChangeEvent evt) {
@@ -345,7 +345,7 @@ public class TurnSelectionBidirectional extends JPanel {
             final List<BLane> listBLanes = bLanesB.getLanes();
             for (int i = 0; i < numLanes; i++) {
                 BLane bLine = listBLanes.get(i);
-                final TurnSelection turnSelection = new TurnSelection(bLine, numLanes, isRightHandTraffic());
+                final TurnSelection turnSelection = new TurnSelection(bLine, numLanes, Util.isRightHandTraffic());
                 turnSelection.addPropertyChangeListener(new PropertyChangeListener() {
                     @Override
                     public void propertyChange(PropertyChangeEvent evt) {
@@ -372,7 +372,7 @@ public class TurnSelectionBidirectional extends JPanel {
         jpnlturnsC.removeAll();
         jpnlturnsC.revalidate();
         jpnlturnsC.repaint();
-        if (isRightHandTraffic()) {
+        if (Util.isRightHandTraffic()) {
             labelC.setText("Number of forward lanes");
             bLanes.setType("forward");
         } else {
@@ -399,7 +399,7 @@ public class TurnSelectionBidirectional extends JPanel {
             final List<BLane> listBLanes = bLanesC.getLanes();
             for (int i = 0; i < numLanes; i++) {
                 BLane bLine = listBLanes.get(i);
-                final TurnSelection turnSelection = new TurnSelection(bLine, numLanes, isRightHandTraffic());
+                final TurnSelection turnSelection = new TurnSelection(bLine, numLanes, Util.isRightHandTraffic());
                 turnSelection.addPropertyChangeListener(new PropertyChangeListener() {
                     @Override
                     public void propertyChange(PropertyChangeEvent evt) {
@@ -452,7 +452,7 @@ public class TurnSelectionBidirectional extends JPanel {
         int lanes = Integer.valueOf(spinnerA.getValue().toString());
 
         if (eventSpinerA) {
-            if (isRightHandTraffic()) {
+            if (Util.isRightHandTraffic()) {
                 if (lanes >= bLanesA.getLanes().size()) {
                     bLanesA = presetsData.addLanes((BLanes) Util.clone(bLanesA), "backward", lanes - bLanesA.getLanes().size());
                 } else {
@@ -496,7 +496,7 @@ public class TurnSelectionBidirectional extends JPanel {
     private void listenerC() {
         int lanes = Integer.valueOf(spinnerC.getValue().toString());
         if (eventSpinerC) {
-            if (isRightHandTraffic()) {
+            if (Util.isRightHandTraffic()) {
 
                 if (lanes >= bLanesC.getLanes().size()) {
                     bLanesC = presetsData.addLanes((BLanes) Util.clone(bLanesC), "forward", lanes - bLanesC.getLanes().size());
@@ -523,12 +523,5 @@ public class TurnSelectionBidirectional extends JPanel {
         eventSpinerC = true;
     }
 
-    public boolean isRightHandTraffic() {
-        Collection<OsmPrimitive> selection = Main.getLayerManager().getEditDataSet().getSelected();
-        boolean flag = false;
-        for (OsmPrimitive element : selection) {
-            flag = RightAndLefthandTraffic.isRightHandTraffic(element.getBBox().getCenter());
-        }
-        return flag;
-    }
+
 }
