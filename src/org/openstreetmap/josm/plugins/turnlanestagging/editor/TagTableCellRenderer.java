@@ -116,11 +116,7 @@ public class TagTableCellRenderer extends JLabel implements TableCellRenderer {
      */
     protected void renderColor(TagModel tagModel, TagEditorModel model, boolean isSelected, boolean isvalTag) {
         if (isvalTag) {
-            if (isSelected) {
-                setBackground(new Color(247, 246, 225));
-            } else {
-                setBackground(new Color(247, 246, 225));
-            }
+            setBackground(new Color(247, 246, 225));
         } else {
             if (isSelected) {
                 setBackground(UIManager.getColor("Table.selectionBackground"));
