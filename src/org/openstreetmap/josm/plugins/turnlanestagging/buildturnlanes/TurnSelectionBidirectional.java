@@ -10,7 +10,6 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.Collection;
 import java.util.List;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
@@ -25,14 +24,12 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import org.openstreetmap.josm.Main;
-import org.openstreetmap.josm.data.osm.OsmPrimitive;
+import static org.openstreetmap.josm.gui.mappaint.mapcss.ExpressionFactory.Functions.tr;
 import org.openstreetmap.josm.plugins.turnlanestagging.bean.BLane;
 import org.openstreetmap.josm.plugins.turnlanestagging.bean.BLanes;
 import org.openstreetmap.josm.plugins.turnlanestagging.bean.BRoad;
 import org.openstreetmap.josm.plugins.turnlanestagging.preset.PresetsData;
 import org.openstreetmap.josm.plugins.turnlanestagging.util.Util;
-import org.openstreetmap.josm.tools.RightAndLefthandTraffic;
 
 /**
  *
@@ -142,7 +139,7 @@ public class TurnSelectionBidirectional extends JPanel {
             }
         });
 
-        labelA = new JLabel("Forward");
+        labelA = new JLabel(tr("Forward"));
         jpnlSelectWardA.add(labelA, BorderLayout.LINE_START);
         jpnlSelectWardA.add(jpnContentSpinnerA, BorderLayout.LINE_END);
         jpnlSelectWardA.setBorder(new SoftBevelBorder(BevelBorder.RAISED));
@@ -160,7 +157,7 @@ public class TurnSelectionBidirectional extends JPanel {
         gbc.gridy = 0;
         gbc.weightx = 4;
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        jpnlSelectWardB.add(new JLabel("Both way lane"), gbc);
+        jpnlSelectWardB.add(new JLabel(tr("Both way lane")), gbc);
         gbc.gridx = 1;
         gbc.gridy = 0;
         gbc.weightx = 1;
@@ -190,7 +187,7 @@ public class TurnSelectionBidirectional extends JPanel {
         });
 
         jpnlSelectWardC.setBorder(new SoftBevelBorder(BevelBorder.RAISED));
-        labelC = new JLabel("Backward");
+        labelC = new JLabel(tr("Backward"));
         jpnlSelectWardC.add(labelC, BorderLayout.LINE_START);
         jpnlSelectWardC.add(jpnContentSpinnerC, BorderLayout.LINE_END);
         jpnlturnsC = new JPanel();
@@ -272,54 +269,73 @@ public class TurnSelectionBidirectional extends JPanel {
         jpnlturnsA.revalidate();
         jpnlturnsA.repaint();
 
-        if (Util.isRightHandTraffic()) {
-            labelA.setText("Number of backward lanes");
-            bLanes.setType("backward");
-        } else {
-            labelA.setText("Number of forward lanes");
-            bLanes.setType("forward");
-        }
-
         //change without event
         eventSpinerA = false;
         spinnerA.setValue(bLanes.getLanes().size());
         eventSpinerA = true;
 
         if (bLanes.getLanes().size() > 0) {
-            String txt;
-            if (bLanes.getType().equals("forward")) {
-                txt = "Forward";
-            } else {
-                txt = "Backward";
-            }
-
-            jpnlturnsA.setBorder(javax.swing.BorderFactory.createTitledBorder(null, txt, javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.CENTER, null, new java.awt.Color(102, 102, 102)));
-            jpnlturnsA.removeAll();
-            int numLanes = bLanesA.getLanes().size();
-            jpnlturnsA.setLayout(new GridLayout(1, numLanes));
-            final List<BLane> listBLanes = bLanesA.getLanes();
-
-            for (int i = numLanes - 1; i >= 0; i--) {
-                BLane bLine = listBLanes.get(i);
-                final TurnSelection turnSelection = new TurnSelection(bLine, numLanes, Util.isRightHandTraffic());
-                turnSelection.addPropertyChangeListener(new PropertyChangeListener() {
-                    @Override
-                    public void propertyChange(PropertyChangeEvent evt) {
-                        if (evt.getPropertyName().equals(TurnSelection.Left_CHANGED)
-                                || evt.getPropertyName().equals(TurnSelection.Right_CHANGED)
-                                || evt.getPropertyName().equals(TurnSelection.Through_CHANGED)
-                                || evt.getPropertyName().equals(TurnSelection.Slight_right_CHANGED)
-                                || evt.getPropertyName().equals(TurnSelection.Slight_left_CHANGED)
-                                || evt.getPropertyName().equals(TurnSelection.Merge_to_right_CHANGED)
-                                || evt.getPropertyName().equals(TurnSelection.Merge_to_left_CHANGED)
-                                || evt.getPropertyName().equals(TurnSelection.Reverse_CHANGED)) {
-                            listBLanes.add((BLane) evt.getNewValue());
-                            bLanesA.setLanes(listBLanes);
-                            printChageLanes();
+            if (Util.isRightHandTraffic()) {
+                labelA.setText(tr("Number of backward lanes"));
+                bLanes.setType("backward");
+                jpnlturnsA.setBorder(javax.swing.BorderFactory.createTitledBorder(null, tr("Backward"), javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.CENTER, null, new java.awt.Color(102, 102, 102)));
+                jpnlturnsA.removeAll();
+                int numLanes = bLanesA.getLanes().size();
+                jpnlturnsA.setLayout(new GridLayout(1, numLanes));
+                final List<BLane> listBLanes = bLanesA.getLanes();
+                for (int i = numLanes - 1; i >= 0; i--) {
+                    BLane bLine = listBLanes.get(i);
+                    final TurnSelection turnSelection = new TurnSelection(bLine, numLanes, Util.isRightHandTraffic());
+                    turnSelection.addPropertyChangeListener(new PropertyChangeListener() {
+                        @Override
+                        public void propertyChange(PropertyChangeEvent evt) {
+                            if (evt.getPropertyName().equals(TurnSelection.Left_CHANGED)
+                                    || evt.getPropertyName().equals(TurnSelection.Right_CHANGED)
+                                    || evt.getPropertyName().equals(TurnSelection.Through_CHANGED)
+                                    || evt.getPropertyName().equals(TurnSelection.Slight_right_CHANGED)
+                                    || evt.getPropertyName().equals(TurnSelection.Slight_left_CHANGED)
+                                    || evt.getPropertyName().equals(TurnSelection.Merge_to_right_CHANGED)
+                                    || evt.getPropertyName().equals(TurnSelection.Merge_to_left_CHANGED)
+                                    || evt.getPropertyName().equals(TurnSelection.Reverse_CHANGED)) {
+                                listBLanes.add((BLane) evt.getNewValue());
+                                bLanesA.setLanes(listBLanes);
+                                printChageLanes();
+                            }
                         }
-                    }
-                });
-                jpnlturnsA.add(turnSelection);
+                    });
+                    jpnlturnsA.add(turnSelection);
+                }
+            } else {
+                labelA.setText(tr("Number of forward lanes"));
+                bLanes.setType("forward");
+                jpnlturnsA.setBorder(javax.swing.BorderFactory.createTitledBorder(null, tr("Forward"), javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.CENTER, null, new java.awt.Color(102, 102, 102)));
+                jpnlturnsA.removeAll();
+                int numLanes = bLanesA.getLanes().size();
+                jpnlturnsA.setLayout(new GridLayout(1, numLanes));
+                final List<BLane> listBLanes = bLanesA.getLanes();
+                for (int i = 0; i < numLanes; i++) {
+                    BLane bLine = listBLanes.get(i);
+                    final TurnSelection turnSelection = new TurnSelection(bLine, numLanes, Util.isRightHandTraffic());
+                    turnSelection.addPropertyChangeListener(new PropertyChangeListener() {
+                        @Override
+                        public void propertyChange(PropertyChangeEvent evt) {
+                            if (evt.getPropertyName().equals(TurnSelection.Left_CHANGED)
+                                    || evt.getPropertyName().equals(TurnSelection.Right_CHANGED)
+                                    || evt.getPropertyName().equals(TurnSelection.Through_CHANGED)
+                                    || evt.getPropertyName().equals(TurnSelection.Slight_right_CHANGED)
+                                    || evt.getPropertyName().equals(TurnSelection.Slight_left_CHANGED)
+                                    || evt.getPropertyName().equals(TurnSelection.Merge_to_right_CHANGED)
+                                    || evt.getPropertyName().equals(TurnSelection.Merge_to_left_CHANGED)
+                                    || evt.getPropertyName().equals(TurnSelection.Reverse_CHANGED)) {
+                                listBLanes.add((BLane) evt.getNewValue());
+                                bLanesA.setLanes(listBLanes);
+                                printChageLanes();
+                            }
+                        }
+                    });
+                    jpnlturnsA.add(turnSelection);
+                }
+
             }
             printChageLanes();
             jpnlturnsA.revalidate();
@@ -337,8 +353,7 @@ public class TurnSelectionBidirectional extends JPanel {
             if (bLanes.getType().equals("both_ways")) {
                 jchbothwayB.setSelected(true);
             }
-
-            jpnlturnsB.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Both way", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.CENTER, null, new java.awt.Color(102, 102, 102)));
+            jpnlturnsB.setBorder(javax.swing.BorderFactory.createTitledBorder(null, tr("Both way"), javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.CENTER, null, new java.awt.Color(102, 102, 102)));
             bLanesB.setType(bLanes.getType());
             int numLanes = bLanesB.getLanes().size();
             jpnlturnsB.setLayout(new GridLayout(1, numLanes));
@@ -372,13 +387,6 @@ public class TurnSelectionBidirectional extends JPanel {
         jpnlturnsC.removeAll();
         jpnlturnsC.revalidate();
         jpnlturnsC.repaint();
-        if (Util.isRightHandTraffic()) {
-            labelC.setText("Number of forward lanes");
-            bLanes.setType("forward");
-        } else {
-            labelC.setText("Number of backward lanes");
-            bLanes.setType("backward");
-        }
 
         //change without event
         eventSpinerC = false;
@@ -387,37 +395,67 @@ public class TurnSelectionBidirectional extends JPanel {
 
         if (bLanes.getLanes().size() > 0) {
             String txt;
-            if (bLanes.getType().equals("forward")) {
-                txt = "Forward";
-            } else {
-                txt = "Backward";
-            }
-            jpnlturnsC.setBorder(javax.swing.BorderFactory.createTitledBorder(null, txt, javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.CENTER, null, new java.awt.Color(102, 102, 102)));
-            jpnlturnsC.removeAll();
-            int numLanes = bLanesC.getLanes().size();
-            jpnlturnsC.setLayout(new GridLayout(1, numLanes));
-            final List<BLane> listBLanes = bLanesC.getLanes();
-            for (int i = 0; i < numLanes; i++) {
-                BLane bLine = listBLanes.get(i);
-                final TurnSelection turnSelection = new TurnSelection(bLine, numLanes, Util.isRightHandTraffic());
-                turnSelection.addPropertyChangeListener(new PropertyChangeListener() {
-                    @Override
-                    public void propertyChange(PropertyChangeEvent evt) {
-                        if (evt.getPropertyName().equals(TurnSelection.Left_CHANGED)
-                                || evt.getPropertyName().equals(TurnSelection.Right_CHANGED)
-                                || evt.getPropertyName().equals(TurnSelection.Through_CHANGED)
-                                || evt.getPropertyName().equals(TurnSelection.Slight_right_CHANGED)
-                                || evt.getPropertyName().equals(TurnSelection.Slight_left_CHANGED)
-                                || evt.getPropertyName().equals(TurnSelection.Merge_to_right_CHANGED)
-                                || evt.getPropertyName().equals(TurnSelection.Merge_to_left_CHANGED)
-                                || evt.getPropertyName().equals(TurnSelection.Reverse_CHANGED)) {
-                            listBLanes.add((BLane) evt.getNewValue());
-                            bLanesC.setLanes(listBLanes);
-                            printChageLanes();
+
+            if (Util.isRightHandTraffic()) {
+                labelC.setText(tr("Number of forward lanes"));
+                bLanes.setType("forward");
+                jpnlturnsC.setBorder(javax.swing.BorderFactory.createTitledBorder(null, tr("Forward"), javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.CENTER, null, new java.awt.Color(102, 102, 102)));
+                jpnlturnsC.removeAll();
+                int numLanes = bLanesC.getLanes().size();
+                jpnlturnsC.setLayout(new GridLayout(1, numLanes));
+                final List<BLane> listBLanes = bLanesC.getLanes();
+                for (int i = 0; i < numLanes; i++) {
+                    BLane bLine = listBLanes.get(i);
+                    final TurnSelection turnSelection = new TurnSelection(bLine, numLanes, Util.isRightHandTraffic());
+                    turnSelection.addPropertyChangeListener(new PropertyChangeListener() {
+                        @Override
+                        public void propertyChange(PropertyChangeEvent evt) {
+                            if (evt.getPropertyName().equals(TurnSelection.Left_CHANGED)
+                                    || evt.getPropertyName().equals(TurnSelection.Right_CHANGED)
+                                    || evt.getPropertyName().equals(TurnSelection.Through_CHANGED)
+                                    || evt.getPropertyName().equals(TurnSelection.Slight_right_CHANGED)
+                                    || evt.getPropertyName().equals(TurnSelection.Slight_left_CHANGED)
+                                    || evt.getPropertyName().equals(TurnSelection.Merge_to_right_CHANGED)
+                                    || evt.getPropertyName().equals(TurnSelection.Merge_to_left_CHANGED)
+                                    || evt.getPropertyName().equals(TurnSelection.Reverse_CHANGED)) {
+                                listBLanes.add((BLane) evt.getNewValue());
+                                bLanesC.setLanes(listBLanes);
+                                printChageLanes();
+                            }
                         }
-                    }
-                });
-                jpnlturnsC.add(turnSelection);
+                    });
+                    jpnlturnsC.add(turnSelection);
+                }
+            } else {
+                labelC.setText(tr("Number of backward lanes"));
+                bLanes.setType("backward");
+                jpnlturnsC.setBorder(javax.swing.BorderFactory.createTitledBorder(null, tr("Backward"), javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.CENTER, null, new java.awt.Color(102, 102, 102)));
+                jpnlturnsC.removeAll();
+                int numLanes = bLanesC.getLanes().size();
+                jpnlturnsC.setLayout(new GridLayout(1, numLanes));
+                final List<BLane> listBLanes = bLanesC.getLanes();
+                for (int i = numLanes - 1; i >= 0; i--) {
+                    BLane bLine = listBLanes.get(i);
+                    final TurnSelection turnSelection = new TurnSelection(bLine, numLanes, Util.isRightHandTraffic());
+                    turnSelection.addPropertyChangeListener(new PropertyChangeListener() {
+                        @Override
+                        public void propertyChange(PropertyChangeEvent evt) {
+                            if (evt.getPropertyName().equals(TurnSelection.Left_CHANGED)
+                                    || evt.getPropertyName().equals(TurnSelection.Right_CHANGED)
+                                    || evt.getPropertyName().equals(TurnSelection.Through_CHANGED)
+                                    || evt.getPropertyName().equals(TurnSelection.Slight_right_CHANGED)
+                                    || evt.getPropertyName().equals(TurnSelection.Slight_left_CHANGED)
+                                    || evt.getPropertyName().equals(TurnSelection.Merge_to_right_CHANGED)
+                                    || evt.getPropertyName().equals(TurnSelection.Merge_to_left_CHANGED)
+                                    || evt.getPropertyName().equals(TurnSelection.Reverse_CHANGED)) {
+                                listBLanes.add((BLane) evt.getNewValue());
+                                bLanesC.setLanes(listBLanes);
+                                printChageLanes();
+                            }
+                        }
+                    });
+                    jpnlturnsC.add(turnSelection);
+                }
             }
             //after preset the actions to update
             printChageLanes();
@@ -522,6 +560,5 @@ public class TurnSelectionBidirectional extends JPanel {
         }
         eventSpinerC = true;
     }
-
 
 }
