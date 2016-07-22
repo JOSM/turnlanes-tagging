@@ -9,7 +9,9 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.swing.AbstractAction;
 import static javax.swing.Action.ACCELERATOR_KEY;
 import static javax.swing.Action.NAME;
@@ -41,13 +43,14 @@ public class TurnLanesEditorDialog extends ExtendedDialog {
 
   // Unique instance      
   static private TurnLanesEditorDialog instance = null;
+  Map<String, String> tags = new HashMap<>();
 
   //constructor
   protected TurnLanesEditorDialog() {
     super(Main.parent, "", null, false, false);
     build();
   }
-
+  
   static public TurnLanesEditorDialog getInstance() {
     if (instance == null) {
       instance = new TurnLanesEditorDialog();
@@ -64,7 +67,7 @@ public class TurnLanesEditorDialog extends ExtendedDialog {
 
   // Last Editions 
   List<BRoad> lastEdits = new ArrayList<>();
-
+  
   protected void build() {
     //Parameters for Dialog
     getContentPane().setLayout(new BorderLayout());
@@ -84,7 +87,7 @@ public class TurnLanesEditorDialog extends ExtendedDialog {
             pnlPresetGrid,
             pnlTagGrid
     );
-
+    
     setMinimumSize(MIN_SIZE);
     splitPane.setOneTouchExpandable(true);
     splitPane.setDividerLocation(380);
@@ -108,7 +111,7 @@ public class TurnLanesEditorDialog extends ExtendedDialog {
     tagEditor = new TagEditor();
     return tagEditor;
   }
-
+  
   public TagEditorModel getModel() {
     return tagEditor.getModel();
   }
@@ -123,17 +126,21 @@ public class TurnLanesEditorDialog extends ExtendedDialog {
           addTagOnRoad((BRoad) evt.getNewValue());
           jbOk.requestFocus();
         }
-
+        
       }
     });
     return buildTurnLanes;
   }
-
+  
   public PresetsTableModel getPressetTableModel() {
     return buildTurnLanes.getModel();
   }
-
+  
   public void startEditSession() {
+    
+    if (waySelected() != null) {
+      tags = waySelected().getKeys();
+    }
     tagEditor.getModel().clearAppliedPresets();
     tagEditor.getModel().initFromJOSMSelection();
     getModel().ensureOneTag();
@@ -142,29 +149,31 @@ public class TurnLanesEditorDialog extends ExtendedDialog {
 
   //Buton Actions
   class CancelAction extends AbstractAction {
-
+    
     public CancelAction() {
       putValue(NAME, tr("Cancel"));
       putValue(SMALL_ICON, ImageProvider.get("cancel"));
       putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0));
       putValue(SHORT_DESCRIPTION, tr("Abort tag editing and close dialog"));
     }
-
+    
     @Override
     public void actionPerformed(ActionEvent arg0) {
+      waySelected().setKeys(tags);
+      waySelected().setModified(false);
       setVisible(false);
     }
   }
-
+  
   class OKAction extends AbstractAction implements PropertyChangeListener {
-
+    
     public OKAction() {
       putValue(NAME, tr("OK"));
       putValue(SMALL_ICON, ImageProvider.get("ok"));
       putValue(SHORT_DESCRIPTION, tr("Apply edited tags and close dialog"));
       putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke("ctrl ENTER"));
     }
-
+    
     @Override
     public void actionPerformed(ActionEvent e) {
       run();
@@ -172,7 +181,7 @@ public class TurnLanesEditorDialog extends ExtendedDialog {
       buildTurnLanes.addLastEditInTable();
       buildTurnLanes.clearSelection();
     }
-
+    
     public void run() {
       tagEditor.stopEditing();
       setVisible(false);
@@ -181,7 +190,7 @@ public class TurnLanesEditorDialog extends ExtendedDialog {
       ds.fireSelectionChanged();
       Main.parent.repaint(); // repaint all
     }
-
+    
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
       if (!evt.getPropertyName().equals(TagEditorModel.PROP_DIRTY)) {
@@ -193,7 +202,7 @@ public class TurnLanesEditorDialog extends ExtendedDialog {
       setEnabled(true);
     }
   }
-
+  
   public boolean addOneway() {
     Collection<OsmPrimitive> selection = Main.getLayerManager().getEditDataSet().getSelected();
     for (OsmPrimitive element : selection) {
@@ -203,7 +212,7 @@ public class TurnLanesEditorDialog extends ExtendedDialog {
     }
     return false;
   }
-
+  
   public void setRoadProperties() {
     //Set the selection Roads
     PresetsData presetsData = new PresetsData();
@@ -320,7 +329,7 @@ public class TurnLanesEditorDialog extends ExtendedDialog {
       }
     }
   }
-
+  
   public void addTagOnRoad(BRoad bRoad) {
     //Clear
     tagEditor.getModel().delete("turn:lanes");
@@ -331,7 +340,7 @@ public class TurnLanesEditorDialog extends ExtendedDialog {
     tagEditor.getModel().delete("lanes:both_ways");
     tagEditor.getModel().delete("turn:lanes:backward");
     tagEditor.getModel().delete("lanes:backward");
-
+    
     if (bRoad.getName().equals("Unidirectional")) {
       if (Util.isEmptyturnlane(bRoad.getLanesUnid().getTagturns())) {
         if (bRoad.isNone()) {
@@ -397,8 +406,22 @@ public class TurnLanesEditorDialog extends ExtendedDialog {
       tagEditor.getModel().applyKeyValuePair(new KeyValuePair("lanes", String.valueOf(bRoad.getNumLanesBidirectional())));
     }
     tagEditor.repaint();
+    
+    if (waySelected() != null) {
+      waySelected().setKeys(tagEditor.getModel().getTags());
+      waySelected().setModified(true);
+    }
+    
   }
-
+  
+  public OsmPrimitive waySelected() {
+    Collection<OsmPrimitive> selection = Main.getLayerManager().getEditDataSet().getSelected();
+    for (OsmPrimitive element : selection) {
+      return element;
+    }
+    return null;
+  }
+  
   public void setEnableOK(boolean active) {
     jbOk.setEnabled(active);
   }
