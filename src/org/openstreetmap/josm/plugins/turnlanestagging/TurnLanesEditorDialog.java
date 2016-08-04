@@ -9,7 +9,9 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.swing.AbstractAction;
 import static javax.swing.Action.ACCELERATOR_KEY;
 import static javax.swing.Action.NAME;
@@ -24,6 +26,7 @@ import javax.swing.KeyStroke;
 import org.openstreetmap.josm.Main;
 import org.openstreetmap.josm.data.osm.DataSet;
 import org.openstreetmap.josm.data.osm.OsmPrimitive;
+import org.openstreetmap.josm.data.osm.TagMap;
 import org.openstreetmap.josm.gui.Notification;
 import org.openstreetmap.josm.gui.tagging.TagEditorModel;
 import org.openstreetmap.josm.plugins.turnlanestagging.bean.BRoad;
@@ -35,12 +38,14 @@ import org.openstreetmap.josm.plugins.turnlanestagging.preset.PresetsData;
 import org.openstreetmap.josm.plugins.turnlanestagging.util.Util;
 import org.openstreetmap.josm.tools.ImageProvider;
 import org.openstreetmap.josm.gui.ExtendedDialog;
+import org.openstreetmap.josm.gui.tagging.TagModel;
 import static org.openstreetmap.josm.tools.I18n.tr;
 
 public class TurnLanesEditorDialog extends ExtendedDialog {
 
     // Unique instance      
     static private TurnLanesEditorDialog instance = null;
+    Map<String, String> tags = new HashMap<>();
 
     //constructor
     protected TurnLanesEditorDialog() {
@@ -134,6 +139,10 @@ public class TurnLanesEditorDialog extends ExtendedDialog {
     }
 
     public void startEditSession() {
+
+        if (waySelected() != null) {
+            tags = waySelected().getKeys();
+        }
         tagEditor.getModel().clearAppliedPresets();
         tagEditor.getModel().initFromJOSMSelection();
         getModel().ensureOneTag();
@@ -152,6 +161,8 @@ public class TurnLanesEditorDialog extends ExtendedDialog {
 
         @Override
         public void actionPerformed(ActionEvent arg0) {
+            waySelected().setKeys(tags);
+            waySelected().setModified(false);
             setVisible(false);
         }
     }
@@ -176,10 +187,11 @@ public class TurnLanesEditorDialog extends ExtendedDialog {
         public void run() {
             tagEditor.stopEditing();
             setVisible(false);
+            waySelected().setKeys(tags);
             tagEditor.getModel().updateJOSMSelection();
             DataSet ds = Main.getLayerManager().getEditDataSet();
             ds.fireSelectionChanged();
-            Main.parent.repaint(); // repaint all
+            Main.parent.repaint();// repaint all
         }
 
         @Override
@@ -397,6 +409,22 @@ public class TurnLanesEditorDialog extends ExtendedDialog {
             tagEditor.getModel().applyKeyValuePair(new KeyValuePair("lanes", String.valueOf(bRoad.getNumLanesBidirectional())));
         }
         tagEditor.repaint();
+
+        if (waySelected() != null) {
+            waySelected().setKeys(tagEditor.getModel().getTags());
+//            DataSet ds = Main.getLayerManager().getEditDataSet();
+//            ds.fireSelectionChanged();
+            // waySelected().setModified(true);
+        }
+
+    }
+
+    public OsmPrimitive waySelected() {
+        Collection<OsmPrimitive> selection = Main.getLayerManager().getEditDataSet().getSelected();
+        for (OsmPrimitive element : selection) {
+            return element;
+        }
+        return null;
     }
 
     public void setEnableOK(boolean active) {
