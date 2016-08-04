@@ -177,7 +177,6 @@ public class TurnSelectionUnidirectional extends JPanel {
     }
 
     class SPinnerListener implements ChangeListener {
-
         @Override
         public void stateChanged(ChangeEvent e) {
             int lanes = Integer.valueOf(spinner.getValue().toString());
