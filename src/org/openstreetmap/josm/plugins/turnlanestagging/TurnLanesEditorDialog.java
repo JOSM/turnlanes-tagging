@@ -26,7 +26,6 @@ import javax.swing.KeyStroke;
 import org.openstreetmap.josm.Main;
 import org.openstreetmap.josm.data.osm.DataSet;
 import org.openstreetmap.josm.data.osm.OsmPrimitive;
-import org.openstreetmap.josm.data.osm.TagMap;
 import org.openstreetmap.josm.gui.Notification;
 import org.openstreetmap.josm.gui.tagging.TagEditorModel;
 import org.openstreetmap.josm.plugins.turnlanestagging.bean.BRoad;
@@ -38,7 +37,6 @@ import org.openstreetmap.josm.plugins.turnlanestagging.preset.PresetsData;
 import org.openstreetmap.josm.plugins.turnlanestagging.util.Util;
 import org.openstreetmap.josm.tools.ImageProvider;
 import org.openstreetmap.josm.gui.ExtendedDialog;
-import org.openstreetmap.josm.gui.tagging.TagModel;
 import static org.openstreetmap.josm.tools.I18n.tr;
 
 public class TurnLanesEditorDialog extends ExtendedDialog {
@@ -128,7 +126,6 @@ public class TurnLanesEditorDialog extends ExtendedDialog {
                     addTagOnRoad((BRoad) evt.getNewValue());
                     jbOk.requestFocus();
                 }
-
             }
         });
         return buildTurnLanes;
@@ -161,7 +158,9 @@ public class TurnLanesEditorDialog extends ExtendedDialog {
 
         @Override
         public void actionPerformed(ActionEvent arg0) {
-            waySelected().setKeys(tags);
+            if (waySelected() != null) {
+                waySelected().setKeys(tags);
+            }
             waySelected().setModified(false);
             setVisible(false);
         }
@@ -412,9 +411,6 @@ public class TurnLanesEditorDialog extends ExtendedDialog {
 
         if (waySelected() != null) {
             waySelected().setKeys(tagEditor.getModel().getTags());
-//            DataSet ds = Main.getLayerManager().getEditDataSet();
-//            ds.fireSelectionChanged();
-            // waySelected().setModified(true);
         }
 
     }

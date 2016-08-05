@@ -155,12 +155,18 @@ public class BuildTurnLanes extends JPanel {
 
         @Override
         public void mouseClicked(MouseEvent e) {
+            BRoad br = new BRoad();
             if (e.getClickCount() == 1) {
                 int rowNum = presetsTable.rowAtPoint(e.getPoint());
                 if (listPresetRoads.get(rowNum).getName().equals("Unidirectional")) {
                     setLanesByRoadUnidirectional((BRoad) Util.clone(listPresetRoads.get(rowNum)));
                 } else {
-                    setLanesByRoadBidirectional((BRoad) Util.clone(listPresetRoads.get(rowNum)));
+                    br = (BRoad) Util.clone(listPresetRoads.get(rowNum));
+                    if (Util.isRightHandTraffic()) {
+                        br.setLanesA(br.getLanesC());
+                        br.setLanesC(((BRoad) Util.clone(listPresetRoads.get(rowNum))).getLanesA());
+                    }
+                    setLanesByRoadBidirectional(br);
                 }
             }
         }
