@@ -273,7 +273,6 @@ public class TurnSelectionBidirectional extends JPanel {
         eventSpinerA = false;
         spinnerA.setValue(bLanes.getLanes().size());
         eventSpinerA = true;
-
         if (bLanes.getLanes().size() > 0) {
             if (Util.isRightHandTraffic()) {
                 labelA.setText(tr("Number of backward lanes"));
@@ -488,7 +487,6 @@ public class TurnSelectionBidirectional extends JPanel {
 
     private void listenerA() {
         int lanes = Integer.valueOf(spinnerA.getValue().toString());
-
         if (eventSpinerA) {
             if (Util.isRightHandTraffic()) {
                 if (lanes >= bLanesA.getLanes().size()) {
