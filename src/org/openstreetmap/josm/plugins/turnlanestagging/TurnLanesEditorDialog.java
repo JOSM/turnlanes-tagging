@@ -191,7 +191,7 @@ public class TurnLanesEditorDialog extends ExtendedDialog {
             DataSet ds = Main.getLayerManager().getEditDataSet();
             ds.fireSelectionChanged();
             Main.parent.repaint();// repaint all
-            saveSelected=null;
+            saveSelected = null;
         }
 
         @Override
@@ -221,9 +221,9 @@ public class TurnLanesEditorDialog extends ExtendedDialog {
         PresetsData presetsData = new PresetsData();
         BRoad bRoad = new BRoad();
         //set as unidirectional as first
+
         bRoad.setName("Unidirectional");
-        //Collection<OsmPrimitive> selection = Main.getLayerManager().getEditDataSet().getSelected();
-//        for (OsmPrimitive element : selection) {
+
         OsmPrimitive element = waySelected();
 
         for (String key : element.keySet()) {
@@ -305,19 +305,28 @@ public class TurnLanesEditorDialog extends ExtendedDialog {
                     bRoad.getLanesC().setType("backward");
                     bRoad.setName("Bidirectional");
                 }
+            } else if (key.equals("oneway") && element.get(key).equals("yes")) {
+                bRoad.setName("Unidirectional");
+            } else if (!element.hasKey("oneway")) {
+                bRoad.setName("Bidirectional");
             }
+
             //Notifications
             if (key.equals("oneway") && element.get(key).equals("-1")) {
                 new Notification(tr("check the right direction of the way")).show();
             }
         }
-//        }
+
+        lastEdits = buildTurnLanes.getListLastEditsRoads();
         if (bRoad.getName().equals("Unidirectional")) {
             if (bRoad.getLanesUnid().getLanes().size() > 0) {
                 buildTurnLanes.setLanesByRoadUnidirectional(bRoad);
             } else {
-                //buildTurnLanes.startDefaultUnidirectional();
-                buildTurnLanes.setLastEdit();
+                if (!lastEdits.isEmpty() && lastEdits.get(0).getName().equals("Unidirectional")) {
+                    buildTurnLanes.setLastEdit();
+                } else {
+                    buildTurnLanes.startDefaultUnidirectional();
+                }
             }
         } else {
             if (bRoad.getLanesA().getLanes().size() > 0 || bRoad.getLanesB().getLanes().size() > 0 || bRoad.getLanesC().getLanes().size() > 0) {
@@ -329,8 +338,11 @@ public class TurnLanesEditorDialog extends ExtendedDialog {
                 }
                 buildTurnLanes.setLanesByRoadBidirectional(bRoad);
             } else {
-                //buildTurnLanes.startDefaultBidirectional();
-                buildTurnLanes.setLastEdit();
+                if (!lastEdits.isEmpty() && lastEdits.get(0).getName().equals("Bidirectional")) {
+                    buildTurnLanes.setLastEdit();
+                } else {
+                    buildTurnLanes.startDefaultBidirectional();
+                }
             }
         }
     }
@@ -413,7 +425,6 @@ public class TurnLanesEditorDialog extends ExtendedDialog {
         tagEditor.repaint();
 
         setPreview(waySelected());
-
     }
 
     public void setPreview(OsmPrimitive osmps) {
@@ -426,7 +437,7 @@ public class TurnLanesEditorDialog extends ExtendedDialog {
         if (osmprs != null) {
             osmprs.setKeys(tags);
             osmprs.setModified(false);
-            saveSelected=null;
+            saveSelected = null;
         }
     }
 
