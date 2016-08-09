@@ -75,7 +75,7 @@ public class BuildTurnLanes extends JPanel {
     // Data to fill  the  table
     static List<BRoad> listPresetRoads = null;
     PresetsData presetsData = new PresetsData();
-    static List<BRoad> listLastEditsRoads = new ArrayList<>();
+    private static List<BRoad> listLastEditsRoads = new ArrayList<>();
 
     //Road
     public static BRoad bRoad = new BRoad();
@@ -417,4 +417,12 @@ public class BuildTurnLanes extends JPanel {
             }
         }
     };
+
+    public List<BRoad> getListLastEditsRoads() {
+        return listLastEditsRoads;
+    }
+
+    public void setListLastEditsRoads(List<BRoad> aListLastEditsRoads) {
+        listLastEditsRoads = aListLastEditsRoads;
+    }
 }
