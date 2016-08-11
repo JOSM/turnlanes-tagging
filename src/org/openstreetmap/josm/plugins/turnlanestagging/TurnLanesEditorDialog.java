@@ -37,6 +37,7 @@ import org.openstreetmap.josm.plugins.turnlanestagging.preset.PresetsData;
 import org.openstreetmap.josm.plugins.turnlanestagging.util.Util;
 import org.openstreetmap.josm.tools.ImageProvider;
 import org.openstreetmap.josm.gui.ExtendedDialog;
+import org.openstreetmap.josm.gui.layer.MainLayerManager;
 import static org.openstreetmap.josm.tools.I18n.tr;
 
 public class TurnLanesEditorDialog extends ExtendedDialog {
@@ -100,6 +101,13 @@ public class TurnLanesEditorDialog extends ExtendedDialog {
         this.getRootPane().getActionMap().put("clickButton", new AbstractAction() {
             public void actionPerformed(ActionEvent ae) {
                 jbOk.doClick();
+            }
+        });
+
+        Main.getLayerManager().addActiveLayerChangeListener(new MainLayerManager.ActiveLayerChangeListener() {
+            @Override
+            public void activeOrEditLayerChanged(MainLayerManager.ActiveLayerChangeEvent alce) {
+                setVisible(false);
             }
         });
     }
