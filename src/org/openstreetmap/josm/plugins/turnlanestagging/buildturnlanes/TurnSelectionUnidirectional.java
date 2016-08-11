@@ -83,6 +83,19 @@ public class TurnSelectionUnidirectional extends JPanel {
         //add(jtfChangeLanes, BorderLayout.SOUTH);
         //Event Road Listenr
         jtfChangeLanes.getDocument().addDocumentListener(new SetLanesChangeListener());
+        jpanelcontentTurns.addMouseWheelListener(new MouseWheelListener() {
+            @Override
+            public void mouseWheelMoved(MouseWheelEvent e) {
+                if (e.getScrollType() != MouseWheelEvent.WHEEL_UNIT_SCROLL) {
+                    return;
+                }
+                Integer value = (Integer) spinner.getValue();
+                value -= e.getUnitsToScroll() / 3;
+                if (value <= max && value >= min) {
+                    spinner.setValue(value);
+                }
+            }
+        });
     }
 
     private class SetLanesChangeListener implements DocumentListener {
@@ -104,6 +117,7 @@ public class TurnSelectionUnidirectional extends JPanel {
 
     //Build pannel for   lanes
     protected JPanel buildselect() {
+
         jpanelcontentSelections = new JPanel(new GridLayout(1, 2));
         jpanelcontentSelections.setBorder(new SoftBevelBorder(BevelBorder.RAISED));
         //fill Combo Box
@@ -124,6 +138,7 @@ public class TurnSelectionUnidirectional extends JPanel {
                 }
             }
         });
+
         return jpanelcontentSelections;
     }
 
@@ -188,7 +203,6 @@ public class TurnSelectionUnidirectional extends JPanel {
                 } else {
                     bLanes = presetsData.removeLanes((BLanes) Util.clone(valBRoad.getLanesUnid()), valBRoad.getLanesUnid().getLanes().size() - lanes);
                 }
-
                 lanes(bLanes);
             }
             eventSpiner = true;
