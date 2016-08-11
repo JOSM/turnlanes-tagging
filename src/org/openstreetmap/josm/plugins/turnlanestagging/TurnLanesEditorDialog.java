@@ -324,7 +324,7 @@ public class TurnLanesEditorDialog extends ExtendedDialog {
                 }
             } else if (key.equals("oneway") && element.get(key).equals("yes")) {
                 bRoad.setName("Unidirectional");
-            } else if (!element.hasKey("oneway")) {
+            } else if (!element.hasKey("oneway")||(key.equals("oneway") && element.get(key).equals("no"))) {
                 bRoad.setName("Bidirectional");
             }
 
