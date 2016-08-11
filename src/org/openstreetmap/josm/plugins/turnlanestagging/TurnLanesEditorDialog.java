@@ -95,6 +95,13 @@ public class TurnLanesEditorDialog extends ExtendedDialog {
         getContentPane().add(splitPane, BorderLayout.CENTER);
         getContentPane().add(buildButtonRowPanel(), BorderLayout.SOUTH);
         getRootPane().registerKeyboardAction(cancelAction, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
+
+        this.getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "clickButton");
+        this.getRootPane().getActionMap().put("clickButton", new AbstractAction() {
+            public void actionPerformed(ActionEvent ae) {
+                jbOk.doClick();
+            }
+        });
     }
 
     //Build Buttons
@@ -123,9 +130,11 @@ public class TurnLanesEditorDialog extends ExtendedDialog {
         buildTurnLanes.addPropertyChangeListener(new PropertyChangeListener() {
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
+
                 if (evt.getPropertyName().equals(BuildTurnLanes.ROADCHANGED)) {
                     addTagOnRoad((BRoad) evt.getNewValue());
                     jbOk.requestFocus();
+                    jbOk.setSelected(true);
                 }
             }
         });

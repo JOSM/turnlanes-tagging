@@ -362,11 +362,19 @@ public class BuildTurnLanes extends JPanel {
     public void addLastEditInTable() {
         if (listLastEditsRoads.isEmpty()) {
             listLastEditsRoads.add(0, (BRoad) Util.clone(bRoad));
-
         } else {
-            if (!listLastEditsRoads.get(0).turns().equals(bRoad.turns())) {
-                listLastEditsRoads.add(0, (BRoad) Util.clone(bRoad));
+            for (int i = 0; i < listLastEditsRoads.size(); i++) {
+                if (bRoad.getName().equals("Bidirectional")) {
+                    if (listLastEditsRoads.get(i).turns().equals(bRoad.turns())) {
+                        listLastEditsRoads.remove(i);
+                    }
+                } else {
+                    if (listLastEditsRoads.get(i).getLanesUnid().getTagturns().equals(bRoad.getLanesUnid().getTagturns())) {
+                        listLastEditsRoads.remove(i);
+                    }
+                }
             }
+            listLastEditsRoads.add(0, (BRoad) Util.clone(bRoad));
         }
         PresetsTableModel lasteditsTM = new PresetsTableModel(listLastEditsRoads, jcNone.isSelected());//check aqui
         lastEditsTable.setModel(lasteditsTM);
@@ -420,9 +428,5 @@ public class BuildTurnLanes extends JPanel {
 
     public List<BRoad> getListLastEditsRoads() {
         return listLastEditsRoads;
-    }
-
-    public void setListLastEditsRoads(List<BRoad> aListLastEditsRoads) {
-        listLastEditsRoads = aListLastEditsRoads;
     }
 }

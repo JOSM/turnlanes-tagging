@@ -93,6 +93,32 @@ public class TurnSelectionBidirectional extends JPanel {
         add(jsp, BorderLayout.CENTER);
         //add(jtfChangeLanes, BorderLayout.SOUTH);
         jtfChangeLanes.getDocument().addDocumentListener(new SetLanesChangeListener());
+        jpnlturnsA.addMouseWheelListener(new MouseWheelListener() {
+            @Override
+            public void mouseWheelMoved(MouseWheelEvent e) {
+                if (e.getScrollType() != MouseWheelEvent.WHEEL_UNIT_SCROLL) {
+                    return;
+                }
+                Integer value = (Integer) spinnerA.getValue();
+                value -= e.getUnitsToScroll() / 3;
+                if (value <= max && value >= min) {
+                    spinnerA.setValue(value);
+                }
+            }
+        });
+        jpnlturnsC.addMouseWheelListener(new MouseWheelListener() {
+            @Override
+            public void mouseWheelMoved(MouseWheelEvent e) {
+                if (e.getScrollType() != MouseWheelEvent.WHEEL_UNIT_SCROLL) {
+                    return;
+                }
+                Integer value = (Integer) spinnerC.getValue();
+                value -= e.getUnitsToScroll() / 3;
+                if (value <= max && value >= min) {
+                    spinnerC.setValue(value);
+                }
+            }
+        });
     }
 
     //Action Liseners when the roads changes
