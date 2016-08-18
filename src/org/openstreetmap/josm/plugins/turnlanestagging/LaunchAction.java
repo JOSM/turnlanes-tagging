@@ -8,6 +8,7 @@ import org.openstreetmap.josm.actions.JosmAction;
 import org.openstreetmap.josm.data.SelectionChangedListener;
 import org.openstreetmap.josm.data.osm.DataSet;
 import org.openstreetmap.josm.data.osm.OsmPrimitive;
+import org.openstreetmap.josm.gui.layer.LayerManager;
 import static org.openstreetmap.josm.gui.mappaint.mapcss.ExpressionFactory.Functions.tr;
 import org.openstreetmap.josm.tools.Shortcut;
 
@@ -29,6 +30,22 @@ public class LaunchAction extends JosmAction implements SelectionChangedListener
                 true);
         DataSet.addSelectionListener(this);
         setEnabled(false);
+        Main.getLayerManager().addLayerChangeListener(new LayerManager.LayerChangeListener() {
+            @Override
+            public void layerAdded(LayerManager.LayerAddEvent lae) {
+            }
+
+            @Override
+            public void layerRemoving(LayerManager.LayerRemoveEvent lre) {
+                isLaunch = false;
+                setEnabled(false);
+                TurnLanesEditorDialog.getInstance().setVisible(false);
+            }
+
+            @Override
+            public void layerOrderChanged(LayerManager.LayerOrderChangeEvent loce) {
+            }
+        });
     }
 
     @Override

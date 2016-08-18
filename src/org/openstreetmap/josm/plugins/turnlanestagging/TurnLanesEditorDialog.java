@@ -37,6 +37,7 @@ import org.openstreetmap.josm.plugins.turnlanestagging.preset.PresetsData;
 import org.openstreetmap.josm.plugins.turnlanestagging.util.Util;
 import org.openstreetmap.josm.tools.ImageProvider;
 import org.openstreetmap.josm.gui.ExtendedDialog;
+import org.openstreetmap.josm.gui.layer.LayerManager;
 import org.openstreetmap.josm.gui.layer.MainLayerManager;
 import static org.openstreetmap.josm.tools.I18n.tr;
 
@@ -101,13 +102,6 @@ public class TurnLanesEditorDialog extends ExtendedDialog {
         this.getRootPane().getActionMap().put("clickButton", new AbstractAction() {
             public void actionPerformed(ActionEvent ae) {
                 jbOk.doClick();
-            }
-        });
-
-        Main.getLayerManager().addActiveLayerChangeListener(new MainLayerManager.ActiveLayerChangeListener() {
-            @Override
-            public void activeOrEditLayerChanged(MainLayerManager.ActiveLayerChangeEvent alce) {
-                setVisible(false);
             }
         });
     }
@@ -324,7 +318,7 @@ public class TurnLanesEditorDialog extends ExtendedDialog {
                 }
             } else if (key.equals("oneway") && element.get(key).equals("yes")) {
                 bRoad.setName("Unidirectional");
-            } else if (!element.hasKey("oneway")||(key.equals("oneway") && element.get(key).equals("no"))) {
+            } else if (!element.hasKey("oneway") || (key.equals("oneway") && element.get(key).equals("no"))) {
                 bRoad.setName("Bidirectional");
             }
 
@@ -338,29 +332,23 @@ public class TurnLanesEditorDialog extends ExtendedDialog {
         if (bRoad.getName().equals("Unidirectional")) {
             if (bRoad.getLanesUnid().getLanes().size() > 0) {
                 buildTurnLanes.setLanesByRoadUnidirectional(bRoad);
+            } else if (!lastEdits.isEmpty() && lastEdits.get(0).getName().equals("Unidirectional")) {
+                buildTurnLanes.setLastEdit();
             } else {
-                if (!lastEdits.isEmpty() && lastEdits.get(0).getName().equals("Unidirectional")) {
-                    buildTurnLanes.setLastEdit();
-                } else {
-                    buildTurnLanes.startDefaultUnidirectional();
-                }
+                buildTurnLanes.startDefaultUnidirectional();
             }
+        } else if (bRoad.getLanesA().getLanes().size() > 0 || bRoad.getLanesB().getLanes().size() > 0 || bRoad.getLanesC().getLanes().size() > 0) {
+            if (bRoad.getLanesA().getLanes().isEmpty()) {
+                bRoad.setLanesA(presetsData.defaultLanes("forward", 1));
+            }
+            if (bRoad.getLanesC().getLanes().isEmpty()) {
+                bRoad.setLanesC(presetsData.defaultLanes("backward", 1));
+            }
+            buildTurnLanes.setLanesByRoadBidirectional(bRoad);
+        } else if (!lastEdits.isEmpty() && lastEdits.get(0).getName().equals("Bidirectional")) {
+            buildTurnLanes.setLastEdit();
         } else {
-            if (bRoad.getLanesA().getLanes().size() > 0 || bRoad.getLanesB().getLanes().size() > 0 || bRoad.getLanesC().getLanes().size() > 0) {
-                if (bRoad.getLanesA().getLanes().isEmpty()) {
-                    bRoad.setLanesA(presetsData.defaultLanes("forward", 1));
-                }
-                if (bRoad.getLanesC().getLanes().isEmpty()) {
-                    bRoad.setLanesC(presetsData.defaultLanes("backward", 1));
-                }
-                buildTurnLanes.setLanesByRoadBidirectional(bRoad);
-            } else {
-                if (!lastEdits.isEmpty() && lastEdits.get(0).getName().equals("Bidirectional")) {
-                    buildTurnLanes.setLastEdit();
-                } else {
-                    buildTurnLanes.startDefaultBidirectional();
-                }
-            }
+            buildTurnLanes.startDefaultBidirectional();
         }
     }
 
