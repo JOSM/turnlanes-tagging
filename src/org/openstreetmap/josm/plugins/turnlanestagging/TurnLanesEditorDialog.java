@@ -233,9 +233,16 @@ public class TurnLanesEditorDialog extends ExtendedDialog {
         BRoad bRoad = new BRoad();
         //set as unidirectional as first
 
-        bRoad.setName("Unidirectional");
-
         OsmPrimitive element = waySelected();
+        if (element.hasKey("oneway")) {
+            if (element.get("oneway").equals("yes")) {
+                bRoad.setName("Unidirectional");
+            } else if (element.get("oneway").equals("no")) {
+                bRoad.setName("Bidirectional");
+            }
+        } else {
+            bRoad.setName("Bidirectional");
+        }
 
         for (String key : element.keySet()) {
             //Unidirectional
@@ -316,10 +323,6 @@ public class TurnLanesEditorDialog extends ExtendedDialog {
                     bRoad.getLanesC().setType("backward");
                     bRoad.setName("Bidirectional");
                 }
-            } else if (key.equals("oneway") && element.get(key).equals("yes")) {
-                bRoad.setName("Unidirectional");
-            } else if (!element.hasKey("oneway") || (key.equals("oneway") && element.get(key).equals("no"))) {
-                bRoad.setName("Bidirectional");
             }
 
             //Notifications
