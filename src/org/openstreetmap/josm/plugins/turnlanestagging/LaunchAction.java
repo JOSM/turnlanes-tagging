@@ -2,6 +2,7 @@ package org.openstreetmap.josm.plugins.turnlanestagging;
 
 import static org.openstreetmap.josm.tools.I18n.tr;
 
+import java.awt.GraphicsEnvironment;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.Collection;
@@ -41,7 +42,9 @@ public class LaunchAction extends JosmAction implements SelectionChangedListener
             public void layerRemoving(LayerManager.LayerRemoveEvent lre) {
                 isLaunch = false;
                 setEnabled(false);
-                TurnLanesEditorDialog.getInstance().setVisible(false);
+                if (!GraphicsEnvironment.isHeadless()) {
+                    TurnLanesEditorDialog.getInstance().setVisible(false);
+                }
             }
 
             @Override
