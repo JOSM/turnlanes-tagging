@@ -1,5 +1,7 @@
 package org.openstreetmap.josm.plugins.turnlanestagging;
 
+import static org.openstreetmap.josm.tools.I18n.tr;
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -12,38 +14,33 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import javax.swing.AbstractAction;
-import static javax.swing.Action.ACCELERATOR_KEY;
-import static javax.swing.Action.NAME;
-import static javax.swing.Action.SHORT_DESCRIPTION;
-import static javax.swing.Action.SMALL_ICON;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.KeyStroke;
+
 import org.openstreetmap.josm.Main;
 import org.openstreetmap.josm.data.osm.DataSet;
 import org.openstreetmap.josm.data.osm.OsmPrimitive;
+import org.openstreetmap.josm.gui.ExtendedDialog;
 import org.openstreetmap.josm.gui.Notification;
 import org.openstreetmap.josm.gui.tagging.TagEditorModel;
 import org.openstreetmap.josm.plugins.turnlanestagging.bean.BRoad;
+import org.openstreetmap.josm.plugins.turnlanestagging.buildturnlanes.BuildTurnLanes;
 import org.openstreetmap.josm.plugins.turnlanestagging.editor.TagEditor;
 import org.openstreetmap.josm.plugins.turnlanestagging.editor.ac.KeyValuePair;
-import org.openstreetmap.josm.plugins.turnlanestagging.preset.PresetsTableModel;
-import org.openstreetmap.josm.plugins.turnlanestagging.buildturnlanes.BuildTurnLanes;
 import org.openstreetmap.josm.plugins.turnlanestagging.preset.PresetsData;
+import org.openstreetmap.josm.plugins.turnlanestagging.preset.PresetsTableModel;
 import org.openstreetmap.josm.plugins.turnlanestagging.util.Util;
 import org.openstreetmap.josm.tools.ImageProvider;
-import org.openstreetmap.josm.gui.ExtendedDialog;
-import org.openstreetmap.josm.gui.layer.LayerManager;
-import org.openstreetmap.josm.gui.layer.MainLayerManager;
-import static org.openstreetmap.josm.tools.I18n.tr;
 
 public class TurnLanesEditorDialog extends ExtendedDialog {
 
-    // Unique instance      
+    // Unique instance
     static private TurnLanesEditorDialog instance = null;
     Map<String, String> tags = new HashMap<>();
 
@@ -67,7 +64,7 @@ public class TurnLanesEditorDialog extends ExtendedDialog {
     private OKAction okAction = null;
     private CancelAction cancelAction = null;
 
-    // Last Editions 
+    // Last Editions
     List<BRoad> lastEdits = new ArrayList<>();
     OsmPrimitive saveSelected = null;
 
@@ -100,6 +97,7 @@ public class TurnLanesEditorDialog extends ExtendedDialog {
 
         this.getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "clickButton");
         this.getRootPane().getActionMap().put("clickButton", new AbstractAction() {
+            @Override
             public void actionPerformed(ActionEvent ae) {
                 jbOk.doClick();
             }

@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -13,7 +14,6 @@ import java.util.logging.Logger;
 
 import org.openstreetmap.josm.gui.tagging.ac.AutoCompletionItemPriority;
 import org.openstreetmap.josm.gui.tagging.ac.AutoCompletionListItem;
-import org.openstreetmap.josm.plugins.turnlanestagging.editor.ac.AutoCompletionContext;
 import org.xml.sax.Attributes;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
@@ -72,7 +72,7 @@ public class TagSpecifications {
             logger.log(Level.SEVERE, "failed to create input stream for resource '" + RES_NAME_TAG_SPECIFICATIONS + "'");
             return;
         }
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(in))) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8))) {
 	        TagSpecifications spec = new TagSpecifications();
 	        spec.load(reader);
 	        instance = spec;
@@ -349,10 +349,10 @@ public class TagSpecifications {
         }
     }
 
-    class ResourceEntityResolver implements EntityResolver {
+    static class ResourceEntityResolver implements EntityResolver {
 
         @Override
-		public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException {
+	public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException {
             if (systemId != null && systemId.endsWith(DTD)) {
                 InputStream stream = TagSpecifications.class.getResourceAsStream("/resources/"+DTD);
                 if (stream == null) {

@@ -14,6 +14,7 @@ import org.openstreetmap.josm.gui.tagging.presets.TaggingPreset;
 public class PresetItemListCellRenderer extends JLabel implements ListCellRenderer<TaggingPreset> {
     //private static final Logger logger = Logger.getLogger(PresetItemListCellRenderer.class.getName());
 
+    @Override
     public Component getListCellRendererComponent(JList<? extends TaggingPreset> list, TaggingPreset item,
             int index, boolean isSelected, boolean cellHasFocus) {
 

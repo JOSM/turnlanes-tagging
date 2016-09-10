@@ -47,7 +47,7 @@ public class AdvancedTag extends Tag {
     public void setOptional(boolean optional) {
         this.optional = optional;
     }
-    
+
     public static Collection<AdvancedTag> forTaggingPreset(TaggingPreset preset) {
         Collection<AdvancedTag> result = new ArrayList<>();
         boolean isOptional = false;

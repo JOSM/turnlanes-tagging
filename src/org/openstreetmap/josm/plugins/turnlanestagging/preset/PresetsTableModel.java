@@ -1,9 +1,12 @@
 // License: GPL. For details, see LICENSE file.
 package org.openstreetmap.josm.plugins.turnlanestagging.preset;
 
+import static org.openstreetmap.josm.tools.I18n.tr;
+
 import java.util.List;
+
 import javax.swing.table.AbstractTableModel;
-import static org.openstreetmap.josm.gui.mappaint.mapcss.ExpressionFactory.Functions.tr;
+
 import org.openstreetmap.josm.plugins.turnlanestagging.bean.BRoad;
 import org.openstreetmap.josm.plugins.turnlanestagging.util.Util;
 
@@ -41,7 +44,7 @@ public class PresetsTableModel extends AbstractTableModel {
                 } else {
                     return String.valueOf(listBRoad.get(rowIndex).getNumLanesBidirectional());
                 }
-            case 2:                
+            case 2:
                 if (listBRoad.get(rowIndex).getName().equals("Unidirectional")) {
                     if (isNone) {
                         return Util.setNoneOnEmpty(listBRoad.get(rowIndex).getLanesUnid().getTagturns());

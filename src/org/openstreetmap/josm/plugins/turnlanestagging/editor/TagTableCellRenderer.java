@@ -83,7 +83,7 @@ public class TagTableCellRenderer extends JLabel implements TableCellRenderer {
             return false;
         }
 
-        // no current preset selected? 
+        // no current preset selected?
         //
         TaggingPreset item = (TaggingPreset) model.getAppliedPresetsModel().getSelectedItem();
         if (item == null) {
@@ -143,6 +143,7 @@ public class TagTableCellRenderer extends JLabel implements TableCellRenderer {
      *
      * @return the renderer component
      */
+    @Override
     public Component getTableCellRendererComponent(JTable table, Object value,
             boolean isSelected, boolean hasFocus, int rowIndex, int vColIndex) {
 

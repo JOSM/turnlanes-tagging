@@ -1,5 +1,7 @@
 package org.openstreetmap.josm.plugins.turnlanestagging.buildturnlanes;
 
+import static org.openstreetmap.josm.tools.I18n.tr;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -16,6 +18,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
 import javax.swing.JCheckBox;
@@ -29,13 +32,12 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.SoftBevelBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import static org.openstreetmap.josm.gui.mappaint.mapcss.ExpressionFactory.Functions.tr;
+
 import org.openstreetmap.josm.plugins.turnlanestagging.bean.BRoad;
+import org.openstreetmap.josm.plugins.turnlanestagging.preset.ImageRenderer;
 import org.openstreetmap.josm.plugins.turnlanestagging.preset.PresetsData;
 import org.openstreetmap.josm.plugins.turnlanestagging.preset.PresetsTable;
 import org.openstreetmap.josm.plugins.turnlanestagging.preset.PresetsTableModel;
-import org.openstreetmap.josm.plugins.turnlanestagging.preset.ImageRenderer;
-
 import org.openstreetmap.josm.plugins.turnlanestagging.util.Util;
 
 /**
@@ -44,7 +46,7 @@ import org.openstreetmap.josm.plugins.turnlanestagging.util.Util;
  */
 public class BuildTurnLanes extends JPanel {
 
-    //Table   
+    //Table
     private JScrollPane scrollPane = null;
     private PresetsTable presetsTable = null;
     private PresetsTableModel presetsTableModel = null;
@@ -272,7 +274,7 @@ public class BuildTurnLanes extends JPanel {
         add(pnlBuildTurnLanes, BorderLayout.SOUTH);
         //road change event
         jtfChangeRoad.getDocument().addDocumentListener(new SetRoadChangeRoadListener());
-        //Start Default 
+        //Start Default
         jrbUnidirectional.setSelected(true);
         startDefaultUnidirectional();
     }
@@ -403,6 +405,7 @@ public class BuildTurnLanes extends JPanel {
     }
 
     ActionListener jcNoneActionListener = new ActionListener() {
+        @Override
         public void actionPerformed(ActionEvent actionEvent) {
             AbstractButton abstractButton = (AbstractButton) actionEvent.getSource();
             boolean selected = abstractButton.getModel().isSelected();
