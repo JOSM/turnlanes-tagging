@@ -14,7 +14,7 @@ public class PresetsTableModel extends AbstractTableModel {
 
     List<BRoad> listBRoad;
     boolean isNone;
-    Class[] columns = {Object.class, Object.class, Object.class};
+    Class<?>[] columns = {Object.class, Object.class, Object.class};
     String titles[] = {tr("Directional"), tr("Number of lanes"), tr("Turn lanes")};
 
     public PresetsTableModel(List<BRoad> list, boolean isNone) {
@@ -83,7 +83,7 @@ public class PresetsTableModel extends AbstractTableModel {
     }
 
     @Override
-    public Class getColumnClass(int columnIndex) {
+    public Class<?> getColumnClass(int columnIndex) {
         return columns[columnIndex];
 
     }

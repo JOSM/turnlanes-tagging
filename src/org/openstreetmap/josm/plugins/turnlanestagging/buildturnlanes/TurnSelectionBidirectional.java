@@ -422,8 +422,6 @@ public class TurnSelectionBidirectional extends JPanel {
         eventSpinerC = true;
 
         if (bLanes.getLanes().size() > 0) {
-            String txt;
-
             if (Util.isRightHandTraffic()) {
                 labelC.setText(tr("Number of forward lanes"));
                 bLanes.setType("forward");

@@ -5,7 +5,6 @@ import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.util.logging.Logger;
 
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListSelectionModel;
@@ -18,7 +17,6 @@ import org.openstreetmap.josm.gui.tagging.TagTable;
 
 public class TagEditor extends JPanel {
 
-    private static final Logger logger = Logger.getLogger(TagEditor.class.getName());
     private TagEditorModel tagEditorModel;
     private TagTable tblTagEditor;
 
