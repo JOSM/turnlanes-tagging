@@ -53,7 +53,7 @@ public class AdvancedTag extends Tag {
         boolean isOptional = false;
         for (TaggingPresetItem item : preset.data) {
             if (item instanceof KeyedItem) {
-                KeyedItem ki = (KeyedItem)item;
+                KeyedItem ki = (KeyedItem) item;
                 for (String value : ki.getValues()) {
                     AdvancedTag tag = new AdvancedTag(ki.key, value);
                     tag.setOptional(isOptional);

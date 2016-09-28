@@ -1,3 +1,4 @@
+// License: GPL. For details, see LICENSE file.
 package org.openstreetmap.josm.plugins.turnlanestagging.util;
 
 import java.io.ByteArrayInputStream;
@@ -7,7 +8,9 @@ import java.io.ObjectOutputStream;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+
 import javax.swing.JOptionPane;
+
 import org.openstreetmap.josm.Main;
 import org.openstreetmap.josm.data.osm.OsmPrimitive;
 import org.openstreetmap.josm.gui.Notification;
@@ -17,7 +20,11 @@ import org.openstreetmap.josm.tools.RightAndLefthandTraffic;
  *
  * @author ruben
  */
-public class Util {
+public final class Util {
+
+    private Util() {
+        // Hide default constructor for utilities classes
+    }
 
     public static Object clone(Object object) {
         try {
@@ -51,7 +58,9 @@ public class Util {
     }
 
     public static boolean isEmptyturnlane(String turns) {
-        List<String> turnsList = Arrays.asList("reverse", "sharp_left", "left", "slight_left", "merge_to_right", "through", "reversible", "merge_to_left", "slight_right", "right", "sharp_right");
+        List<String> turnsList = Arrays.asList(
+                "reverse", "sharp_left", "left", "slight_left", "merge_to_right", "through",
+                "reversible", "merge_to_left", "slight_right", "right", "sharp_right");
         for (String tl : turnsList) {
             if (turns.contains(tl)) {
                 return true;

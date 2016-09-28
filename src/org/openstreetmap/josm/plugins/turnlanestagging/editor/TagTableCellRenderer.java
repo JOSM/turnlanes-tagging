@@ -1,3 +1,4 @@
+// License: GPL. For details, see LICENSE file.
 package org.openstreetmap.josm.plugins.turnlanestagging.editor;
 
 import static org.openstreetmap.josm.tools.I18n.tr;
@@ -108,11 +109,11 @@ public class TagTableCellRenderer extends JLabel implements TableCellRenderer {
     /**
      * renders the background color. The default color is white. It is set to {
      *
-     * @see TableCellRenderer#BG_COLOR_HIGHLIGHTED} if this cell displays the
-     * tag which is suggested by the currently selected preset.
-     *
      * @param tagModel the tag model
      * @param model the tag editor model
+     *
+     * @see TableCellRenderer#BG_COLOR_HIGHLIGHTED} if this cell displays the
+     * tag which is suggested by the currently selected preset.
      */
     protected void renderColor(TagModel tagModel, TagEditorModel model, boolean isSelected, boolean isvalTag) {
         if (isvalTag) {

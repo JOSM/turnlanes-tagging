@@ -1,8 +1,10 @@
+// License: GPL. For details, see LICENSE file.
 package org.openstreetmap.josm.plugins.turnlanestagging.buildturnlanes;
 
 import static org.openstreetmap.josm.tools.I18n.tr;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
@@ -10,6 +12,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.List;
 
+import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -18,6 +21,7 @@ import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.SoftBevelBorder;
+import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
@@ -77,7 +81,8 @@ public class TurnSelectionUnidirectional extends JPanel {
         jpanelContentLane.setBorder(new SoftBevelBorder(BevelBorder.RAISED));
         jpanelcontentTurns = new JPanel();
 
-        jpanelcontentTurns.setBorder(javax.swing.BorderFactory.createTitledBorder(null, tr("Lanes"), javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.CENTER, null, new java.awt.Color(102, 102, 102)));
+        jpanelcontentTurns.setBorder(BorderFactory.createTitledBorder(null, tr("Lanes"),
+                TitledBorder.CENTER, TitledBorder.CENTER, null, new Color(102, 102, 102)));
         JScrollPane jsp = new JScrollPane(jpanelcontentTurns);
         jsp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         jsp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
@@ -202,9 +207,11 @@ public class TurnSelectionUnidirectional extends JPanel {
             BLanes bLanes = new BLanes("unid");
             if (eventSpiner) {
                 if (lanes >= valBRoad.getLanesUnid().getLanes().size()) {
-                    bLanes = presetsData.addLanes((BLanes) Util.clone(valBRoad.getLanesUnid()), "unid", lanes - valBRoad.getLanesUnid().getLanes().size());
+                    bLanes = presetsData.addLanes((BLanes) Util.clone(valBRoad.getLanesUnid()),
+                            "unid", lanes - valBRoad.getLanesUnid().getLanes().size());
                 } else {
-                    bLanes = presetsData.removeLanes((BLanes) Util.clone(valBRoad.getLanesUnid()), valBRoad.getLanesUnid().getLanes().size() - lanes);
+                    bLanes = presetsData.removeLanes((BLanes) Util.clone(valBRoad.getLanesUnid()),
+                            valBRoad.getLanesUnid().getLanes().size() - lanes);
                 }
                 lanes(bLanes);
             }

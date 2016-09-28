@@ -15,7 +15,7 @@ public class PresetsTableModel extends AbstractTableModel {
     List<BRoad> listBRoad;
     boolean isNone;
     Class<?>[] columns = {Object.class, Object.class, Object.class};
-    String titles[] = {tr("Directional"), tr("Number of lanes"), tr("Turn lanes")};
+    String[] titles = {tr("Directional"), tr("Number of lanes"), tr("Turn lanes")};
 
     public PresetsTableModel(List<BRoad> list, boolean isNone) {
         super();
@@ -55,23 +55,29 @@ public class PresetsTableModel extends AbstractTableModel {
                     String textTurns = "";
                     if (listBRoad.get(rowIndex).getLanesA().getLanes().size() > 0) {
                         if (isNone) {
-                            textTurns = listBRoad.get(rowIndex).getLanesA().getType() + ": " + Util.setNoneOnEmpty(listBRoad.get(rowIndex).getLanesA().getTagturns());
+                            textTurns = listBRoad.get(rowIndex).getLanesA().getType() + ": " +
+                                    Util.setNoneOnEmpty(listBRoad.get(rowIndex).getLanesA().getTagturns());
                         } else {
-                            textTurns = listBRoad.get(rowIndex).getLanesA().getType() + ": " + listBRoad.get(rowIndex).getLanesA().getTagturns();
+                            textTurns = listBRoad.get(rowIndex).getLanesA().getType() + ": " +
+                                    listBRoad.get(rowIndex).getLanesA().getTagturns();
                         }
                     }
                     if (listBRoad.get(rowIndex).getLanesB().getLanes().size() > 0) {
                         if (isNone) {
-                            textTurns = textTurns + "  " + listBRoad.get(rowIndex).getLanesB().getType() + ": " + Util.setNoneOnEmpty(listBRoad.get(rowIndex).getLanesB().getTagturns());
+                            textTurns = textTurns + "  " + listBRoad.get(rowIndex).getLanesB().getType() + ": " +
+                                    Util.setNoneOnEmpty(listBRoad.get(rowIndex).getLanesB().getTagturns());
                         } else {
-                            textTurns = textTurns + "  " + listBRoad.get(rowIndex).getLanesB().getType() + ": " + listBRoad.get(rowIndex).getLanesB().getTagturns();
+                            textTurns = textTurns + "  " + listBRoad.get(rowIndex).getLanesB().getType() + ": " +
+                                    listBRoad.get(rowIndex).getLanesB().getTagturns();
                         }
                     }
                     if (listBRoad.get(rowIndex).getLanesC().getLanes().size() > 0) {
                         if (isNone) {
-                            textTurns = textTurns + " " + listBRoad.get(rowIndex).getLanesC().getType() + ": " + Util.setNoneOnEmpty(listBRoad.get(rowIndex).getLanesC().getTagturns());
+                            textTurns = textTurns + " " + listBRoad.get(rowIndex).getLanesC().getType() + ": " +
+                                    Util.setNoneOnEmpty(listBRoad.get(rowIndex).getLanesC().getTagturns());
                         } else {
-                            textTurns = textTurns + " " + listBRoad.get(rowIndex).getLanesC().getType() + ": " + listBRoad.get(rowIndex).getLanesC().getTagturns();
+                            textTurns = textTurns + " " + listBRoad.get(rowIndex).getLanesC().getType() + ": " +
+                                    listBRoad.get(rowIndex).getLanesC().getTagturns();
                         }
                     }
                     return textTurns;

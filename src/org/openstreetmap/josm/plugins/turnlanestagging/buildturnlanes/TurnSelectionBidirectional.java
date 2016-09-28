@@ -1,8 +1,10 @@
+// License: GPL. For details, see LICENSE file.
 package org.openstreetmap.josm.plugins.turnlanestagging.buildturnlanes;
 
 import static org.openstreetmap.josm.tools.I18n.tr;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -14,6 +16,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.List;
 
+import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -23,6 +26,7 @@ import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.SoftBevelBorder;
+import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
@@ -306,7 +310,8 @@ public class TurnSelectionBidirectional extends JPanel {
             if (Util.isRightHandTraffic()) {
                 labelA.setText(tr("Number of backward lanes"));
                 bLanes.setType("backward");
-                jpnlturnsA.setBorder(javax.swing.BorderFactory.createTitledBorder(null, tr("Backward"), javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.CENTER, null, new java.awt.Color(102, 102, 102)));
+                jpnlturnsA.setBorder(BorderFactory.createTitledBorder(null, tr("Backward"),
+                        TitledBorder.CENTER, TitledBorder.CENTER, null, new Color(102, 102, 102)));
                 jpnlturnsA.removeAll();
                 int numLanes = bLanesA.getLanes().size();
                 jpnlturnsA.setLayout(new GridLayout(1, numLanes));
@@ -336,7 +341,8 @@ public class TurnSelectionBidirectional extends JPanel {
             } else {
                 labelA.setText(tr("Number of forward lanes"));
                 bLanes.setType("forward");
-                jpnlturnsA.setBorder(javax.swing.BorderFactory.createTitledBorder(null, tr("Forward"), javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.CENTER, null, new java.awt.Color(102, 102, 102)));
+                jpnlturnsA.setBorder(BorderFactory.createTitledBorder(null, tr("Forward"),
+                        TitledBorder.CENTER, TitledBorder.CENTER, null, new Color(102, 102, 102)));
                 jpnlturnsA.removeAll();
                 int numLanes = bLanesA.getLanes().size();
                 jpnlturnsA.setLayout(new GridLayout(1, numLanes));
@@ -381,7 +387,8 @@ public class TurnSelectionBidirectional extends JPanel {
             if (bLanes.getType().equals("both_ways")) {
                 jchbothwayB.setSelected(true);
             }
-            jpnlturnsB.setBorder(javax.swing.BorderFactory.createTitledBorder(null, tr("Both way"), javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.CENTER, null, new java.awt.Color(102, 102, 102)));
+            jpnlturnsB.setBorder(BorderFactory.createTitledBorder(null, tr("Both way"),
+                    TitledBorder.CENTER, TitledBorder.CENTER, null, new Color(102, 102, 102)));
             bLanesB.setType(bLanes.getType());
             int numLanes = bLanesB.getLanes().size();
             jpnlturnsB.setLayout(new GridLayout(1, numLanes));
@@ -425,7 +432,8 @@ public class TurnSelectionBidirectional extends JPanel {
             if (Util.isRightHandTraffic()) {
                 labelC.setText(tr("Number of forward lanes"));
                 bLanes.setType("forward");
-                jpnlturnsC.setBorder(javax.swing.BorderFactory.createTitledBorder(null, tr("Forward"), javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.CENTER, null, new java.awt.Color(102, 102, 102)));
+                jpnlturnsC.setBorder(BorderFactory.createTitledBorder(null, tr("Forward"),
+                        TitledBorder.CENTER, TitledBorder.CENTER, null, new Color(102, 102, 102)));
                 jpnlturnsC.removeAll();
                 int numLanes = bLanesC.getLanes().size();
                 jpnlturnsC.setLayout(new GridLayout(1, numLanes));
@@ -455,7 +463,8 @@ public class TurnSelectionBidirectional extends JPanel {
             } else {
                 labelC.setText(tr("Number of backward lanes"));
                 bLanes.setType("backward");
-                jpnlturnsC.setBorder(javax.swing.BorderFactory.createTitledBorder(null, tr("Backward"), javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.CENTER, null, new java.awt.Color(102, 102, 102)));
+                jpnlturnsC.setBorder(BorderFactory.createTitledBorder(null, tr("Backward"),
+                        TitledBorder.CENTER, TitledBorder.CENTER, null, new Color(102, 102, 102)));
                 jpnlturnsC.removeAll();
                 int numLanes = bLanesC.getLanes().size();
                 jpnlturnsC.setLayout(new GridLayout(1, numLanes));

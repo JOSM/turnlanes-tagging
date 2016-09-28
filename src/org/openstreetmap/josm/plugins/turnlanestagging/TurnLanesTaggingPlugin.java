@@ -1,3 +1,4 @@
+// License: GPL. For details, see LICENSE file.
 package org.openstreetmap.josm.plugins.turnlanestagging;
 
 import org.openstreetmap.josm.Main;
@@ -18,7 +19,3 @@ LaunchAction action;
         MainMenu.add(Main.main.menu.dataMenu, action);
     }
 }
-
-
-
-       

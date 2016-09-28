@@ -1,10 +1,12 @@
+// License: GPL. For details, see LICENSE file.
 package org.openstreetmap.josm.plugins.turnlanestagging.preset;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.openstreetmap.josm.plugins.turnlanestagging.bean.BLane;
-import org.openstreetmap.josm.plugins.turnlanestagging.bean.BRoad;
 import org.openstreetmap.josm.plugins.turnlanestagging.bean.BLanes;
+import org.openstreetmap.josm.plugins.turnlanestagging.bean.BRoad;
 
 /**
  *
@@ -16,7 +18,7 @@ public class PresetsData {
         List<BRoad> listBRoads = new ArrayList<>();
         //Unidirectional
         //oneway=yes && lanes=3 && turn:lanes=left||
-        String presetUnidirectional[] = {"left||"};
+        String[] presetUnidirectional = {"left||"};
         for (int i = 0; i < presetUnidirectional.length; i++) {
             BRoad bRoadUnidireactinal = new BRoad();
             bRoadUnidireactinal.setName("Unidirectional");
@@ -199,7 +201,7 @@ public class PresetsData {
     public BLanes addLanes(BLanes bLanes, String type, int lanes) {
         //remove  merge_to_left and merge_to_right fro midle lanes
         for (int j = 1; j < bLanes.getLanes().size(); j++) {
-            String dirs[] = bLanes.getLanes().get(j).getTurn().split("\\;", -1);
+            String[] dirs = bLanes.getLanes().get(j).getTurn().split("\\;", -1);
             List<String> list = new ArrayList<>();
             for (int i = 0; i < dirs.length; i++) {
                 if (!dirs[i].equals("merge_to_right") && !dirs[i].equals("merge_to_left")) {

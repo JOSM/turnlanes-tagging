@@ -1,3 +1,4 @@
+// License: GPL. For details, see LICENSE file.
 package org.openstreetmap.josm.plugins.turnlanestagging.bean;
 
 import java.io.Serializable;
@@ -61,7 +62,7 @@ public class BLanes implements Serializable {
     }
 
     public void setStringLanes(String type, String turnLanes) {
-        String turns[] = turnLanes.split("\\|", -1);
+        String[] turns = turnLanes.split("\\|", -1);
         List<BLane> lst = new ArrayList<>();
         for (int i = 0; i < turns.length; i++) {
             //remove none tags
@@ -78,7 +79,9 @@ public class BLanes implements Serializable {
 
     private String sortTurns(String roadTurns) {
         //http://wiki.openstreetmap.org/wiki/Key:turn
-        List<String> turnsList = Arrays.asList("reverse", "sharp_left", "left", "slight_left", "merge_to_right", "through", "reversible", "merge_to_left", "slight_right", "right", "sharp_right");
+        List<String> turnsList = Arrays.asList(
+                "reverse", "sharp_left", "left", "slight_left", "merge_to_right", "through",
+                "reversible", "merge_to_left", "slight_right", "right", "sharp_right");
         List<String> roadTurnsList = Arrays.asList(roadTurns.split(";"));
         List<String> newRoadTurns = new ArrayList<>();
         for (String e : turnsList) {

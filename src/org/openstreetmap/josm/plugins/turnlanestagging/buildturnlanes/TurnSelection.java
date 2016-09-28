@@ -1,13 +1,19 @@
+// License: GPL. For details, see LICENSE file.
 package org.openstreetmap.josm.plugins.turnlanestagging.buildturnlanes;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
+import javax.swing.border.TitledBorder;
+
 import org.openstreetmap.josm.plugins.turnlanestagging.bean.BLane;
 import org.openstreetmap.josm.tools.ImageProvider;
 
@@ -129,7 +135,8 @@ public class TurnSelection extends JPanel {
         merge_to_left.addActionListener(new Merge_to_leftListener());
         reverse.addActionListener(new ReverseListener());
 
-        jPOptions.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Lane " + bLine.getPosition(), javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Abyssinica SIL", 0, 11), java.awt.Color.gray));
+        jPOptions.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Lane " + bLine.getPosition(),
+                TitledBorder.CENTER, TitledBorder.DEFAULT_POSITION, new Font("Abyssinica SIL", 0, 11), Color.gray));
         setTurn();
         add(jPOptions);
     }
@@ -190,7 +197,7 @@ public class TurnSelection extends JPanel {
     }
 
     protected void setTurn() {
-        String dirs[] = bLine.getTurn().split("\\;", -1);
+        String[] dirs = bLine.getTurn().split("\\;", -1);
 
         //"reverse", "sharp_left", "left", "slight_left", "merge_to_right", "through", "merge_to_left", "slight_right", "right", "sharp_right"
         for (int i = 0; i < dirs.length; i++) {

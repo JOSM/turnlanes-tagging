@@ -1,3 +1,4 @@
+// License: GPL. For details, see LICENSE file.
 package org.openstreetmap.josm.plugins.turnlanestagging.buildturnlanes;
 
 import static org.openstreetmap.josm.tools.I18n.tr;
@@ -298,7 +299,9 @@ public class BuildTurnLanes extends JPanel {
             if (evt.getPropertyName().equals(TurnSelectionBidirectional.LINESCHANGEDBIDIRECTIONAL)) {
                 bRoad = (BRoad) evt.getNewValue();
                 bRoad.setName("Bidirectional");
-                jtfChangeRoad.setText(bRoad.getLanesA().getTagturns() + ";" + bRoad.getLanesB().getTagturns() + ";" + bRoad.getLanesC().getTagturns());
+                jtfChangeRoad.setText(bRoad.getLanesA().getTagturns() + ";" +
+                                      bRoad.getLanesB().getTagturns() + ";" +
+                                      bRoad.getLanesC().getTagturns());
             }
         }
     }
@@ -345,7 +348,8 @@ public class BuildTurnLanes extends JPanel {
         jrbBidirectional.setSelected(true);
         pnlContentDirectional.removeAll();
         pnlContentDirectional.setLayout(new GridLayout(1, 1));
-        turnSelectionBidirectional.setDefault(presetsData.defaultRoadBidirectional("forward", 3, "backward", 2));//default 3 and 2 lanes according data team
+        turnSelectionBidirectional.setDefault(
+                presetsData.defaultRoadBidirectional("forward", 3, "backward", 2)); //default 3 and 2 lanes according data team
         pnlContentDirectional.add(turnSelectionBidirectional);
         pnlContentDirectional.revalidate();
         pnlContentDirectional.repaint();
@@ -378,7 +382,7 @@ public class BuildTurnLanes extends JPanel {
             }
             listLastEditsRoads.add(0, (BRoad) Util.clone(bRoad));
         }
-        PresetsTableModel lasteditsTM = new PresetsTableModel(listLastEditsRoads, jcNone.isSelected());//check aqui
+        PresetsTableModel lasteditsTM = new PresetsTableModel(listLastEditsRoads, jcNone.isSelected()); //check aqui
         lastEditsTable.setModel(lasteditsTM);
         lastEditsTable.getColumnModel().getColumn(2).setCellRenderer(new ImageRenderer());
         Dimension d = scrollPane.getViewport().getExtentSize();
@@ -424,7 +428,9 @@ public class BuildTurnLanes extends JPanel {
             if (bRoad.getName().equals("Unidirectional")) {
                 jtfChangeRoad.setText(bRoad.getLanesUnid().getTagturns());
             } else {
-                jtfChangeRoad.setText(bRoad.getLanesA().getTagturns() + ";" + bRoad.getLanesB().getTagturns() + ";" + bRoad.getLanesC().getTagturns());
+                jtfChangeRoad.setText(bRoad.getLanesA().getTagturns() + ";" +
+                                      bRoad.getLanesB().getTagturns() + ";" +
+                                      bRoad.getLanesC().getTagturns());
             }
         }
     };

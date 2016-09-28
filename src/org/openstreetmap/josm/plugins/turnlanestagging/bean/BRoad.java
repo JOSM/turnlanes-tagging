@@ -1,3 +1,4 @@
+// License: GPL. For details, see LICENSE file.
 package org.openstreetmap.josm.plugins.turnlanestagging.bean;
 
 import java.io.Serializable;
@@ -86,6 +87,8 @@ public class BRoad implements Serializable {
     }
 
     public String turns() {
-        return lanesA.getLanes().size() + "-" + lanesA.getTagturns() + "-" + lanesB.getLanes().size() + "-" + lanesB.getTagturns() + "-" + lanesC.getLanes().size() + "-" + lanesC.getTagturns();
+        return lanesA.getLanes().size() + "-" + lanesA.getTagturns() + "-" +
+               lanesB.getLanes().size() + "-" + lanesB.getTagturns() + "-" +
+               lanesC.getLanes().size() + "-" + lanesC.getTagturns();
     }
 }

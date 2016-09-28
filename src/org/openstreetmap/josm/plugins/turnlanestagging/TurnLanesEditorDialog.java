@@ -1,3 +1,4 @@
+// License: GPL. For details, see LICENSE file.
 package org.openstreetmap.josm.plugins.turnlanestagging;
 
 import static org.openstreetmap.josm.tools.I18n.tr;
@@ -41,7 +42,7 @@ import org.openstreetmap.josm.tools.ImageProvider;
 public class TurnLanesEditorDialog extends ExtendedDialog {
 
     // Unique instance
-    static private TurnLanesEditorDialog instance = null;
+    private static TurnLanesEditorDialog instance = null;
     Map<String, String> tags = new HashMap<>();
 
     //constructor
@@ -50,14 +51,15 @@ public class TurnLanesEditorDialog extends ExtendedDialog {
         build();
     }
 
-    static public TurnLanesEditorDialog getInstance() {
+    public static TurnLanesEditorDialog getInstance() {
         if (instance == null) {
             instance = new TurnLanesEditorDialog();
         }
         return instance;
     }
-    static public final Dimension PREFERRED_SIZE = new Dimension(750, 700);
-    static public final Dimension MIN_SIZE = new Dimension(630, 600);
+
+    public static final Dimension PREFERRED_SIZE = new Dimension(750, 700);
+    public static final Dimension MIN_SIZE = new Dimension(630, 600);
     private TagEditor tagEditor = null;
     private BuildTurnLanes buildTurnLanes = null;
     private JButton jbOk = null;
@@ -158,7 +160,7 @@ public class TurnLanesEditorDialog extends ExtendedDialog {
     //Buton Actions
     class CancelAction extends AbstractAction {
 
-        public CancelAction() {
+        CancelAction() {
             putValue(NAME, tr("Cancel"));
             putValue(SMALL_ICON, ImageProvider.get("cancel"));
             putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0));
@@ -177,7 +179,7 @@ public class TurnLanesEditorDialog extends ExtendedDialog {
 
     class OKAction extends AbstractAction implements PropertyChangeListener {
 
-        public OKAction() {
+        OKAction() {
             putValue(NAME, tr("OK"));
             putValue(SMALL_ICON, ImageProvider.get("ok"));
             putValue(SHORT_DESCRIPTION, tr("Apply edited tags and close dialog"));
@@ -199,7 +201,7 @@ public class TurnLanesEditorDialog extends ExtendedDialog {
             tagEditor.getModel().updateJOSMSelection();
             DataSet ds = Main.getLayerManager().getEditDataSet();
             ds.fireSelectionChanged();
-            Main.parent.repaint();// repaint all
+            Main.parent.repaint(); // repaint all
             saveSelected = null;
         }
 
@@ -243,33 +245,38 @@ public class TurnLanesEditorDialog extends ExtendedDialog {
         }
 
         for (String key : element.keySet()) {
-            //Unidirectional
             if (key.equals("turn:lanes")) {
                 bRoad.getLanesUnid().setStringLanes("unid", element.get(key));
                 bRoad.setName("Unidirectional");
-                if (element.hasKey("lanes") && Util.isInt(element.get("lanes")) && Integer.valueOf(element.get("lanes")) != bRoad.getLanesUnid().getLanes().size()) {
+                if (element.hasKey("lanes") && Util.isInt(element.get("lanes"))
+                        && Integer.valueOf(element.get("lanes")) != bRoad.getLanesUnid().getLanes().size()) {
                     new Notification(tr(" The number of lanes has fixed according number of turns")).show();
                 }
-            } else if (key.equals("lanes") && Util.isInt(element.get(key)) && !element.hasKey("turn:lanes") && element.hasDirectionKeys()) {
+            } else if (key.equals("lanes") && Util.isInt(element.get(key))
+                    && !element.hasKey("turn:lanes") && element.hasDirectionKeys()) {
                 bRoad = presetsData.defaultRoadUnidirectional(Integer.valueOf(element.get(key)));
                 bRoad.setName("Unidirectional");
-            } else if (key.equals("lanes") && Util.isInt(element.get(key)) && !element.hasKey("turn:lanes") && !(element.hasKey("turn:lanes:forward") || element.hasKey("turn:lanes:both_ways") || element.hasKey("turn:lanes:backward") || element.hasKey("lanes:forward") || element.hasKey("lanes:both_ways") || element.hasKey("lanes:backward"))) {
+            } else if (key.equals("lanes") && Util.isInt(element.get(key)) && !element.hasKey("turn:lanes")
+                    && !(element.hasKey("turn:lanes:forward") || element.hasKey("turn:lanes:both_ways") ||
+                         element.hasKey("turn:lanes:backward") || element.hasKey("lanes:forward") ||
+                         element.hasKey("lanes:both_ways") || element.hasKey("lanes:backward"))) {
                 bRoad = presetsData.defaultRoadUnidirectional(Integer.valueOf(element.get(key)));
                 bRoad.setName("Unidirectional");
-            } //Bidirectional
-            else if (key.equals("turn:lanes:forward")) {
+            } else if (key.equals("turn:lanes:forward")) {
                 if (Util.isRightHandTraffic()) {
                     bRoad.getLanesC().setStringLanes("forward", element.get(key));
                     bRoad.getLanesC().setType("forward");
                     bRoad.setName("Bidirectional");
-                    if (element.hasKey("lanes:forward") && Util.isInt(element.get("lanes:forward")) && Integer.valueOf(element.get("lanes:forward")) != bRoad.getLanesC().getLanes().size()) {
+                    if (element.hasKey("lanes:forward") && Util.isInt(element.get("lanes:forward"))
+                            && Integer.valueOf(element.get("lanes:forward")) != bRoad.getLanesC().getLanes().size()) {
                         new Notification(tr(" The number of lanes:forward has fixed according number of turns")).show();
                     }
                 } else {
                     bRoad.getLanesA().setStringLanes("forward", element.get(key));
                     bRoad.getLanesA().setType("forward");
                     bRoad.setName("Bidirectional");
-                    if (element.hasKey("lanes:forward") && Util.isInt(element.get("lanes:forward")) && Integer.valueOf(element.get("lanes:forward")) != bRoad.getLanesA().getLanes().size()) {
+                    if (element.hasKey("lanes:forward") && Util.isInt(element.get("lanes:forward"))
+                            && Integer.valueOf(element.get("lanes:forward")) != bRoad.getLanesA().getLanes().size()) {
                         new Notification(tr(" The number of lanes:forward has fixed according number of turns")).show();
                     }
                 }
@@ -277,7 +284,8 @@ public class TurnLanesEditorDialog extends ExtendedDialog {
                 bRoad.getLanesB().setStringLanes("both_ways", element.get(key));
                 bRoad.getLanesB().setType("both_ways");
                 bRoad.setName("Bidirectional");
-                if (element.hasKey("lanes:both_ways") && Util.isInt(element.get("lanes:both_ways")) && Integer.valueOf(element.get("lanes:both_ways")) != bRoad.getLanesB().getLanes().size()) {
+                if (element.hasKey("lanes:both_ways") && Util.isInt(element.get("lanes:both_ways"))
+                        && Integer.valueOf(element.get("lanes:both_ways")) != bRoad.getLanesB().getLanes().size()) {
                     new Notification(tr(" The number of lanes:both_ways has fixed according number of turns")).show();
                 }
             } else if (key.equals("turn:lanes:backward")) {
@@ -285,19 +293,20 @@ public class TurnLanesEditorDialog extends ExtendedDialog {
                     bRoad.getLanesA().setStringLanes("backward", element.get(key));
                     bRoad.getLanesA().setType("backward");
                     bRoad.setName("Bidirectional");
-                    if (element.hasKey("lanes:backward") && Util.isInt(element.get("lanes:backward")) && Integer.valueOf(element.get("lanes:backward")) != bRoad.getLanesA().getLanes().size()) {
+                    if (element.hasKey("lanes:backward") && Util.isInt(element.get("lanes:backward"))
+                            && Integer.valueOf(element.get("lanes:backward")) != bRoad.getLanesA().getLanes().size()) {
                         new Notification(tr(" The number of lanes:backward has fixed according number of turns")).show();
                     }
                 } else {
                     bRoad.getLanesC().setStringLanes("backward", element.get(key));
                     bRoad.getLanesC().setType("backward");
                     bRoad.setName("Bidirectional");
-                    if (element.hasKey("lanes:backward") && Util.isInt(element.get("lanes:backward")) && Integer.valueOf(element.get("lanes:backward")) != bRoad.getLanesC().getLanes().size()) {
+                    if (element.hasKey("lanes:backward") && Util.isInt(element.get("lanes:backward"))
+                            && Integer.valueOf(element.get("lanes:backward")) != bRoad.getLanesC().getLanes().size()) {
                         new Notification(tr(" The number of lanes:backward has fixed according number of turns")).show();
                     }
                 }
-            } //in case the road has just lanes
-            else if (key.equals("lanes:forward") && Util.isInt(element.get(key)) && !element.hasKey("turn:lanes:forward")) {
+            } else if (key.equals("lanes:forward") && Util.isInt(element.get(key)) && !element.hasKey("turn:lanes:forward")) {
                 if (Util.isRightHandTraffic()) {
                     bRoad.setLanesC(presetsData.defaultLanes("forward", Integer.valueOf(element.get(key))));
                     bRoad.getLanesC().setType("forward");
@@ -338,7 +347,9 @@ public class TurnLanesEditorDialog extends ExtendedDialog {
             } else {
                 buildTurnLanes.startDefaultUnidirectional();
             }
-        } else if (bRoad.getLanesA().getLanes().size() > 0 || bRoad.getLanesB().getLanes().size() > 0 || bRoad.getLanesC().getLanes().size() > 0) {
+        } else if (bRoad.getLanesA().getLanes().size() > 0 ||
+                   bRoad.getLanesB().getLanes().size() > 0 ||
+                   bRoad.getLanesC().getLanes().size() > 0) {
             if (bRoad.getLanesA().getLanes().isEmpty()) {
                 bRoad.setLanesA(presetsData.defaultLanes("forward", 1));
             }
@@ -367,66 +378,85 @@ public class TurnLanesEditorDialog extends ExtendedDialog {
         if (bRoad.getName().equals("Unidirectional")) {
             if (Util.isEmptyturnlane(bRoad.getLanesUnid().getTagturns())) {
                 if (bRoad.isNone()) {
-                    tagEditor.getModel().applyKeyValuePair(new KeyValuePair("turn:lanes", Util.setNoneOnEmpty(bRoad.getLanesUnid().getTagturns())));
+                    tagEditor.getModel().applyKeyValuePair(new KeyValuePair("turn:lanes",
+                            Util.setNoneOnEmpty(bRoad.getLanesUnid().getTagturns())));
                 } else {
-                    tagEditor.getModel().applyKeyValuePair(new KeyValuePair("turn:lanes", bRoad.getLanesUnid().getTagturns()));
+                    tagEditor.getModel().applyKeyValuePair(new KeyValuePair("turn:lanes",
+                            bRoad.getLanesUnid().getTagturns()));
                 }
             }
-            tagEditor.getModel().applyKeyValuePair(new KeyValuePair("lanes", String.valueOf(bRoad.getLanesUnid().getLanes().size())));
+            tagEditor.getModel().applyKeyValuePair(new KeyValuePair("lanes",
+                    String.valueOf(bRoad.getLanesUnid().getLanes().size())));
         } else {
             if (!bRoad.getLanesA().getLanes().isEmpty()) {
                 if (bRoad.getLanesA().getType().equals("forward")) {
                     if (Util.isEmptyturnlane(bRoad.getLanesA().getTagturns())) {
                         if (bRoad.isNone()) {
-                            tagEditor.getModel().applyKeyValuePair(new KeyValuePair("turn:lanes:forward", Util.setNoneOnEmpty(bRoad.getLanesA().getTagturns())));
+                            tagEditor.getModel().applyKeyValuePair(new KeyValuePair("turn:lanes:forward",
+                                    Util.setNoneOnEmpty(bRoad.getLanesA().getTagturns())));
                         } else {
-                            tagEditor.getModel().applyKeyValuePair(new KeyValuePair("turn:lanes:forward", bRoad.getLanesA().getTagturns()));
+                            tagEditor.getModel().applyKeyValuePair(new KeyValuePair("turn:lanes:forward",
+                                    bRoad.getLanesA().getTagturns()));
                         }
                     }
-                    tagEditor.getModel().applyKeyValuePair(new KeyValuePair("lanes:forward", String.valueOf(bRoad.getLanesA().getLanes().size())));
+                    tagEditor.getModel().applyKeyValuePair(new KeyValuePair("lanes:forward",
+                            String.valueOf(bRoad.getLanesA().getLanes().size())));
                 } else {
                     if (Util.isEmptyturnlane(bRoad.getLanesA().getTagturns())) {
                         if (bRoad.isNone()) {
-                            tagEditor.getModel().applyKeyValuePair(new KeyValuePair("turn:lanes:backward", Util.setNoneOnEmpty(bRoad.getLanesA().getTagturns())));
+                            tagEditor.getModel().applyKeyValuePair(new KeyValuePair("turn:lanes:backward",
+                                    Util.setNoneOnEmpty(bRoad.getLanesA().getTagturns())));
                         } else {
-                            tagEditor.getModel().applyKeyValuePair(new KeyValuePair("turn:lanes:backward", bRoad.getLanesA().getTagturns()));
+                            tagEditor.getModel().applyKeyValuePair(new KeyValuePair("turn:lanes:backward",
+                                    bRoad.getLanesA().getTagturns()));
                         }
                     }
-                    tagEditor.getModel().applyKeyValuePair(new KeyValuePair("lanes:backward", String.valueOf(bRoad.getLanesA().getLanes().size())));
+                    tagEditor.getModel().applyKeyValuePair(new KeyValuePair("lanes:backward",
+                            String.valueOf(bRoad.getLanesA().getLanes().size())));
                 }
             }
             if (!bRoad.getLanesB().getLanes().isEmpty()) {
                 if (Util.isEmptyturnlane(bRoad.getLanesB().getTagturns())) {
                     if (bRoad.isNone()) {
-                        tagEditor.getModel().applyKeyValuePair(new KeyValuePair("turn:lanes:both_ways", Util.setNoneOnEmpty(bRoad.getLanesB().getTagturns())));
+                        tagEditor.getModel().applyKeyValuePair(new KeyValuePair("turn:lanes:both_ways",
+                                Util.setNoneOnEmpty(bRoad.getLanesB().getTagturns())));
                     } else {
-                        tagEditor.getModel().applyKeyValuePair(new KeyValuePair("turn:lanes:both_ways", bRoad.getLanesB().getTagturns()));
+                        tagEditor.getModel().applyKeyValuePair(new KeyValuePair("turn:lanes:both_ways",
+                                bRoad.getLanesB().getTagturns()));
                     }
                 }
-                tagEditor.getModel().applyKeyValuePair(new KeyValuePair("lanes:both_ways", String.valueOf(bRoad.getLanesB().getLanes().size())));
+                tagEditor.getModel().applyKeyValuePair(new KeyValuePair("lanes:both_ways",
+                        String.valueOf(bRoad.getLanesB().getLanes().size())));
             }
             if (!bRoad.getLanesC().getLanes().isEmpty()) {
                 if (bRoad.getLanesC().getType().equals("backward")) {
                     if (Util.isEmptyturnlane(bRoad.getLanesC().getTagturns())) {
                         if (bRoad.isNone()) {
-                            tagEditor.getModel().applyKeyValuePair(new KeyValuePair("turn:lanes:backward", Util.setNoneOnEmpty(bRoad.getLanesC().getTagturns())));
+                            tagEditor.getModel().applyKeyValuePair(new KeyValuePair("turn:lanes:backward",
+                                    Util.setNoneOnEmpty(bRoad.getLanesC().getTagturns())));
                         } else {
-                            tagEditor.getModel().applyKeyValuePair(new KeyValuePair("turn:lanes:backward", bRoad.getLanesC().getTagturns()));
+                            tagEditor.getModel().applyKeyValuePair(new KeyValuePair("turn:lanes:backward",
+                                    bRoad.getLanesC().getTagturns()));
                         }
                     }
-                    tagEditor.getModel().applyKeyValuePair(new KeyValuePair("lanes:backward", String.valueOf(bRoad.getLanesC().getLanes().size())));
+                    tagEditor.getModel().applyKeyValuePair(new KeyValuePair("lanes:backward",
+                            String.valueOf(bRoad.getLanesC().getLanes().size())));
                 } else {
                     if (Util.isEmptyturnlane(bRoad.getLanesC().getTagturns())) {
                         if (bRoad.isNone()) {
-                            tagEditor.getModel().applyKeyValuePair(new KeyValuePair("turn:lanes:forward", Util.setNoneOnEmpty(bRoad.getLanesC().getTagturns())));
+                            tagEditor.getModel().applyKeyValuePair(new KeyValuePair("turn:lanes:forward",
+                                    Util.setNoneOnEmpty(bRoad.getLanesC().getTagturns())));
                         } else {
-                            tagEditor.getModel().applyKeyValuePair(new KeyValuePair("turn:lanes:forward", bRoad.getLanesC().getTagturns()));
+                            tagEditor.getModel().applyKeyValuePair(new KeyValuePair("turn:lanes:forward",
+                                    bRoad.getLanesC().getTagturns()));
                         }
                     }
-                    tagEditor.getModel().applyKeyValuePair(new KeyValuePair("lanes:forward", String.valueOf(bRoad.getLanesC().getLanes().size())));
+                    tagEditor.getModel().applyKeyValuePair(new KeyValuePair("lanes:forward",
+                            String.valueOf(bRoad.getLanesC().getLanes().size())));
                 }
             }
-            tagEditor.getModel().applyKeyValuePair(new KeyValuePair("lanes", String.valueOf(bRoad.getNumLanesBidirectional())));
+            tagEditor.getModel().applyKeyValuePair(new KeyValuePair("lanes",
+                    String.valueOf(bRoad.getNumLanesBidirectional())));
         }
         tagEditor.repaint();
 

@@ -1,3 +1,4 @@
+// License: GPL. For details, see LICENSE file.
 package org.openstreetmap.josm.plugins.turnlanestagging.bean;
 
 import java.io.Serializable;
@@ -18,7 +19,7 @@ public class BLane implements Serializable {
     public BLane(String type, int position, String turn) {
         this.position = position;
         this.turn = turn;
-        this.type = type;// for unidirectional " unid""
+        this.type = type; // for unidirectional " unid""
     }
 
     public int getPosition() {
