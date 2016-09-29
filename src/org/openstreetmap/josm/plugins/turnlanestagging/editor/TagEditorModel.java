@@ -13,9 +13,9 @@ import org.openstreetmap.josm.Main;
 import org.openstreetmap.josm.command.Command;
 import org.openstreetmap.josm.command.SequenceCommand;
 import org.openstreetmap.josm.data.osm.OsmPrimitive;
+import org.openstreetmap.josm.data.osm.Tag;
 import org.openstreetmap.josm.gui.tagging.TagModel;
 import org.openstreetmap.josm.gui.tagging.presets.TaggingPreset;
-import org.openstreetmap.josm.plugins.turnlanestagging.editor.ac.KeyValuePair;
 import org.openstreetmap.josm.plugins.turnlanestagging.editor.preset.AdvancedTag;
 
 @SuppressWarnings("serial")
@@ -86,7 +86,7 @@ public class TagEditorModel extends org.openstreetmap.josm.gui.tagging.TagEditor
      *
      * @param pair the key value pair
      */
-    public void applyKeyValuePair(KeyValuePair pair) {
+    public void applyKeyValuePair(Tag pair) {
         TagModel tagModel = get(pair.getKey());
         if (tagModel == null) {
             tagModel = new TagModel(pair.getKey(), pair.getValue());
