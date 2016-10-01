@@ -17,7 +17,7 @@ import javax.swing.table.TableCellRenderer;
 import org.openstreetmap.josm.gui.tagging.TagModel;
 import org.openstreetmap.josm.gui.tagging.presets.TaggingPreset;
 import org.openstreetmap.josm.plugins.tageditor.editor.TagEditorModel;
-import org.openstreetmap.josm.plugins.turnlanestagging.editor.preset.AdvancedTag;
+import org.openstreetmap.josm.plugins.tageditor.preset.AdvancedTag;
 
 /**
  * This is the table cell renderer for cells for the table of tags in the tag
