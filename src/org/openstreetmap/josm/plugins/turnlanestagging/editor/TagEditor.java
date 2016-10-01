@@ -15,6 +15,7 @@ import javax.swing.JScrollPane;
 import javax.swing.table.TableCellEditor;
 
 import org.openstreetmap.josm.gui.tagging.TagTable;
+import org.openstreetmap.josm.plugins.tageditor.editor.TagEditorModel;
 
 public class TagEditor extends JPanel {
 
