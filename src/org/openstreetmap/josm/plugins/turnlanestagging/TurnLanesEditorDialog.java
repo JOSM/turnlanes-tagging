@@ -25,10 +25,10 @@ import javax.swing.JSplitPane;
 import javax.swing.KeyStroke;
 
 import org.openstreetmap.josm.Main;
-import org.openstreetmap.josm.data.osm.DataSet;
 import org.openstreetmap.josm.data.osm.OsmPrimitive;
 import org.openstreetmap.josm.data.osm.Tag;
 import org.openstreetmap.josm.gui.ExtendedDialog;
+import org.openstreetmap.josm.gui.MainApplication;
 import org.openstreetmap.josm.gui.Notification;
 import org.openstreetmap.josm.gui.tagging.TagEditorModel;
 import org.openstreetmap.josm.plugins.turnlanestagging.bean.BRoad;
@@ -199,8 +199,6 @@ public class TurnLanesEditorDialog extends ExtendedDialog {
             setVisible(false);
             waySelected().setKeys(tags);
             tagEditor.getModel().updateJOSMSelection();
-            DataSet ds = Main.getLayerManager().getEditDataSet();
-            ds.fireSelectionChanged();
             Main.parent.repaint(); // repaint all
             saveSelected = null;
         }
@@ -478,11 +476,11 @@ public class TurnLanesEditorDialog extends ExtendedDialog {
     }
 
     public OsmPrimitive waySelected() {
-        if (saveSelected != null && !Main.getLayerManager().getEditDataSet().getSelected().contains(saveSelected)) {
+        if (saveSelected != null && !MainApplication.getLayerManager().getEditDataSet().getSelected().contains(saveSelected)) {
             resetPreview(saveSelected);
         }
 
-        Collection<OsmPrimitive> selection = Main.getLayerManager().getEditDataSet().getSelected();
+        Collection<OsmPrimitive> selection = MainApplication.getLayerManager().getEditDataSet().getSelected();
         for (OsmPrimitive element : selection) {
             saveSelected = element;
             return element;

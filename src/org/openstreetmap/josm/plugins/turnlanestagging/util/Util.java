@@ -6,13 +6,13 @@ import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 
 import javax.swing.JOptionPane;
 
-import org.openstreetmap.josm.Main;
+import org.openstreetmap.josm.data.osm.DataSet;
 import org.openstreetmap.josm.data.osm.OsmPrimitive;
+import org.openstreetmap.josm.gui.MainApplication;
 import org.openstreetmap.josm.gui.Notification;
 import org.openstreetmap.josm.tools.RightAndLefthandTraffic;
 
@@ -80,10 +80,12 @@ public final class Util {
     }
 
     public static boolean isRightHandTraffic() {
-        Collection<OsmPrimitive> selection = Main.getLayerManager().getEditDataSet().getSelected();
+        DataSet ds = MainApplication.getLayerManager().getEditDataSet();
         boolean flag = false;
-        for (OsmPrimitive element : selection) {
-            flag = RightAndLefthandTraffic.isRightHandTraffic(element.getBBox().getCenter());
+        if (ds != null) {
+            for (OsmPrimitive element : ds.getSelected()) {
+                flag = RightAndLefthandTraffic.isRightHandTraffic(element.getBBox().getCenter());
+            }
         }
         return flag;
     }
