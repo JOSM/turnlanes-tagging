@@ -1,6 +1,6 @@
 # TurnLanes-tagging plugin for JOSM
 
-TurnLanes-tagging Editor plugin provides an alternative way to add [turn:lanes tags](http://wiki.openstreetmap.org/wiki/Key:turn#Turning_indications_per_lane) on highways
+TurnLanes-tagging Editor plugin provides an alternative way to add [turn:lanes tags](https://wiki.openstreetmap.org/wiki/Key:turn#Turning_indications_per_lane) on highways
 
 ## Installing the plugin
 

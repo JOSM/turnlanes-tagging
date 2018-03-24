@@ -78,7 +78,7 @@ public class BLanes implements Serializable {
     }
 
     private String sortTurns(String roadTurns) {
-        //http://wiki.openstreetmap.org/wiki/Key:turn
+        //https://wiki.openstreetmap.org/wiki/Key:turn
         List<String> turnsList = Arrays.asList(
                 "reverse", "sharp_left", "left", "slight_left", "merge_to_right", "through",
                 "reversible", "merge_to_left", "slight_right", "right", "sharp_right");
