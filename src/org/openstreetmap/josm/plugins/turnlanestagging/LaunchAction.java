@@ -7,11 +7,13 @@ import java.awt.GraphicsEnvironment;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.Collection;
+import java.util.Set;
 
 import org.openstreetmap.josm.actions.JosmAction;
-import org.openstreetmap.josm.data.SelectionChangedListener;
+import org.openstreetmap.josm.data.osm.DataSelectionListener;
 import org.openstreetmap.josm.data.osm.DataSet;
 import org.openstreetmap.josm.data.osm.OsmPrimitive;
+import org.openstreetmap.josm.data.osm.event.SelectionEventManager;
 import org.openstreetmap.josm.gui.layer.LayerManager;
 import org.openstreetmap.josm.tools.Shortcut;
 
@@ -19,7 +21,7 @@ import org.openstreetmap.josm.tools.Shortcut;
  *
  * @author ruben
  */
-public class LaunchAction extends JosmAction implements SelectionChangedListener {
+public class LaunchAction extends JosmAction implements DataSelectionListener {
 
     private boolean isLaunch = false;
 
@@ -31,7 +33,7 @@ public class LaunchAction extends JosmAction implements SelectionChangedListener
                         tr("Tool: {0}", tr("turn lanes tagging - editor")),
                         KeyEvent.VK_2, Shortcut.ALT_SHIFT),
                 true);
-        DataSet.addSelectionListener(this);
+        SelectionEventManager.getInstance().addSelectionListener(this);
         setEnabled(false);
         getLayerManager().addLayerChangeListener(new LayerManager.LayerChangeListener() {
             @Override
@@ -60,7 +62,8 @@ public class LaunchAction extends JosmAction implements SelectionChangedListener
     }
 
     @Override
-    public void selectionChanged(Collection<? extends OsmPrimitive> newSelection) {
+    public void selectionChanged(SelectionChangeEvent event) {
+        Set<OsmPrimitive> newSelection = event.getSelection();
         setEnabled(newSelection != null && newSelection.size() == 1 && isRoad());
         TurnLanesEditorDialog.getInstance().setEnableOK(true);
         if (isLaunch && TurnLanesEditorDialog.getInstance().isVisible()) {
