@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project name="turnlanes-tagging" default="dist" basedir=".">
     <property name="commit.message" value="Turn Lanes Tagging"/>
-    <property name="plugin.main.version" value="12643"/>
+    <property name="plugin.main.version" value="14153"/>
     <property name="plugin.version" value="v0.0.5"/>
     <property name="plugin.author" value="Rub21"/>
     <property name="plugin.class" value="org.openstreetmap.josm.plugins.turnlanestagging.TurnLanesTaggingPlugin"/>   

@@ -47,7 +47,7 @@ public class TurnLanesEditorDialog extends ExtendedDialog {
 
     //constructor
     protected TurnLanesEditorDialog() {
-        super(Main.parent, "", null, false, false);
+        super(MainApplication.getMainFrame(), "", null, false, false);
         build();
     }
 
@@ -199,7 +199,7 @@ public class TurnLanesEditorDialog extends ExtendedDialog {
             setVisible(false);
             waySelected().setKeys(tags);
             tagEditor.getModel().updateJOSMSelection();
-            Main.parent.repaint(); // repaint all
+            MainApplication.getMainFrame().repaint(); // repaint all
             saveSelected = null;
         }
 
