@@ -92,7 +92,7 @@ public class BLanes implements Serializable {
         return newRoadTurns.toString().replaceAll("\\[|\\]", "").replaceAll(", ", ";");
     }
 
-    public void changeDirectionLanes(String Type) {
+    public void changeDirectionLanes(String type) {
         for (int k = 0; k < lanes.size(); k++) {
             lanes.get(k).setType(type);
         }
