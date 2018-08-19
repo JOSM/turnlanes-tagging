@@ -65,6 +65,8 @@ public class LaunchAction extends JosmAction implements DataSelectionListener {
     public void selectionChanged(SelectionChangeEvent event) {
         Set<OsmPrimitive> newSelection = event.getSelection();
         setEnabled(newSelection != null && newSelection.size() == 1 && isRoad());
+        if (GraphicsEnvironment.isHeadless())
+            return;
         TurnLanesEditorDialog.getInstance().setEnableOK(true);
         if (isLaunch && TurnLanesEditorDialog.getInstance().isVisible()) {
             launchEditor();
