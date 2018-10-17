@@ -24,7 +24,6 @@ import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.KeyStroke;
 
-import org.openstreetmap.josm.Main;
 import org.openstreetmap.josm.data.osm.OsmPrimitive;
 import org.openstreetmap.josm.data.osm.Tag;
 import org.openstreetmap.josm.gui.ExtendedDialog;
@@ -47,7 +46,7 @@ public class TurnLanesEditorDialog extends ExtendedDialog {
 
     //constructor
     protected TurnLanesEditorDialog() {
-        super(Main.parent, "", null, false, false);
+        super(MainApplication.getMainFrame(), "", null, false, false);
         build();
     }
 
@@ -199,7 +198,7 @@ public class TurnLanesEditorDialog extends ExtendedDialog {
             setVisible(false);
             waySelected().setKeys(tags);
             tagEditor.getModel().updateJOSMSelection();
-            Main.parent.repaint(); // repaint all
+            MainApplication.getMainFrame().repaint(); // repaint all
             saveSelected = null;
         }
 
