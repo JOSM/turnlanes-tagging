@@ -8,7 +8,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.Collection;
 
-import org.openstreetmap.josm.Main;
 import org.openstreetmap.josm.actions.JosmAction;
 import org.openstreetmap.josm.data.SelectionChangedListener;
 import org.openstreetmap.josm.data.osm.DataSet;
@@ -34,7 +33,7 @@ public class LaunchAction extends JosmAction implements SelectionChangedListener
                 true);
         DataSet.addSelectionListener(this);
         setEnabled(false);
-        Main.getLayerManager().addLayerChangeListener(new LayerManager.LayerChangeListener() {
+        getLayerManager().addLayerChangeListener(new LayerManager.LayerChangeListener() {
             @Override
             public void layerAdded(LayerManager.LayerAddEvent lae) {
             }
@@ -83,11 +82,14 @@ public class LaunchAction extends JosmAction implements SelectionChangedListener
     }
 
     public boolean isRoad() {
-        Collection<OsmPrimitive> selection = Main.getLayerManager().getEditDataSet().getSelected();
-        for (OsmPrimitive element : selection) {
-            for (String key : element.keySet()) {
-                if (key.equals("highway")) {
-                    return true;
+        DataSet ds = getLayerManager().getEditDataSet();
+        if (ds != null) {
+            Collection<OsmPrimitive> selection = ds.getSelected();
+            for (OsmPrimitive element : selection) {
+                for (String key : element.keySet()) {
+                    if (key.equals("highway")) {
+                        return true;
+                    }
                 }
             }
         }
