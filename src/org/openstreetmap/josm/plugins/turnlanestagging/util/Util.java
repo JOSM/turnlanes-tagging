@@ -7,6 +7,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Arrays;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import javax.swing.JOptionPane;
 
@@ -69,14 +70,45 @@ public final class Util {
         return false;
     }
 
+    /**
+     * Converts a turn lane value to use {@code "none"} instead of the empty string
+     * to signify lanes with no turn markings
+     *
+     * @see <a href="http://wiki.openstreetmap.org/wiki/Key:turn#Turning_indications_per_lane">turn:lanes tagging</a>
+     *
+     * @param turn lanes value string with each lane separated by a vertical bar {@code "|"}.  For example, {@code "left|through|right"} or {@code "||right"}
+     * @return the lane string with empty lanes replaced with "none".  For example, {@code "left||right"} is changed to {@code "left|none|right"}.
+     */
     public static String setNoneOnEmpty(String turn) {
-        if (turn.startsWith("|")) {
-            turn = "none" + turn;
-        }
-        if (turn.endsWith("|")) {
-            turn = turn + "none";
-        }
-        return turn.replaceAll("(\\|)(\\|)", "$1none$2");
+            StringTokenizer tokenizer = new StringTokenizer(turn, "|", true);
+            String previous = "";
+            StringBuilder builder = new StringBuilder();
+            while (tokenizer.hasMoreTokens())
+            {
+                String current = tokenizer.nextToken();
+                if (current.equals("|"))
+                {
+                    if (previous.equals(""))
+                    {
+                        // blank starting lane
+                        builder.append("none");
+                    }
+                    else if (previous.equals("|"))
+                    {
+                        // blank middle lane
+                        builder.append("none");
+                    }
+                }
+                builder.append(current);
+                if (current.equals("|") && !tokenizer.hasMoreTokens())
+                {
+                    // blank ending lane
+                    builder.append("none");
+                }
+                previous = current;
+            }
+
+            return builder.toString();
     }
 
     public static boolean isRightHandTraffic() {
