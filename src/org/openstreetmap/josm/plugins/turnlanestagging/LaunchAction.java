@@ -30,7 +30,7 @@ public class LaunchAction extends JosmAction implements DataSelectionListener {
                 "turnlanes-tagging",
                 tr("Turn lanes tagging - Editor"),
                 Shortcut.registerShortcut("edit:turnlanestaggingeditor",
-                        tr("Tool: {0}", tr("turn lanes tagging - editor")),
+                        tr("Data: {0}", tr("turn lanes tagging - editor")),
                         KeyEvent.VK_2, Shortcut.ALT_SHIFT),
                 true);
         SelectionEventManager.getInstance().addSelectionListener(this);
