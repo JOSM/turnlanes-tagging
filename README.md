@@ -6,6 +6,15 @@ TurnLanes-tagging Editor plugin provides an alternative way to add [turn:lanes t
 
 ![turnlanes91-21](https://cloud.githubusercontent.com/assets/1152236/16094397/b7184c3c-3305-11e6-8294-1a1af89a3e60.gif)
 
+
+After this step, if you wish to see the (red) lane outlines and arrow icons you need to turn on the
+appropriate map style. To do this:
+* In JOSM preferences look in the "Map Paint Styles" tab. This can also be reached from the Map Paint 
+Styles window and clicking on the settings (two vertical sliders) icon.
+* Select the "Lane and road attributes" from the list of "Available styles" and add to the list of "Active styles".
+* Activate the "Lane and road attributes" style by selecting its checkbox in the list of "Active styles".
+This should be selected in addition to your usual map style.
+ 
 ## How does it work?
 
 **Adding turn lanes in unidirectional highways**
