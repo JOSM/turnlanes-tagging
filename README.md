@@ -16,9 +16,10 @@ TurnLanes-tagging Editor plugin provides an alternative way to add [turn:lanes t
 
 ![5](https://cloud.githubusercontent.com/assets/1152236/16133863/aa636bfe-33df-11e6-9161-6ccd6b10559c.gif)
 
-## Shortcut to activate the plugin
+## To activate the plugin
 
-Default shortcut `Alt+Shift+2`
+Select a way, then the default shortcut <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>2</kbd> (MacOS: <kbd>Option</kbd>-<kbd>Shift</kbd>-<kbd>2</kbd> or <kbd>⌥</kbd><kbd>⇧</kbd><kbd>2</kbd>) 
+or menu item Data - Turn lanes tagging editor.
 
 ## The main features are:
 
