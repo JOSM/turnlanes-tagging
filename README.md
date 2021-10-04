@@ -89,7 +89,7 @@ turn:lanes=left|left|
 ```
 
 
-**If you have any feedback on the plugin, you can find me on [twitter](https://twitter.com/Rub21tk) or open a [ticket](https://github.com/mapbox/turnlanes-tagging/issues/new)**
+**If you have any feedback on the plugin, you can find me on [twitter](https://twitter.com/Rub21tk) or open a [ticket](https://github.com/JOSM/turnlanes-tagging/issues/new)**
 
 
 
