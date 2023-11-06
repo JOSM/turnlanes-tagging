@@ -1,17 +1,18 @@
 package org.openstreetmap.josm.plugins.turnlanestagging.util;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class UtilTest {
+
+class UtilTest {
 
     /**
      * Test method for
      * {@link org.openstreetmap.josm.plugins.turnlanestagging.util.Util#setNoneOnEmpty(java.lang.String)}.
      */
     @Test
-    public void testSetNoneOnEmpty() {
+    void testSetNoneOnEmpty() {
         assertEquals("left", Util.setNoneOnEmpty("left"));
         assertEquals("left|none", Util.setNoneOnEmpty("left|"));
         assertEquals("none|right", Util.setNoneOnEmpty("|right"));
