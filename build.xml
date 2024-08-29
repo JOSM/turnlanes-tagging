@@ -5,7 +5,7 @@
     <property name="plugin.author" value="Rub21"/>
     <property name="plugin.class" value="org.openstreetmap.josm.plugins.turnlanestagging.TurnLanesTaggingPlugin"/>   
     <property name="plugin.description" value="Editor to add turn lanes tags in highways"/>
-    <property name="plugin.link" value="https://github.com/mapbox/turnlanes-tagging"/>
+    <property name="plugin.link" value="https://github.com/JOSM/turnlanes-tagging"/>
     <property name="plugin.icon" value="images/turnlanes-tagging.png"/>
     <property name="plugin.requires" value="tageditor"/>
     <property name="plugin.canloadatruntime" value="true"/>
