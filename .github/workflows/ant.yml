@@ -1,0 +1,56 @@
+name: Java CI
+
+on:
+  push:
+    branches:
+      - master
+      - $default-branch
+      - $protected-branches
+  pull_request:
+    branches:
+      - master
+      - $default-branch
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  attestations: write
+  contents: write
+  packages: write
+  checks: write
+
+jobs:
+  check-release-needed:
+    runs-on: ubuntu-latest
+    outputs:
+      release_needed: ${{ steps.create_release_needed.outputs.release_needed }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: ${{ (github.repository == 'JOSM/turnlanes-tagging' && github.ref_type == 'branch' && github.ref_name == 'master' && github.event_name != 'schedule' && github.event_name != 'pull_request') && '0' || '1' }}
+
+      - name: Set release needed
+        id: create_release_needed
+        run: |
+          last_tag=$(git describe --tags --abbrev=0 --always)
+          release_needed="false"
+          for file in $(git diff ${last_tag}..HEAD --name-only); do
+            if [[ $file = "src/"* ]] || [[ $file = "data/*" ]] || [[ $file = "lib/*" ]] || [[ $file = "resources/*" ]] || [[ $file = "images/*" ]]; then
+              release_needed="true"
+              break
+            fi
+          done
+          echo "release_needed=$release_needed" >> $GITHUB_OUTPUT
+
+  call-workflow:
+    needs: check-release-needed
+    strategy:
+      matrix:
+        josm-revision: ["", "r19044"]
+    uses: JOSM/JOSMPluginAction/.github/workflows/ant.yml@v3
+    with:
+      josm-revision: ${{ matrix.josm-revision }}
+      perform-revision-tagging: ${{ matrix.josm-revision == 'r19044' && needs.check-release-needed.outputs.release_needed == 'true' }}
+    secrets: inherit
+
