@@ -18,12 +18,13 @@ import org.openstreetmap.josm.plugins.tageditor.editor.TagEditorModel;
 public class TagTableCellRenderer extends org.openstreetmap.josm.plugins.tageditor.editor.TagTableCellRenderer {
 
     /**
-     * renders the background color. The default color is white. It is set to {
+     * renders the background color. The default color is white. It is set to
+     * {@link org.openstreetmap.josm.plugins.tageditor.editor.TagTableCellRenderer#BG_COLOR_HIGHLIGHTED BG_COLOR_HIGHLIGHTED}.
      *
      * @param tagModel the tag model
      * @param model the tag editor model
      *
-     * @see TableCellRenderer#BG_COLOR_HIGHLIGHTED} if this cell displays the
+     * @see org.openstreetmap.josm.plugins.tageditor.editor.TagTableCellRenderer#BG_COLOR_HIGHLIGHTED if this cell displays the
      * tag which is suggested by the currently selected preset.
      */
     protected void renderColor(TagModel tagModel, TagEditorModel model, boolean isSelected, boolean isvalTag) {
