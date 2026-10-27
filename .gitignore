@@ -1,6 +1,5 @@
-# Some Files #
-###################
 nbproject/
 build/
 *.class
 javadoc
+target
