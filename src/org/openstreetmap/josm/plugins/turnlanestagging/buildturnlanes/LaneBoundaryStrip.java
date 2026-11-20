@@ -60,9 +60,10 @@ public class LaneBoundaryStrip extends JPanel {
      */
     public void setBike() {
         this.bike = true;
-        setPreferredSize(new Dimension(10, 60));
-        setMinimumSize(new Dimension(6, 40));
-        setMaximumSize(new Dimension(10, Integer.MAX_VALUE));
+        setPreferredSize(new Dimension(14, 60));
+        setMinimumSize(new Dimension(8, 40));
+        setMaximumSize(new Dimension(14, Integer.MAX_VALUE));
+        setToolTipText("cycleway");
         repaint();
     }
 
@@ -77,7 +78,11 @@ public class LaneBoundaryStrip extends JPanel {
             int y2 = getHeight() - 4;
             if (bike) {
                 g2.setColor(COLOR_BIKE);
-                g2.fillRect(x - 2, y1, 4, y2 - y1);
+                g2.fillRoundRect(x - 5, y1, 10, y2 - y1, 6, 6);
+                g2.setColor(new Color(235, 255, 235));
+                g2.setStroke(new BasicStroke(1.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL,
+                        0f, new float[] {3f, 3f}, 0f));
+                g2.drawLine(x, y1 + 2, x, y2 - 2);
             } else if (centre) {
                 drawCentre(g2, x, y1, y2);
             } else if (laneMarkings) {
