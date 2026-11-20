@@ -3,6 +3,7 @@ package org.openstreetmap.josm.plugins.turnlanestagging.buildturnlanes;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -13,6 +14,8 @@ import java.util.List;
 
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 
@@ -50,6 +53,7 @@ public class TurnSelection extends JPanel {
     private JCheckBox merge_to_left;
     private JCheckBox reverse;
     private JComboBox<String> change;
+    private JLabel lblChange;
 
     BLane bLine;
     int numRoadLanes;
@@ -149,15 +153,72 @@ public class TurnSelection extends JPanel {
                 TitledBorder.CENTER, TitledBorder.DEFAULT_POSITION, new Font("Abyssinica SIL", 0, 11), Color.gray));
         setTurn();
         setChange();
-        add(buildChangePanel(), BorderLayout.NORTH);
+        // Tint the whole panel by travel direction, like the old road preview did.
+        Color tint = directionColor(bLine.getType());
+        setOpaque(true);
+        setBackground(tint);
+        jPOptions.setBackground(tint);
+        for (Component comp : jPOptions.getComponents()) {
+            if (comp instanceof JComponent) {
+                ((JComponent) comp).setOpaque(false);
+            }
+        }
+        add(buildChangePanel(tint), BorderLayout.NORTH);
         add(jPOptions, BorderLayout.CENTER);
+        lblChange = new JLabel(" ", JLabel.CENTER);
+        lblChange.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 10));
+        add(lblChange, BorderLayout.SOUTH);
+        updateChangeLabel();
     }
 
-    private JPanel buildChangePanel() {
+    private JPanel buildChangePanel(Color tint) {
         JPanel pnl = new JPanel(new BorderLayout(5, 0));
-        pnl.add(new javax.swing.JLabel("Change"), BorderLayout.WEST);
+        pnl.setBackground(tint);
+        pnl.add(new JLabel("Change"), BorderLayout.WEST);
         pnl.add(change, BorderLayout.CENTER);
         return pnl;
+    }
+
+    /**
+     * Updates the coloured label showing the lane's {@code change:lanes} value.
+     */
+    private void updateChangeLabel() {
+        String c = bLine.getChange();
+        if (c == null || c.isEmpty()) {
+            lblChange.setText(" ");
+        } else {
+            lblChange.setText("change: " + c);
+            lblChange.setForeground(changeColor(c));
+        }
+    }
+
+    /**
+     * Background tint per travel direction: blue for forward/unidirectional
+     * lanes, red for backward lanes and yellow for both-ways lanes.
+     */
+    private Color directionColor(String type) {
+        if ("forward".equals(type) || "unid".equals(type)) {
+            return new Color(190, 215, 255);
+        } else if ("backward".equals(type)) {
+            return new Color(255, 200, 190);
+        } else if ("both_ways".equals(type)) {
+            return new Color(255, 230, 160);
+        }
+        return new Color(238, 238, 238);
+    }
+
+    private Color changeColor(String change) {
+        switch (change) {
+            case "yes":
+                return new Color(0, 128, 0);
+            case "no":
+                return new Color(200, 0, 0);
+            case "not_left":
+            case "not_right":
+                return new Color(200, 120, 0);
+            default:
+                return Color.DARK_GRAY;
+        }
     }
 
     //left|left;through||…|right
@@ -261,6 +322,7 @@ public class TurnSelection extends JPanel {
 
     protected void setChange() {
         change.setSelectedItem(bLine.getChange());
+        updateChangeLabel();
     }
 
     private class LeftListener implements ActionListener {
@@ -350,6 +412,7 @@ public class TurnSelection extends JPanel {
         public void actionPerformed(ActionEvent ae) {
             Object selected = change.getSelectedItem();
             bLine.setChange(selected == null ? "" : selected.toString());
+            updateChangeLabel();
             firePropertyChange(CHANGE_CHANGED, null, bLine);
         }
     }
