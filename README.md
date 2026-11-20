@@ -1,24 +1,22 @@
 # TurnLanes-tagging plugin for JOSM
 
-TurnLanes-tagging Editor plugin provides an alternative way to add [turn:lanes tags](https://wiki.openstreetmap.org/wiki/Key:turn#Turning_indications_per_lane) on highways
+TurnLanes-tagging Editor plugin provides an alternative way to add [turn:lanes tags](https://wiki.openstreetmap.org/wiki/Key:turn#Turning_indications_per_lane) on highways.
 
 ## Installing the plugin
 
-![turnlanes91-21](https://cloud.githubusercontent.com/assets/1152236/16094397/b7184c3c-3305-11e6-8294-1a1af89a3e60.gif)
+Install it from the JOSM plugin list: **Preferences → Plugins → search "turnlanes-tagging" → install → restart JOSM**.
 
+If you wish to see the (red) lane outlines and arrow icons on the map, turn on the appropriate map style:
 
-After this step, if you wish to see the (red) lane outlines and arrow icons you need to turn on the
-appropriate map style. To do this:
-* In JOSM preferences look in the "Map Paint Styles" tab. This can also be reached from the Map Paint 
-Styles window and clicking on the settings (two vertical sliders) icon.
-* Select the "Lane and road attributes" from the list of "Available styles" and add to the list of "Active styles".
-* Activate the "Lane and road attributes" style by selecting its checkbox in the list of "Active styles".
+* In JOSM preferences look in the **Map Paint Styles** tab. This can also be reached from the Map Paint Styles window and clicking on the settings (two vertical sliders) icon.
+* Select the **Lane and road attributes** style from the list of *Available styles* and add it to the list of *Active styles*.
+* Activate the style by selecting its checkbox in the list of *Active styles*.
+
 This should be selected in addition to your usual map style.
 
 ## Installing a custom build (jar file)
 
-A locally built jar (e.g. with `ant dist`, or a jar downloaded from a GitHub
-release) can be installed manually without the plugin manager:
+A locally built jar (e.g. with `ant dist`, or a jar downloaded from a GitHub release) can be installed manually without the plugin manager:
 
 1. Close JOSM.
 2. Copy the jar to the JOSM plugins directory, e.g.:
@@ -27,33 +25,21 @@ release) can be installed manually without the plugin manager:
    * Windows: `%APPDATA%\JOSM\plugins\`
    * Flatpak: `~/.var/app/org.openstreetmap.josm/data/JOSM/plugins/`
 3. Name it `turnlanes-tagging.jar` (this replaces the official version, if present).
-4. Start JOSM; if necessary, enable the plugin in Preferences - Plugins.
+4. Start JOSM; if necessary, enable the plugin in **Preferences → Plugins**.
 
-The jar is self-contained (classes, icons and translations), so no other
-files are needed. Note that the JOSM plugin updater may reinstall the
-official version when plugins are updated; repeat the steps above to go
-back to the custom build.
- 
-## How does it work?
-
-**Adding turn lanes in unidirectional highways**
-
-![4](https://cloud.githubusercontent.com/assets/1152236/16133679/c56fe05e-33de-11e6-8f18-cb5efa721cde.gif)
-
-**Adding turn lanes in bidirectional highways**
-
-![5](https://cloud.githubusercontent.com/assets/1152236/16133863/aa636bfe-33df-11e6-9161-6ccd6b10559c.gif)
+The jar is self-contained (classes, icons and translations), so no other files are needed. Note that the JOSM plugin updater may reinstall the official version when plugins are updated; repeat the steps above to go back to the custom build.
 
 ## To activate the plugin
 
-Select a way, then the default shortcut <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>2</kbd> (MacOS: <kbd>Option</kbd>-<kbd>Shift</kbd>-<kbd>2</kbd> or <kbd>⌥</kbd><kbd>⇧</kbd><kbd>2</kbd>) 
-or menu item Data - Turn lanes tagging editor.
+Select a way, then the default shortcut <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>2</kbd> (MacOS: <kbd>Option</kbd>-<kbd>Shift</kbd>-<kbd>2</kbd> or <kbd>⌥</kbd><kbd>⇧</kbd><kbd>2</kbd>) or the menu item **Data → Turn lanes tagging editor**.
 
-## The main features are:
+## The main features are
 
-- The plugin is enabled after the highway is selected.
-- The plugin contains the combinations of most common preset turn lanes according mapbox-data-team
-- The plugin adds `turn:lanes` with its respective number of `lanes`.
+* The plugin is enabled after a highway is selected.
+* Presets with the most common turn-lane combinations.
+* The `recent turn lanes edit` tab contains recent turn lanes added by the user.
+* If the highway contains `turn:lanes:backward`, `turn:lanes:both_ways` or `turn:lanes:forward`, the plugin automatically sets up the configuration.
+* If the number of `lanes` does not match the `turn:lanes`, the plugin automatically fixes the number of `lanes` according to the `turn:lanes`.
 
 *Example*
 
@@ -61,10 +47,6 @@ or menu item Data - Turn lanes tagging editor.
 lanes=5
 turn:lanes=left|through|slight_left;through|right|through;right
 ```
-
-- The plugin adds `turn:lanes:backward`, `turn:lanes:both_ways` or  `turn:lanes:forward`  with theirs respective number of `lanes:backward`, `lanes:both_ways` or `lanes:forward` and the sum of all `lanes`.
-
-*Example*
 
 ```
 lanes:backward=2
@@ -76,44 +58,44 @@ turn:lanes:both_ways=left;reversible;right
 turn:lanes:forward=left|slight_left|through
 ```
 
-- The `recent turn lanes edit` tab contains recent turn lanes added by the user.
+### Live lane view in the editor
 
-![2](https://cloud.githubusercontent.com/assets/1152236/16133282/8b005b76-33dc-11e6-98ed-db53be95473d.gif)
+The lane editor draws the road while you edit it:
 
+* Each lane panel is **tinted by travel direction**: blue = forward, red = backward, yellow = both ways.
+* The **boundary lines are drawn between the lane panels**, following the settings:
+  * dashed where lane changes are allowed, **solid beside a lane that may not cross** (from `change:lanes`),
+  * asymmetric boundaries are drawn as two half-lines (solid + dashed) when only one side forbids crossing,
+  * the **yellow centre divider** follows the `divider` setting (solid / double solid / dashed) and upgrades to solid on the restricted side,
+  * `lane_markings=no` hides the white separators.
+* A coloured label on each lane shows its `change:lanes` value.
 
-- If a unidirectional highway contains a certain number of lanes, the plugin automatically sets up the configuration for the number of lanes.
+### Lane-change restrictions (`change:lanes`)
 
+Each lane can be given a lane-change restriction (`yes`, `no`, `not_left`, `not_right`), written as `change:lanes` (or `change:lanes:forward` / `change:lanes:backward` / `change:lanes:both_ways` for bidirectional highways). A warning is shown when some lanes have a restriction and others have an empty value, since JOSM does not handle empty pipe-separated values well.
 
-- If the highway contains `turn:lanes:backward`, `turn:lanes:both_ways` or `turn:lanes:forward` the plugin automatically sets up the configuration. 
+### Road divider and lane markings
 
+Use the **Divider** option to set `divider=solid_line|double_solid_line|dashed_line` and the **No lane markings** option to set `lane_markings=no`.
 
-![3](https://cloud.githubusercontent.com/assets/1152236/16133401/44d59642-33dd-11e6-9d90-1f9621cec6cf.gif)
+### Bicycle lanes
 
+* **Bicycle lanes left / Bicycle lanes right** options set `cycleway:left=*` / `cycleway:right=*` (`lane`, `track`, `shared_lane` or `no`). The cycleway is shown as a green panel with a bicycle icon at the chosen side of the road; `track` additionally shows a grey curb gap. The cycleway lane is always separated from the general traffic lanes by a **solid line**.
+* Each lane has a **Bike** checkbox: a checked lane becomes a designated bicycle lane (`bicycle:lanes=designated`) and is tinted green, so a bike lane can be placed **between general traffic lanes** (e.g. `bicycle:lanes=yes|designated|yes`). Existing `bicycle:lanes` tags are read back into the editor.
 
-- If the number of `lanes` does not match with the `turn:lanes`, the plugin will automatically fix the  number of `lanes` according to the `turn:lanes` added.
+## Screenshots and videos
 
-- Each lane can also be given a lane-change restriction (`yes`, `no`, `not_left`, `not_right`) which is written as `change:lanes` (or `change:lanes:forward` / `change:lanes:backward` / `change:lanes:both_ways` for bidirectional highways). Use the "Divider" option to set `divider=*`, the "No lane markings" option to set `lane_markings=no` and the "Bicycle lanes" option to set `cycleway=*`. The lane markings (dashed/solid/double, including the centre divider) are drawn live between the lane editors and in the preview.
+*Current media of the editor (lane preview, change:lanes lines, divider, bicycle lanes) are collected here.*
 
+<!-- Planned captures:
+     ![](screenshots/editor-unidirectional.png)
+     ![](screenshots/editor-bidirectional.png)
+     ![](screenshots/editor-change-lanes.png)
+     ![](screenshots/editor-cycleway.png)
+     ![](screenshots/editor-bike-lane-between.png)
+     ![](screenshots/add-turn-lanes.gif)
+-->
 
+## Feedback
 
-![1](https://cloud.githubusercontent.com/assets/1152236/16132547/32be798c-33d9-11e6-9208-77258d5fbb77.gif)
-
-*Before*
-```
-lanes=2
-turn:lanes=left|left|
-```
-*After*
-```
-lanes=3
-turn:lanes=left|left|
-```
-
-
-**If you have any feedback on the plugin, you can find me on [twitter](https://twitter.com/Rub21tk) or open a [ticket](https://github.com/JOSM/turnlanes-tagging/issues/new)**
-
-
-
-
-
-
+If you have any feedback on the plugin, you can find the author on [twitter](https://twitter.com/Rub21tk) or open a [ticket](https://github.com/JOSM/turnlanes-tagging/issues/new)
