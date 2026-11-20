@@ -63,7 +63,8 @@ public class BuildTurnLanes extends JPanel {
     private static final String[] DIVIDER_OPTIONS = {"", "solid_line", "double_solid_line", "dashed_line"};
     private static final String[] CYCLEWAY_OPTIONS = {"", "lane", "track", "shared_lane", "no"};
     private JComboBox<String> jcDivider = null;
-    private JComboBox<String> jcCycleway = null;
+    private JComboBox<String> jcCyclewayLeft = null;
+    private JComboBox<String> jcCyclewayRight = null;
     private JCheckBox jcLaneMarkingsNo = null;
     private boolean syncingRoadOptions = false;
 
@@ -273,20 +274,34 @@ public class BuildTurnLanes extends JPanel {
         gbc.weightx = 1;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         pnlDirectionalOptions.add(jpMarkingsOpt, gbc);
-        //Bicycle lanes option
-        JPanel jpCyclewayOpt = new JPanel(new BorderLayout(5, 0));
-        jpCyclewayOpt.setBorder(new SoftBevelBorder(BevelBorder.RAISED));
-        jpCyclewayOpt.add(new JLabel(tr("Bicycle lanes")), BorderLayout.LINE_START);
-        jcCycleway = new JComboBox<>(CYCLEWAY_OPTIONS);
-        jcCycleway.setToolTipText(tr("Set cycleway=* for the road"));
-        jcCycleway.addActionListener(roadOptionsActionListener);
-        jpCyclewayOpt.add(jcCycleway, BorderLayout.CENTER);
+        //Bicycle lanes option (left side)
+        JPanel jpCyclewayLeftOpt = new JPanel(new BorderLayout(5, 0));
+        jpCyclewayLeftOpt.setBorder(new SoftBevelBorder(BevelBorder.RAISED));
+        jpCyclewayLeftOpt.add(new JLabel(tr("Bicycle lanes left")), BorderLayout.LINE_START);
+        jcCyclewayLeft = new JComboBox<>(CYCLEWAY_OPTIONS);
+        jcCyclewayLeft.setToolTipText(tr("Set cycleway:left=* for the road"));
+        jcCyclewayLeft.addActionListener(roadOptionsActionListener);
+        jpCyclewayLeftOpt.add(jcCyclewayLeft, BorderLayout.CENTER);
         gbc.gridx = 0;
         gbc.gridy = 2;
         gbc.gridwidth = 2;
         gbc.weightx = 4;
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        pnlDirectionalOptions.add(jpCyclewayOpt, gbc);
+        pnlDirectionalOptions.add(jpCyclewayLeftOpt, gbc);
+        //Bicycle lanes option (right side)
+        JPanel jpCyclewayRightOpt = new JPanel(new BorderLayout(5, 0));
+        jpCyclewayRightOpt.setBorder(new SoftBevelBorder(BevelBorder.RAISED));
+        jpCyclewayRightOpt.add(new JLabel(tr("Bicycle lanes right")), BorderLayout.LINE_START);
+        jcCyclewayRight = new JComboBox<>(CYCLEWAY_OPTIONS);
+        jcCyclewayRight.setToolTipText(tr("Set cycleway:right=* for the road"));
+        jcCyclewayRight.addActionListener(roadOptionsActionListener);
+        jpCyclewayRightOpt.add(jcCyclewayRight, BorderLayout.CENTER);
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        gbc.gridwidth = 2;
+        gbc.weightx = 4;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        pnlDirectionalOptions.add(jpCyclewayRightOpt, gbc);
         jrbUnidirectional.addActionListener(actionListenerUnidirectional);
         jrbBidirectional.addActionListener(actionListenerBidirectional);
         return pnlDirectionalOptions;
@@ -502,7 +517,8 @@ public class BuildTurnLanes extends JPanel {
             }
             bRoad.setDivider(jcDivider.getSelectedItem() == null ? "" : jcDivider.getSelectedItem().toString());
             bRoad.setLaneMarkings(jcLaneMarkingsNo.isSelected() ? "no" : "");
-            bRoad.setCycleway(jcCycleway.getSelectedItem() == null ? "" : jcCycleway.getSelectedItem().toString());
+            bRoad.setCyclewayLeft(jcCyclewayLeft.getSelectedItem() == null ? "" : jcCyclewayLeft.getSelectedItem().toString());
+            bRoad.setCyclewayRight(jcCyclewayRight.getSelectedItem() == null ? "" : jcCyclewayRight.getSelectedItem().toString());
             turnSelectionUnidirectional.refreshPreview();
             turnSelectionBidirectional.refreshPreview();
             firePropertyChange(ROADCHANGED, null, bRoad);
@@ -520,7 +536,8 @@ public class BuildTurnLanes extends JPanel {
         try {
             jcDivider.setSelectedItem(road.getDivider() == null ? "" : road.getDivider());
             jcLaneMarkingsNo.setSelected("no".equals(road.getLaneMarkings()));
-            jcCycleway.setSelectedItem(road.getCycleway() == null ? "" : road.getCycleway());
+            jcCyclewayLeft.setSelectedItem(road.getCyclewayLeft() == null ? "" : road.getCyclewayLeft());
+            jcCyclewayRight.setSelectedItem(road.getCyclewayRight() == null ? "" : road.getCyclewayRight());
         } finally {
             syncingRoadOptions = false;
         }

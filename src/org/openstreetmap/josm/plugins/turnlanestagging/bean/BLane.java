@@ -13,6 +13,7 @@ public class BLane implements Serializable {
     private String turn;
     private String change = "";
     private String type; //backward, fordward, both_ways
+    private boolean bike;
 
     public BLane() {
     }
@@ -60,6 +61,19 @@ public class BLane implements Serializable {
 
     public void setChange(String change) {
         this.change = change;
+    }
+
+    /**
+     * Whether this lane is a bicycle lane ({@code bicycle:lanes=designated}).
+     *
+     * @return {@code true} if the lane is a designated bicycle lane
+     */
+    public boolean isBike() {
+        return bike;
+    }
+
+    public void setBike(boolean bike) {
+        this.bike = bike;
     }
 
 }

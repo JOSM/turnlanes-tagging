@@ -368,8 +368,41 @@ public class TurnLanesEditorDialog extends ExtendedDialog {
                 bRoad.setDivider(element.get(key));
             } else if (key.equals("lane_markings")) {
                 bRoad.setLaneMarkings(element.get(key));
+            } else if (key.equals("cycleway:left")) {
+                bRoad.setCyclewayLeft(element.get(key));
+            } else if (key.equals("cycleway:right")) {
+                bRoad.setCyclewayRight(element.get(key));
+            } else if (key.equals("cycleway:both")) {
+                bRoad.setCyclewayLeft(element.get(key));
+                bRoad.setCyclewayRight(element.get(key));
             } else if (key.equals("cycleway")) {
-                bRoad.setCycleway(element.get(key));
+                bRoad.setCyclewayLeft(element.get(key));
+                bRoad.setCyclewayRight(element.get(key));
+            } else if (key.equals("bicycle:lanes")) {
+                bRoad.getLanesUnid().setStringBicycle("unid", element.get(key));
+                bRoad.setName("Unidirectional");
+            } else if (key.equals("bicycle:lanes:forward")) {
+                if (Util.isRightHandTraffic()) {
+                    bRoad.getLanesC().setStringBicycle("forward", element.get(key));
+                    bRoad.getLanesC().setType("forward");
+                } else {
+                    bRoad.getLanesA().setStringBicycle("forward", element.get(key));
+                    bRoad.getLanesA().setType("forward");
+                }
+                bRoad.setName("Bidirectional");
+            } else if (key.equals("bicycle:lanes:both_ways")) {
+                bRoad.getLanesB().setStringBicycle("both_ways", element.get(key));
+                bRoad.getLanesB().setType("both_ways");
+                bRoad.setName("Bidirectional");
+            } else if (key.equals("bicycle:lanes:backward")) {
+                if (Util.isRightHandTraffic()) {
+                    bRoad.getLanesA().setStringBicycle("backward", element.get(key));
+                    bRoad.getLanesA().setType("backward");
+                } else {
+                    bRoad.getLanesC().setStringBicycle("backward", element.get(key));
+                    bRoad.getLanesC().setType("backward");
+                }
+                bRoad.setName("Bidirectional");
             }
         }
 
@@ -413,8 +446,16 @@ public class TurnLanesEditorDialog extends ExtendedDialog {
         tagEditor.getModel().delete("change:lanes:forward");
         tagEditor.getModel().delete("change:lanes:both_ways");
         tagEditor.getModel().delete("change:lanes:backward");
+        tagEditor.getModel().delete("bicycle:lanes");
+        tagEditor.getModel().delete("bicycle:lanes:forward");
+        tagEditor.getModel().delete("bicycle:lanes:both_ways");
+        tagEditor.getModel().delete("bicycle:lanes:backward");
         tagEditor.getModel().delete("divider");
         tagEditor.getModel().delete("lane_markings");
+        tagEditor.getModel().delete("cycleway");
+        tagEditor.getModel().delete("cycleway:left");
+        tagEditor.getModel().delete("cycleway:right");
+        tagEditor.getModel().delete("cycleway:both");
 
         if (bRoad.getName().equals("Unidirectional")) {
             if (Util.isEmptyturnlane(bRoad.getLanesUnid().getTagturns())) {
@@ -431,6 +472,10 @@ public class TurnLanesEditorDialog extends ExtendedDialog {
             if (Util.isEmptychangelane(bRoad.getLanesUnid().getTagchanges())) {
                 tagEditor.getModel().applyKeyValuePair(new Tag("change:lanes",
                         bRoad.getLanesUnid().getTagchanges()));
+            }
+            if (bRoad.getLanesUnid().hasBike()) {
+                tagEditor.getModel().applyKeyValuePair(new Tag("bicycle:lanes",
+                        bRoad.getLanesUnid().getTagbicycle()));
             }
         } else {
             if (!bRoad.getLanesA().getLanes().isEmpty()) {
@@ -450,6 +495,10 @@ public class TurnLanesEditorDialog extends ExtendedDialog {
                         tagEditor.getModel().applyKeyValuePair(new Tag("change:lanes:forward",
                                 bRoad.getLanesA().getTagchanges()));
                     }
+                    if (bRoad.getLanesA().hasBike()) {
+                        tagEditor.getModel().applyKeyValuePair(new Tag("bicycle:lanes:forward",
+                                bRoad.getLanesA().getTagbicycle()));
+                    }
                 } else {
                     if (Util.isEmptyturnlane(bRoad.getLanesA().getTagturns())) {
                         if (bRoad.isNone()) {
@@ -465,6 +514,10 @@ public class TurnLanesEditorDialog extends ExtendedDialog {
                     if (Util.isEmptychangelane(bRoad.getLanesA().getTagchanges())) {
                         tagEditor.getModel().applyKeyValuePair(new Tag("change:lanes:backward",
                                 bRoad.getLanesA().getTagchanges()));
+                    }
+                    if (bRoad.getLanesA().hasBike()) {
+                        tagEditor.getModel().applyKeyValuePair(new Tag("bicycle:lanes:backward",
+                                bRoad.getLanesA().getTagbicycle()));
                     }
                 }
             }
@@ -484,6 +537,10 @@ public class TurnLanesEditorDialog extends ExtendedDialog {
                     tagEditor.getModel().applyKeyValuePair(new Tag("change:lanes:both_ways",
                             bRoad.getLanesB().getTagchanges()));
                 }
+                if (bRoad.getLanesB().hasBike()) {
+                    tagEditor.getModel().applyKeyValuePair(new Tag("bicycle:lanes:both_ways",
+                            bRoad.getLanesB().getTagbicycle()));
+                }
             }
             if (!bRoad.getLanesC().getLanes().isEmpty()) {
                 if (bRoad.getLanesC().getType().equals("backward")) {
@@ -502,6 +559,10 @@ public class TurnLanesEditorDialog extends ExtendedDialog {
                         tagEditor.getModel().applyKeyValuePair(new Tag("change:lanes:backward",
                                 bRoad.getLanesC().getTagchanges()));
                     }
+                    if (bRoad.getLanesC().hasBike()) {
+                        tagEditor.getModel().applyKeyValuePair(new Tag("bicycle:lanes:backward",
+                                bRoad.getLanesC().getTagbicycle()));
+                    }
                 } else {
                     if (Util.isEmptyturnlane(bRoad.getLanesC().getTagturns())) {
                         if (bRoad.isNone()) {
@@ -518,6 +579,10 @@ public class TurnLanesEditorDialog extends ExtendedDialog {
                         tagEditor.getModel().applyKeyValuePair(new Tag("change:lanes:forward",
                                 bRoad.getLanesC().getTagchanges()));
                     }
+                    if (bRoad.getLanesC().hasBike()) {
+                        tagEditor.getModel().applyKeyValuePair(new Tag("bicycle:lanes:forward",
+                                bRoad.getLanesC().getTagbicycle()));
+                    }
                 }
             }
             tagEditor.getModel().applyKeyValuePair(new Tag("lanes",
@@ -529,8 +594,11 @@ public class TurnLanesEditorDialog extends ExtendedDialog {
         if (bRoad.getLaneMarkings() != null && !bRoad.getLaneMarkings().isEmpty()) {
             tagEditor.getModel().applyKeyValuePair(new Tag("lane_markings", bRoad.getLaneMarkings()));
         }
-        if (bRoad.getCycleway() != null && !bRoad.getCycleway().isEmpty()) {
-            tagEditor.getModel().applyKeyValuePair(new Tag("cycleway", bRoad.getCycleway()));
+        if (bRoad.getCyclewayLeft() != null && !bRoad.getCyclewayLeft().isEmpty()) {
+            tagEditor.getModel().applyKeyValuePair(new Tag("cycleway:left", bRoad.getCyclewayLeft()));
+        }
+        if (bRoad.getCyclewayRight() != null && !bRoad.getCyclewayRight().isEmpty()) {
+            tagEditor.getModel().applyKeyValuePair(new Tag("cycleway:right", bRoad.getCyclewayRight()));
         }
         tagEditor.repaint();
 

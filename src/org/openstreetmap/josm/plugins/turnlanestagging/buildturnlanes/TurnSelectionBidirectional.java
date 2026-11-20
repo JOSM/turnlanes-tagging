@@ -363,7 +363,8 @@ public class TurnSelectionBidirectional extends JPanel {
                                     || evt.getPropertyName().equals(TurnSelection.Merge_to_right_CHANGED)
                                     || evt.getPropertyName().equals(TurnSelection.Merge_to_left_CHANGED)
                                     || evt.getPropertyName().equals(TurnSelection.Reverse_CHANGED)
-                                    || evt.getPropertyName().equals(TurnSelection.CHANGE_CHANGED)) {
+                                    || evt.getPropertyName().equals(TurnSelection.CHANGE_CHANGED)
+                                    || evt.getPropertyName().equals(TurnSelection.BIKE_CHANGED)) {
                                 listBLanes.add((BLane) evt.getNewValue());
                                 bLanesA.setLanes(listBLanes);
                                 printChageLanes();
@@ -401,7 +402,8 @@ public class TurnSelectionBidirectional extends JPanel {
                                     || evt.getPropertyName().equals(TurnSelection.Merge_to_right_CHANGED)
                                     || evt.getPropertyName().equals(TurnSelection.Merge_to_left_CHANGED)
                                     || evt.getPropertyName().equals(TurnSelection.Reverse_CHANGED)
-                                    || evt.getPropertyName().equals(TurnSelection.CHANGE_CHANGED)) {
+                                    || evt.getPropertyName().equals(TurnSelection.CHANGE_CHANGED)
+                                    || evt.getPropertyName().equals(TurnSelection.BIKE_CHANGED)) {
                                 listBLanes.add((BLane) evt.getNewValue());
                                 bLanesA.setLanes(listBLanes);
                                 printChageLanes();
@@ -449,7 +451,8 @@ public class TurnSelectionBidirectional extends JPanel {
                         if (evt.getPropertyName().equals(TurnSelection.Left_CHANGED)
                                 || evt.getPropertyName().equals(TurnSelection.Right_CHANGED)
                                 || evt.getPropertyName().equals(TurnSelection.Reversible_CHANGED)
-                                || evt.getPropertyName().equals(TurnSelection.CHANGE_CHANGED)) {
+                                || evt.getPropertyName().equals(TurnSelection.CHANGE_CHANGED)
+                                || evt.getPropertyName().equals(TurnSelection.BIKE_CHANGED)) {
                             listBLanes.add((BLane) evt.getNewValue());
                             bLanesB.setLanes(listBLanes);
                             printChageLanes();
@@ -506,7 +509,8 @@ public class TurnSelectionBidirectional extends JPanel {
                                     || evt.getPropertyName().equals(TurnSelection.Merge_to_right_CHANGED)
                                     || evt.getPropertyName().equals(TurnSelection.Merge_to_left_CHANGED)
                                     || evt.getPropertyName().equals(TurnSelection.Reverse_CHANGED)
-                                    || evt.getPropertyName().equals(TurnSelection.CHANGE_CHANGED)) {
+                                    || evt.getPropertyName().equals(TurnSelection.CHANGE_CHANGED)
+                                    || evt.getPropertyName().equals(TurnSelection.BIKE_CHANGED)) {
                                 listBLanes.add((BLane) evt.getNewValue());
                                 bLanesC.setLanes(listBLanes);
                                 printChageLanes();
@@ -544,7 +548,8 @@ public class TurnSelectionBidirectional extends JPanel {
                                     || evt.getPropertyName().equals(TurnSelection.Merge_to_right_CHANGED)
                                     || evt.getPropertyName().equals(TurnSelection.Merge_to_left_CHANGED)
                                     || evt.getPropertyName().equals(TurnSelection.Reverse_CHANGED)
-                                    || evt.getPropertyName().equals(TurnSelection.CHANGE_CHANGED)) {
+                                    || evt.getPropertyName().equals(TurnSelection.CHANGE_CHANGED)
+                                    || evt.getPropertyName().equals(TurnSelection.BIKE_CHANGED)) {
                                 listBLanes.add((BLane) evt.getNewValue());
                                 bLanesC.setLanes(listBLanes);
                                 printChageLanes();
@@ -603,7 +608,8 @@ public class TurnSelectionBidirectional extends JPanel {
     public void refreshPreview() {
         valBRoad.setDivider(BuildTurnLanes.bRoad.getDivider());
         valBRoad.setLaneMarkings(BuildTurnLanes.bRoad.getLaneMarkings());
-        valBRoad.setCycleway(BuildTurnLanes.bRoad.getCycleway());
+        valBRoad.setCyclewayLeft(BuildTurnLanes.bRoad.getCyclewayLeft());
+        valBRoad.setCyclewayRight(BuildTurnLanes.bRoad.getCyclewayRight());
         refreshBoundaries();
     }
 
@@ -665,26 +671,25 @@ public class TurnSelectionBidirectional extends JPanel {
             setCentre(stripAB, a.get(a.size() - 1), c.get(0), divider);
         }
         boolean laneMarkings = !"no".equals(valBRoad.getLaneMarkings());
-        String cycleway = valBRoad.getCycleway() == null ? "" : valBRoad.getCycleway();
-        boolean bike = !cycleway.isEmpty() && !"no".equals(cycleway);
-        boolean track = "track".equals(cycleway);
-        bikeLeftPanel.setVisible(bike);
-        bikeRightPanel.setVisible(bike);
-        stripBikeLeft.setVisible(bike);
-        stripBikeRight.setVisible(bike);
-        curbLeft.setVisible(track);
-        curbRight.setVisible(track);
-        if (bike) {
-            bikeLeftPanel.setMode(cycleway);
-            bikeRightPanel.setMode(cycleway);
-            if (!a.isEmpty()) {
-                stripBikeLeft.setState(false, Util.blocksSmallerOffsetSide(a.get(0)),
-                        false, divider, laneMarkings);
-            }
-            if (!c.isEmpty()) {
-                stripBikeRight.setState(Util.blocksLargerOffsetSide(c.get(c.size() - 1)), false,
-                        false, divider, laneMarkings);
-            }
+        String cyclewayLeft = valBRoad.getCyclewayLeft() == null ? "" : valBRoad.getCyclewayLeft();
+        String cyclewayRight = valBRoad.getCyclewayRight() == null ? "" : valBRoad.getCyclewayRight();
+        boolean bikeLeft = !cyclewayLeft.isEmpty() && !"no".equals(cyclewayLeft);
+        boolean bikeRight = !cyclewayRight.isEmpty() && !"no".equals(cyclewayRight);
+        bikeLeftPanel.setVisible(bikeLeft);
+        stripBikeLeft.setVisible(bikeLeft);
+        curbLeft.setVisible("track".equals(cyclewayLeft));
+        bikeRightPanel.setVisible(bikeRight);
+        stripBikeRight.setVisible(bikeRight);
+        curbRight.setVisible("track".equals(cyclewayRight));
+        if (bikeLeft && !a.isEmpty()) {
+            bikeLeftPanel.setMode(cyclewayLeft);
+            stripBikeLeft.setState(false, Util.blocksSmallerOffsetSide(a.get(0)),
+                    false, divider, laneMarkings);
+        }
+        if (bikeRight && !c.isEmpty()) {
+            bikeRightPanel.setMode(cyclewayRight);
+            stripBikeRight.setState(Util.blocksLargerOffsetSide(c.get(c.size() - 1)), false,
+                    false, divider, laneMarkings);
         }
         jpanelcontentTurns.revalidate();
         jpanelcontentTurns.repaint();
@@ -705,7 +710,8 @@ public class TurnSelectionBidirectional extends JPanel {
         valBRoad.setLanesC(bLanesC);
         valBRoad.setDivider(bRoad.getDivider());
         valBRoad.setLaneMarkings(bRoad.getLaneMarkings());
-        valBRoad.setCycleway(bRoad.getCycleway());
+        valBRoad.setCyclewayLeft(bRoad.getCyclewayLeft());
+        valBRoad.setCyclewayRight(bRoad.getCyclewayRight());
         jtfChangeLanes.setText(bLanesA.getTagturns() + "==" + bLanesB.getTagturns() + "==" + bLanesC.getTagturns());
         lanesA(bRoad.getLanesA());
         lanesB(bRoad.getLanesB());
