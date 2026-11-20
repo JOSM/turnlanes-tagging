@@ -92,7 +92,7 @@ turn:lanes:forward=left|slight_left|through
 
 - If the number of `lanes` does not match with the `turn:lanes`, the plugin will automatically fix the  number of `lanes` according to the `turn:lanes` added.
 
-- Each lane can also be given a lane-change restriction (`yes`, `no`, `not_left`, `not_right`) which is written as `change:lanes` (or `change:lanes:forward` / `change:lanes:backward` / `change:lanes:both_ways` for bidirectional highways). Use the "Divider" option to set `divider=*` and the "No lane markings" option to set `lane_markings=no`.
+- Each lane can also be given a lane-change restriction (`yes`, `no`, `not_left`, `not_right`) which is written as `change:lanes` (or `change:lanes:forward` / `change:lanes:backward` / `change:lanes:both_ways` for bidirectional highways). Use the "Divider" option to set `divider=*`, the "No lane markings" option to set `lane_markings=no` and the "Bicycle lanes" option to set `cycleway=*`. The lane markings (dashed/solid/double, including the centre divider) are drawn live between the lane editors and in the preview.
 
 
 

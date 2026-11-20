@@ -61,7 +61,9 @@ public class BuildTurnLanes extends JPanel {
     private static JCheckBox jcNone = null;
 
     private static final String[] DIVIDER_OPTIONS = {"", "solid_line", "double_solid_line", "dashed_line"};
+    private static final String[] CYCLEWAY_OPTIONS = {"", "lane", "track", "shared_lane", "no"};
     private JComboBox<String> jcDivider = null;
+    private JComboBox<String> jcCycleway = null;
     private JCheckBox jcLaneMarkingsNo = null;
     private boolean syncingRoadOptions = false;
 
@@ -271,6 +273,20 @@ public class BuildTurnLanes extends JPanel {
         gbc.weightx = 1;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         pnlDirectionalOptions.add(jpMarkingsOpt, gbc);
+        //Bicycle lanes option
+        JPanel jpCyclewayOpt = new JPanel(new BorderLayout(5, 0));
+        jpCyclewayOpt.setBorder(new SoftBevelBorder(BevelBorder.RAISED));
+        jpCyclewayOpt.add(new JLabel(tr("Bicycle lanes")), BorderLayout.LINE_START);
+        jcCycleway = new JComboBox<>(CYCLEWAY_OPTIONS);
+        jcCycleway.setToolTipText(tr("Set cycleway=* for the road"));
+        jcCycleway.addActionListener(roadOptionsActionListener);
+        jpCyclewayOpt.add(jcCycleway, BorderLayout.CENTER);
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.gridwidth = 2;
+        gbc.weightx = 4;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        pnlDirectionalOptions.add(jpCyclewayOpt, gbc);
         jrbUnidirectional.addActionListener(actionListenerUnidirectional);
         jrbBidirectional.addActionListener(actionListenerBidirectional);
         return pnlDirectionalOptions;
@@ -486,6 +502,7 @@ public class BuildTurnLanes extends JPanel {
             }
             bRoad.setDivider(jcDivider.getSelectedItem() == null ? "" : jcDivider.getSelectedItem().toString());
             bRoad.setLaneMarkings(jcLaneMarkingsNo.isSelected() ? "no" : "");
+            bRoad.setCycleway(jcCycleway.getSelectedItem() == null ? "" : jcCycleway.getSelectedItem().toString());
             turnSelectionUnidirectional.refreshPreview();
             turnSelectionBidirectional.refreshPreview();
             firePropertyChange(ROADCHANGED, null, bRoad);
@@ -503,6 +520,7 @@ public class BuildTurnLanes extends JPanel {
         try {
             jcDivider.setSelectedItem(road.getDivider() == null ? "" : road.getDivider());
             jcLaneMarkingsNo.setSelected("no".equals(road.getLaneMarkings()));
+            jcCycleway.setSelectedItem(road.getCycleway() == null ? "" : road.getCycleway());
         } finally {
             syncingRoadOptions = false;
         }
