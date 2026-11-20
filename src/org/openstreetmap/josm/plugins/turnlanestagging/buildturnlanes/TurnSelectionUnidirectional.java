@@ -52,9 +52,12 @@ public class TurnSelectionUnidirectional extends JPanel {
 
     private final JTextField jtfChangeLanes = new JTextField();
     private final List<LaneBoundaryStrip> strips = new ArrayList<>();
-    private final BikeLanePanel bikePanel = new BikeLanePanel();
-    private final LaneBoundaryStrip stripBike = new LaneBoundaryStrip();
-    private final JPanel curb = new JPanel();
+    private final BikeLanePanel bikeLeftPanel = new BikeLanePanel();
+    private final BikeLanePanel bikeRightPanel = new BikeLanePanel();
+    private final LaneBoundaryStrip stripBikeLeft = new LaneBoundaryStrip();
+    private final LaneBoundaryStrip stripBikeRight = new LaneBoundaryStrip();
+    private final JPanel curbLeft = new JPanel();
+    private final JPanel curbRight = new JPanel();
 
     // Event Changed
     public static final String LINESCHANGED = "LinesChanged";
@@ -87,10 +90,14 @@ public class TurnSelectionUnidirectional extends JPanel {
         jpanelContentLane = new JPanel(new GridLayout(1, 1));
         jpanelContentLane.setBorder(new SoftBevelBorder(BevelBorder.RAISED));
         jpanelcontentTurns = new JPanel();
-        curb.setOpaque(true);
-        curb.setBackground(new Color(175, 175, 175));
-        curb.setPreferredSize(new Dimension(8, 60));
-        curb.setMaximumSize(new Dimension(8, Integer.MAX_VALUE));
+        curbLeft.setOpaque(true);
+        curbLeft.setBackground(new Color(175, 175, 175));
+        curbLeft.setPreferredSize(new Dimension(8, 60));
+        curbLeft.setMaximumSize(new Dimension(8, Integer.MAX_VALUE));
+        curbRight.setOpaque(true);
+        curbRight.setBackground(new Color(175, 175, 175));
+        curbRight.setPreferredSize(new Dimension(8, 60));
+        curbRight.setMaximumSize(new Dimension(8, Integer.MAX_VALUE));
 
         jpanelcontentTurns.setBorder(BorderFactory.createTitledBorder(null, tr("Lanes"),
                 TitledBorder.CENTER, TitledBorder.CENTER, null, new Color(102, 102, 102)));
@@ -168,6 +175,9 @@ public class TurnSelectionUnidirectional extends JPanel {
         int numLanes = bLanes.getLanes().size();
         jpanelcontentTurns.setLayout(new BoxLayout(jpanelcontentTurns, BoxLayout.X_AXIS));
         strips.clear();
+        jpanelcontentTurns.add(bikeLeftPanel);
+        jpanelcontentTurns.add(curbLeft);
+        jpanelcontentTurns.add(stripBikeLeft);
 
         eventSpiner = false;
         spinner.setValue(numLanes);
@@ -195,7 +205,8 @@ public class TurnSelectionUnidirectional extends JPanel {
                             || evt.getPropertyName().equals(TurnSelection.Merge_to_right_CHANGED)
                             || evt.getPropertyName().equals(TurnSelection.Merge_to_left_CHANGED)
                             || evt.getPropertyName().equals(TurnSelection.Reverse_CHANGED)
-                            || evt.getPropertyName().equals(TurnSelection.CHANGE_CHANGED)) {
+                            || evt.getPropertyName().equals(TurnSelection.CHANGE_CHANGED)
+                            || evt.getPropertyName().equals(TurnSelection.BIKE_CHANGED)) {
                         listBLines.add((BLane) evt.getNewValue());
                         valBRoad.getLanesUnid().setLanes(listBLines);
                         jtfChangeLanes.setText(valBRoad.getLanesUnid().getTagturns());
@@ -208,9 +219,9 @@ public class TurnSelectionUnidirectional extends JPanel {
             });
             jpanelcontentTurns.add(turnSelection);
         }
-        jpanelcontentTurns.add(curb);
-        jpanelcontentTurns.add(stripBike);
-        jpanelcontentTurns.add(bikePanel);
+        jpanelcontentTurns.add(stripBikeRight);
+        jpanelcontentTurns.add(curbRight);
+        jpanelcontentTurns.add(bikeRightPanel);
         jtfChangeLanes.setText(valBRoad.getLanesUnid().getTagturns());
         refreshBoundaries();
         jpanelcontentTurns.revalidate();
@@ -221,7 +232,8 @@ public class TurnSelectionUnidirectional extends JPanel {
         lanes(bRoad.getLanesUnid());
         valBRoad.setDivider(bRoad.getDivider());
         valBRoad.setLaneMarkings(bRoad.getLaneMarkings());
-        valBRoad.setCycleway(bRoad.getCycleway());
+        valBRoad.setCyclewayLeft(bRoad.getCyclewayLeft());
+        valBRoad.setCyclewayRight(bRoad.getCyclewayRight());
         refreshPreview();
     }
 
@@ -236,7 +248,8 @@ public class TurnSelectionUnidirectional extends JPanel {
     public void refreshPreview() {
         valBRoad.setDivider(BuildTurnLanes.bRoad.getDivider());
         valBRoad.setLaneMarkings(BuildTurnLanes.bRoad.getLaneMarkings());
-        valBRoad.setCycleway(BuildTurnLanes.bRoad.getCycleway());
+        valBRoad.setCyclewayLeft(BuildTurnLanes.bRoad.getCyclewayLeft());
+        valBRoad.setCyclewayRight(BuildTurnLanes.bRoad.getCyclewayRight());
         refreshBoundaries();
     }
 
@@ -254,15 +267,24 @@ public class TurnSelectionUnidirectional extends JPanel {
             strips.get(i).setState(Util.blocksLargerOffsetSide(left),
                     Util.blocksSmallerOffsetSide(right), false, divider, laneMarkings);
         }
-        String cycleway = valBRoad.getCycleway() == null ? "" : valBRoad.getCycleway();
-        boolean bike = !cycleway.isEmpty() && !"no".equals(cycleway);
-        boolean track = "track".equals(cycleway);
-        bikePanel.setVisible(bike);
-        stripBike.setVisible(bike);
-        curb.setVisible(track);
-        if (bike && !lanes.isEmpty()) {
-            bikePanel.setMode(cycleway);
-            stripBike.setState(Util.blocksLargerOffsetSide(lanes.get(lanes.size() - 1)), false,
+        String cyclewayLeft = valBRoad.getCyclewayLeft() == null ? "" : valBRoad.getCyclewayLeft();
+        String cyclewayRight = valBRoad.getCyclewayRight() == null ? "" : valBRoad.getCyclewayRight();
+        boolean bikeLeft = !cyclewayLeft.isEmpty() && !"no".equals(cyclewayLeft);
+        boolean bikeRight = !cyclewayRight.isEmpty() && !"no".equals(cyclewayRight);
+        bikeLeftPanel.setVisible(bikeLeft);
+        stripBikeLeft.setVisible(bikeLeft);
+        curbLeft.setVisible("track".equals(cyclewayLeft));
+        bikeRightPanel.setVisible(bikeRight);
+        stripBikeRight.setVisible(bikeRight);
+        curbRight.setVisible("track".equals(cyclewayRight));
+        if (bikeLeft && !lanes.isEmpty()) {
+            bikeLeftPanel.setMode(cyclewayLeft);
+            stripBikeLeft.setState(false, Util.blocksSmallerOffsetSide(lanes.get(0)),
+                    false, divider, laneMarkings);
+        }
+        if (bikeRight && !lanes.isEmpty()) {
+            bikeRightPanel.setMode(cyclewayRight);
+            stripBikeRight.setState(Util.blocksLargerOffsetSide(lanes.get(lanes.size() - 1)), false,
                     false, divider, laneMarkings);
         }
         jpanelcontentTurns.revalidate();

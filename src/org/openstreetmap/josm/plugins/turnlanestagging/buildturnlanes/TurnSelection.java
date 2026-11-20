@@ -38,6 +38,7 @@ public class TurnSelection extends JPanel {
     public static final String Merge_to_left_CHANGED = "merge_to_left Changed";
     public static final String Reverse_CHANGED = "reverse Changed";
     public static final String CHANGE_CHANGED = "Change Changed";
+    public static final String BIKE_CHANGED = "Bike Changed";
 
     private static final String[] CHANGE_OPTIONS = {"", "yes", "no", "not_left", "not_right"};
 
@@ -53,7 +54,9 @@ public class TurnSelection extends JPanel {
     private JCheckBox merge_to_left;
     private JCheckBox reverse;
     private JComboBox<String> change;
+    private JCheckBox bike;
     private JLabel lblChange;
+    private JPanel pnlChange;
 
     BLane bLine;
     int numRoadLanes;
@@ -82,6 +85,7 @@ public class TurnSelection extends JPanel {
         merge_to_left = new JCheckBox();
         reverse = new JCheckBox();
         change = new JComboBox<>(CHANGE_OPTIONS);
+        bike = new JCheckBox();
 
         //ToolTipText
         left.setToolTipText("left");
@@ -94,6 +98,7 @@ public class TurnSelection extends JPanel {
         merge_to_left.setToolTipText("merge_to_left");
         reverse.setToolTipText("reverse");
         change.setToolTipText("change");
+        bike.setToolTipText("bicycle:lanes=designated");
 
         //Unidirectional
         if (bLine.getType().equals("unid")) {
@@ -148,6 +153,7 @@ public class TurnSelection extends JPanel {
         merge_to_left.addActionListener(new Merge_to_leftListener());
         reverse.addActionListener(new ReverseListener());
         change.addActionListener(new ChangeListener());
+        bike.addActionListener(new BikeListener());
 
         jPOptions.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Lane " + bLine.getPosition(),
                 TitledBorder.CENTER, TitledBorder.DEFAULT_POSITION, new Font("Abyssinica SIL", 0, 11), Color.gray));
@@ -155,35 +161,61 @@ public class TurnSelection extends JPanel {
         lblChange.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 10));
         setTurn();
         setChange();
-        // Tint the whole panel by travel direction, like the old road preview did.
-        Color tint = directionColor(bLine.getType());
-        setOpaque(true);
-        setBackground(tint);
-        jPOptions.setBackground(tint);
-        for (Component comp : jPOptions.getComponents()) {
-            if (comp instanceof JComponent) {
-                ((JComponent) comp).setOpaque(false);
-            }
-        }
-        add(buildChangePanel(tint), BorderLayout.NORTH);
+        bike.setSelected(bLine.isBike());
+        applyTint();
+        add(buildChangePanel(), BorderLayout.NORTH);
         add(jPOptions, BorderLayout.CENTER);
         add(lblChange, BorderLayout.SOUTH);
         updateChangeLabel();
     }
 
-    private JPanel buildChangePanel(Color tint) {
-        JPanel pnl = new JPanel(new BorderLayout(5, 0));
-        pnl.setBackground(tint);
-        pnl.add(new JLabel("Change"), BorderLayout.WEST);
-        pnl.add(change, BorderLayout.CENTER);
-        return pnl;
+    private JPanel buildChangePanel() {
+        pnlChange = new JPanel(new BorderLayout(5, 0));
+        pnlChange.add(new JLabel("Change"), BorderLayout.WEST);
+        pnlChange.add(change, BorderLayout.CENTER);
+        JPanel pnlBike = new JPanel(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 2, 0));
+        pnlBike.add(new JLabel("Bike"));
+        pnlBike.add(bike);
+        pnlChange.add(pnlBike, BorderLayout.EAST);
+        return pnlChange;
     }
 
     /**
-     * Updates the coloured label showing the lane's {@code change:lanes} value.
+     * Tints the whole panel: green for a designated bicycle lane, otherwise
+     * the colour of the travel direction (blue forward, red backward, yellow
+     * both ways).
+     */
+    private void applyTint() {
+        Color tint = bLine.isBike() ? new Color(160, 220, 160) : directionColor(bLine.getType());
+        setOpaque(true);
+        setBackground(tint);
+        jPOptions.setBackground(tint);
+        if (pnlChange != null) {
+            pnlChange.setBackground(tint);
+            for (Component comp : pnlChange.getComponents()) {
+                if (comp instanceof JComponent) {
+                    ((JComponent) comp).setBackground(tint);
+                }
+            }
+        }
+        for (Component comp : jPOptions.getComponents()) {
+            if (comp instanceof JComponent) {
+                ((JComponent) comp).setOpaque(false);
+            }
+        }
+    }
+
+    /**
+     * Updates the coloured label showing the lane's {@code change:lanes} value
+     * (or that the lane is a bicycle lane).
      */
     private void updateChangeLabel() {
         if (lblChange == null) {
+            return;
+        }
+        if (bLine.isBike()) {
+            lblChange.setText("bicycle");
+            lblChange.setForeground(new Color(0, 110, 0));
             return;
         }
         String c = bLine.getChange();
@@ -410,13 +442,22 @@ public class TurnSelection extends JPanel {
     }
 
     private class ChangeListener implements ActionListener {
-
         @Override
         public void actionPerformed(ActionEvent ae) {
             Object selected = change.getSelectedItem();
             bLine.setChange(selected == null ? "" : selected.toString());
             updateChangeLabel();
             firePropertyChange(CHANGE_CHANGED, null, bLine);
+        }
+    }
+
+    private class BikeListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            bLine.setBike(bike.isSelected());
+            applyTint();
+            updateChangeLabel();
+            firePropertyChange(BIKE_CHANGED, null, bLine);
         }
     }
 
