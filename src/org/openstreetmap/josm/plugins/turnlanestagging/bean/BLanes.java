@@ -61,20 +61,65 @@ public class BLanes implements Serializable {
         return tagturns;
     }
 
-    public void setStringLanes(String type, String turnLanes) {
-        String[] turns = turnLanes.split("\\|", -1);
-        List<BLane> lst = new ArrayList<>();
-        for (int i = 0; i < turns.length; i++) {
-            //remove none tags
-            if (turns[i].equals("none")) {
-                turns[i] = "";
-            } else if (turns[i].indexOf(";") > 0) {
-                turns[i] = sortTurns(turns[i]);
+    public String getTagchanges() {
+        String tagchanges = "";
+        for (int i = 0; i < lanes.size(); i++) {
+            if (i == 0) {
+                tagchanges = lanes.get(i).getChange();
+            } else {
+                tagchanges = tagchanges + "|" + lanes.get(i).getChange();
             }
-            BLane bLine = new BLane(type, (i + 1), turns[i]);
-            lst.add(bLine);
         }
-        this.lanes = lst;
+        return tagchanges;
+    }
+
+    public void setStringLanes(String type, String turnLanes) {
+        applyLaneValues(type, turnLanes.split("\\|", -1), null);
+    }
+
+    public void setStringChanges(String type, String changeLanes) {
+        applyLaneValues(type, null, changeLanes.split("\\|", -1));
+    }
+
+    /**
+     * Builds/updates the lane list by position, preserving the turn value while
+     * setting changes (or vice versa). This keeps turn and change information in
+     * sync when a way carries both {@code turn:lanes} and {@code change:lanes}
+     * tags, regardless of the order they are processed in.
+     */
+    private void applyLaneValues(String type, String[] turns, String[] changes) {
+        Map<Integer, BLane> existing = new TreeMap<>();
+        for (BLane lane : lanes) {
+            existing.put(lane.getPosition(), lane);
+        }
+
+        int count = lanes.size();
+        if (turns != null) {
+            count = Math.max(count, turns.length);
+        }
+        if (changes != null) {
+            count = Math.max(count, changes.length);
+        }
+
+        List<BLane> result = new ArrayList<>();
+        for (int i = 0; i < count; i++) {
+            int position = i + 1;
+            BLane previous = existing.get(position);
+            String turn = turns != null ? normalizeTurn(turns[i]) : (previous != null ? previous.getTurn() : "");
+            String change = changes != null ? changes[i] : (previous != null ? previous.getChange() : "");
+            result.add(new BLane(type, position, turn, change));
+        }
+        this.lanes = result;
+    }
+
+    private String normalizeTurn(String turn) {
+        if (turn.equals("none")) {
+            return "";
+        }
+        if (turn.indexOf(";") > 0) {
+            return sortTurns(turn);
+        }
+        return turn;
     }
 
     private String sortTurns(String roadTurns) {

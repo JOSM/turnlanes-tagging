@@ -1,6 +1,7 @@
 // License: GPL. For details, see LICENSE file.
 package org.openstreetmap.josm.plugins.turnlanestagging.buildturnlanes;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -11,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 
@@ -32,6 +34,9 @@ public class TurnSelection extends JPanel {
     public static final String Merge_to_right_CHANGED = "merge_to_right Changed";
     public static final String Merge_to_left_CHANGED = "merge_to_left Changed";
     public static final String Reverse_CHANGED = "reverse Changed";
+    public static final String CHANGE_CHANGED = "Change Changed";
+
+    private static final String[] CHANGE_OPTIONS = {"", "yes", "no", "not_left", "not_right"};
 
 //    private JPanel jPTurnSelection;
     private JPanel jPOptions;
@@ -44,6 +49,7 @@ public class TurnSelection extends JPanel {
     private JCheckBox merge_to_right;
     private JCheckBox merge_to_left;
     private JCheckBox reverse;
+    private JComboBox<String> change;
 
     BLane bLine;
     int numRoadLanes;
@@ -60,6 +66,7 @@ public class TurnSelection extends JPanel {
     }
 
     public void init() {
+        setLayout(new BorderLayout());
         jPOptions = new JPanel(new GridBagLayout());
         left = new JCheckBox();
         through = new JCheckBox();
@@ -70,6 +77,7 @@ public class TurnSelection extends JPanel {
         merge_to_right = new JCheckBox();
         merge_to_left = new JCheckBox();
         reverse = new JCheckBox();
+        change = new JComboBox<>(CHANGE_OPTIONS);
 
         //ToolTipText
         left.setToolTipText("left");
@@ -81,6 +89,7 @@ public class TurnSelection extends JPanel {
         merge_to_right.setToolTipText("merge_to_right");
         merge_to_left.setToolTipText("merge_to_left");
         reverse.setToolTipText("reverse");
+        change.setToolTipText("change");
 
         //Unidirectional
         if (bLine.getType().equals("unid")) {
@@ -134,11 +143,21 @@ public class TurnSelection extends JPanel {
         merge_to_right.addActionListener(new Merge_to_rightListener());
         merge_to_left.addActionListener(new Merge_to_leftListener());
         reverse.addActionListener(new ReverseListener());
+        change.addActionListener(new ChangeListener());
 
         jPOptions.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Lane " + bLine.getPosition(),
                 TitledBorder.CENTER, TitledBorder.DEFAULT_POSITION, new Font("Abyssinica SIL", 0, 11), Color.gray));
         setTurn();
-        add(jPOptions);
+        setChange();
+        add(buildChangePanel(), BorderLayout.NORTH);
+        add(jPOptions, BorderLayout.CENTER);
+    }
+
+    private JPanel buildChangePanel() {
+        JPanel pnl = new JPanel(new BorderLayout(5, 0));
+        pnl.add(new javax.swing.JLabel("Change"), BorderLayout.WEST);
+        pnl.add(change, BorderLayout.CENTER);
+        return pnl;
     }
 
     //left|left;through||…|right
@@ -240,6 +259,10 @@ public class TurnSelection extends JPanel {
         }
     }
 
+    protected void setChange() {
+        change.setSelectedItem(bLine.getChange());
+    }
+
     private class LeftListener implements ActionListener {
 
         @Override
@@ -318,6 +341,16 @@ public class TurnSelection extends JPanel {
         public void actionPerformed(ActionEvent ae) {
             builturn();
             firePropertyChange(Reverse_CHANGED, null, bLine);
+        }
+    }
+
+    private class ChangeListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            Object selected = change.getSelectedItem();
+            bLine.setChange(selected == null ? "" : selected.toString());
+            firePropertyChange(CHANGE_CHANGED, null, bLine);
         }
     }
 

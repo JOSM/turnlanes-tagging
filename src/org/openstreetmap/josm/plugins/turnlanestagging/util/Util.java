@@ -13,9 +13,12 @@ import javax.swing.JOptionPane;
 
 import org.openstreetmap.josm.data.osm.DataSet;
 import org.openstreetmap.josm.data.osm.OsmPrimitive;
+import org.openstreetmap.josm.plugins.turnlanestagging.bean.BLane;
 import org.openstreetmap.josm.gui.MainApplication;
 import org.openstreetmap.josm.gui.Notification;
 import org.openstreetmap.josm.tools.RightAndLefthandTraffic;
+
+import static org.openstreetmap.josm.tools.I18n.tr;
 
 /**
  *
@@ -68,6 +71,100 @@ public final class Util {
             }
         }
         return false;
+    }
+
+    /**
+     * Checks whether a {@code change:lanes} value contains any explicit lane change
+     * restriction/allowance, so the caller knows whether the tag should be written.
+     *
+     * @param changes lane change value string, e.g. {@code "yes|not_left"} or {@code "||"}
+     * @return {@code true} if at least one lane carries an explicit change value
+     */
+    public static boolean isEmptychangelane(String changes) {
+        List<String> changesList = Arrays.asList("yes", "no", "not_left", "not_right");
+        for (String cl : changesList) {
+            if (changes.contains(cl)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Checks whether a {@code change:lanes} value mixes filled and empty lanes,
+     * e.g. {@code "yes||no"} or {@code "yes|"}. JOSM/OSM does not handle empty
+     * entries in the middle of the list well, so such values should be avoided.
+     *
+     * @param changes lane change value string, e.g. {@code "yes||no"}
+     * @return {@code true} if at least one lane is filled and at least one is empty
+     */
+    public static boolean hasEmptyChangeLane(String changes) {
+        if (changes == null || changes.isEmpty()) {
+            return false;
+        }
+        boolean hasValue = false;
+        boolean hasEmpty = false;
+        for (String part : changes.split("\\|", -1)) {
+            if (part.isEmpty()) {
+                hasEmpty = true;
+            } else {
+                hasValue = true;
+            }
+        }
+        return hasValue && hasEmpty;
+    }
+
+    /**
+     * Whether a lane may not cross the boundary on its larger-offset side
+     * (right side for forward/unidirectional lanes, left side for backward
+     * lanes, since they face the opposite direction).
+     */
+    public static boolean blocksLargerOffsetSide(BLane lane) {
+        String c = lane.getChange();
+        if (c == null || c.isEmpty()) {
+            return false;
+        }
+        if ("backward".equals(lane.getType())) {
+            return "not_left".equals(c) || "no".equals(c);
+        }
+        return "not_right".equals(c) || "no".equals(c);
+    }
+
+    /**
+     * Whether a lane may not cross the boundary on its smaller-offset side
+     * (left side for forward/unidirectional lanes, right side for backward
+     * lanes).
+     */
+    public static boolean blocksSmallerOffsetSide(BLane lane) {
+        String c = lane.getChange();
+        if (c == null || c.isEmpty()) {
+            return false;
+        }
+        if ("backward".equals(lane.getType())) {
+            return "not_right".equals(c) || "no".equals(c);
+        }
+        return "not_left".equals(c) || "no".equals(c);
+    }
+
+    /**
+     * Whether the boundary between the two adjacent lanes may not be crossed,
+     * because either lane carries a {@code change:lanes} restriction
+     * ({@code no}/{@code not_left}/{@code not_right}) forbidding crossing it.
+     */
+    public static boolean boundaryChangeRestricted(BLane left, BLane right) {
+        return blocksLargerOffsetSide(left) || blocksSmallerOffsetSide(right);
+    }
+
+    /**
+     * Shows a warning notification when a {@code change:lanes} value has empty
+     * lanes mixed with filled lanes, prompting the user to fill in every lane.
+     *
+     * @param changes lane change value string
+     */
+    public static void warnIfEmptyChangeLane(String changes) {
+        if (hasEmptyChangeLane(changes)) {
+            notification(tr("Lane change restriction is empty for some lanes. Fill in a value for every lane."));
+        }
     }
 
     /**
