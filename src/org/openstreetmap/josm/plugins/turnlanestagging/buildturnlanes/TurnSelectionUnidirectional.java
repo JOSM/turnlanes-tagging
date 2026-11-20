@@ -48,6 +48,7 @@ public class TurnSelectionUnidirectional extends JPanel {
     JSpinner spinner = null;
 
     private final JTextField jtfChangeLanes = new JTextField();
+    private final LanePreviewPanel preview = new LanePreviewPanel();
 
     // Event Changed
     public static final String LINESCHANGED = "LinesChanged";
@@ -88,6 +89,7 @@ public class TurnSelectionUnidirectional extends JPanel {
         jsp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
         jpanelContentLane.add(jsp);
         add(jpanelContentLane, BorderLayout.CENTER);
+        add(preview, BorderLayout.SOUTH);
         //add(jtfChangeLanes, BorderLayout.SOUTH);
         //Event Road Listenr
         jtfChangeLanes.getDocument().addDocumentListener(new SetLanesChangeListener());
@@ -177,26 +179,49 @@ public class TurnSelectionUnidirectional extends JPanel {
                             || evt.getPropertyName().equals(TurnSelection.Slight_left_CHANGED)
                             || evt.getPropertyName().equals(TurnSelection.Merge_to_right_CHANGED)
                             || evt.getPropertyName().equals(TurnSelection.Merge_to_left_CHANGED)
-                            || evt.getPropertyName().equals(TurnSelection.Reverse_CHANGED)) {
+                            || evt.getPropertyName().equals(TurnSelection.Reverse_CHANGED)
+                            || evt.getPropertyName().equals(TurnSelection.CHANGE_CHANGED)) {
                         listBLines.add((BLane) evt.getNewValue());
                         valBRoad.getLanesUnid().setLanes(listBLines);
                         jtfChangeLanes.setText(valBRoad.getLanesUnid().getTagturns());
+                        preview.setRoad(valBRoad);
+                        if (evt.getPropertyName().equals(TurnSelection.CHANGE_CHANGED)) {
+                            warnIfIncompleteChange();
+                        }
                     }
                 }
             });
             jpanelcontentTurns.add(turnSelection);
         }
         jtfChangeLanes.setText(valBRoad.getLanesUnid().getTagturns());
+        preview.setRoad(valBRoad);
         jpanelcontentTurns.revalidate();
         jpanelcontentTurns.repaint();
     }
 
     public void setDefault(BRoad bRoad) {
         lanes(bRoad.getLanesUnid());
+        valBRoad.setDivider(bRoad.getDivider());
+        valBRoad.setLaneMarkings(bRoad.getLaneMarkings());
+        refreshPreview();
     }
 
     public BRoad getValBRoad() {
         return valBRoad;
+    }
+
+    /**
+     * Repaints the lane preview after road-level options (divider, lane markings)
+     * change without a full lane rebuild.
+     */
+    public void refreshPreview() {
+        valBRoad.setDivider(BuildTurnLanes.bRoad.getDivider());
+        valBRoad.setLaneMarkings(BuildTurnLanes.bRoad.getLaneMarkings());
+        preview.setRoad(valBRoad);
+    }
+
+    private void warnIfIncompleteChange() {
+        Util.warnIfEmptyChangeLane(valBRoad.getLanesUnid().getTagchanges());
     }
 
     class SPinnerListener implements ChangeListener {

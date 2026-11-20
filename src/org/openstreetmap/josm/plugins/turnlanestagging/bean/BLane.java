@@ -11,6 +11,7 @@ public class BLane implements Serializable {
 
     private int position;
     private String turn;
+    private String change = "";
     private String type; //backward, fordward, both_ways
 
     public BLane() {
@@ -19,6 +20,13 @@ public class BLane implements Serializable {
     public BLane(String type, int position, String turn) {
         this.position = position;
         this.turn = turn;
+        this.type = type; // for unidirectional " unid""
+    }
+
+    public BLane(String type, int position, String turn, String change) {
+        this.position = position;
+        this.turn = turn;
+        this.change = change;
         this.type = type; // for unidirectional " unid""
     }
 
@@ -44,6 +52,14 @@ public class BLane implements Serializable {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getChange() {
+        return change;
+    }
+
+    public void setChange(String change) {
+        this.change = change;
     }
 
 }

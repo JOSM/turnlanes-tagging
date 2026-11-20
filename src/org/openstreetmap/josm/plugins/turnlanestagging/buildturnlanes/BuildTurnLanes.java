@@ -23,6 +23,8 @@ import java.util.List;
 import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
@@ -57,6 +59,11 @@ public class BuildTurnLanes extends JPanel {
     private PresetsTableModel lastEditsTableModel = null;
     // Config
     private static JCheckBox jcNone = null;
+
+    private static final String[] DIVIDER_OPTIONS = {"", "solid_line", "double_solid_line", "dashed_line"};
+    private JComboBox<String> jcDivider = null;
+    private JCheckBox jcLaneMarkingsNo = null;
+    private boolean syncingRoadOptions = false;
 
     //Main Content
     private JPanel pnlBuildTurnLanes = null;
@@ -237,6 +244,33 @@ public class BuildTurnLanes extends JPanel {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         jpNoneOpt.add(jcNone);
         pnlDirectionalOptions.add(jpNoneOpt, gbc);
+        //Divider option
+        JPanel jpDividerOpt = new JPanel(new BorderLayout(5, 0));
+        jpDividerOpt.setBorder(new SoftBevelBorder(BevelBorder.RAISED));
+        jpDividerOpt.add(new JLabel(tr("Divider")), BorderLayout.LINE_START);
+        jcDivider = new JComboBox<>(DIVIDER_OPTIONS);
+        jcDivider.setToolTipText(tr("Axis road divider marking"));
+        jcDivider.addActionListener(roadOptionsActionListener);
+        jpDividerOpt.add(jcDivider, BorderLayout.CENTER);
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.gridwidth = 2;
+        gbc.weightx = 4;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        pnlDirectionalOptions.add(jpDividerOpt, gbc);
+        //Lane markings option
+        JPanel jpMarkingsOpt = new JPanel(new BorderLayout());
+        jpMarkingsOpt.setBorder(new SoftBevelBorder(BevelBorder.RAISED));
+        jcLaneMarkingsNo = new JCheckBox(tr("No lane markings"));
+        jcLaneMarkingsNo.setToolTipText(tr("Set lane_markings=no (no painted lines)"));
+        jcLaneMarkingsNo.addActionListener(roadOptionsActionListener);
+        jpMarkingsOpt.add(jcLaneMarkingsNo);
+        gbc.gridx = 2;
+        gbc.gridy = 1;
+        gbc.gridwidth = 1;
+        gbc.weightx = 1;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        pnlDirectionalOptions.add(jpMarkingsOpt, gbc);
         jrbUnidirectional.addActionListener(actionListenerUnidirectional);
         jrbBidirectional.addActionListener(actionListenerBidirectional);
         return pnlDirectionalOptions;
@@ -328,7 +362,9 @@ public class BuildTurnLanes extends JPanel {
         jrbUnidirectional.setSelected(true);
         pnlContentDirectional.removeAll();
         pnlContentDirectional.setLayout(new GridLayout(1, 1));
-        turnSelectionUnidirectional.setDefault(presetsData.defaultRoadUnidirectional(4)); //default 4 lanes according data team
+        BRoad road = presetsData.defaultRoadUnidirectional(4); //default 4 lanes according data team
+        turnSelectionUnidirectional.setDefault(road);
+        syncRoadOptions(road);
         pnlContentDirectional.add(turnSelectionUnidirectional);
         pnlContentDirectional.revalidate();
         pnlContentDirectional.repaint();
@@ -339,6 +375,7 @@ public class BuildTurnLanes extends JPanel {
         pnlContentDirectional.removeAll();
         pnlContentDirectional.setLayout(new GridLayout(1, 1));
         turnSelectionUnidirectional.setDefault(road);
+        syncRoadOptions(road);
         pnlContentDirectional.add(turnSelectionUnidirectional);
         pnlContentDirectional.revalidate();
         pnlContentDirectional.repaint();
@@ -348,8 +385,9 @@ public class BuildTurnLanes extends JPanel {
         jrbBidirectional.setSelected(true);
         pnlContentDirectional.removeAll();
         pnlContentDirectional.setLayout(new GridLayout(1, 1));
-        turnSelectionBidirectional.setDefault(
-                presetsData.defaultRoadBidirectional("forward", 3, "backward", 2)); //default 3 and 2 lanes according data team
+        BRoad road = presetsData.defaultRoadBidirectional("forward", 3, "backward", 2); //default 3 and 2 lanes according data team
+        turnSelectionBidirectional.setDefault(road);
+        syncRoadOptions(road);
         pnlContentDirectional.add(turnSelectionBidirectional);
         pnlContentDirectional.revalidate();
         pnlContentDirectional.repaint();
@@ -360,6 +398,7 @@ public class BuildTurnLanes extends JPanel {
         pnlContentDirectional.removeAll();
         pnlContentDirectional.setLayout(new GridLayout(1, 1));
         turnSelectionBidirectional.setDefault(bRoad);
+        syncRoadOptions(bRoad);
         pnlContentDirectional.add(turnSelectionBidirectional);
         pnlContentDirectional.revalidate();
         pnlContentDirectional.repaint();
@@ -371,11 +410,15 @@ public class BuildTurnLanes extends JPanel {
         } else {
             for (int i = 0; i < listLastEditsRoads.size(); i++) {
                 if (bRoad.getName().equals("Bidirectional")) {
-                    if (listLastEditsRoads.get(i).turns().equals(bRoad.turns())) {
+                    if (listLastEditsRoads.get(i).turns().equals(bRoad.turns())
+                            && listLastEditsRoads.get(i).changes().equals(bRoad.changes())) {
                         listLastEditsRoads.remove(i);
                     }
                 } else {
-                    if (listLastEditsRoads.get(i).getLanesUnid().getTagturns().equals(bRoad.getLanesUnid().getTagturns())) {
+                    if (listLastEditsRoads.get(i).getLanesUnid().getTagturns().equals(bRoad.getLanesUnid().getTagturns())
+                            && listLastEditsRoads.get(i).getLanesUnid().getTagchanges().equals(bRoad.getLanesUnid().getTagchanges())
+                            && listLastEditsRoads.get(i).getDivider().equals(bRoad.getDivider())
+                            && listLastEditsRoads.get(i).getLaneMarkings().equals(bRoad.getLaneMarkings())) {
                         listLastEditsRoads.remove(i);
                     }
                 }
@@ -434,6 +477,36 @@ public class BuildTurnLanes extends JPanel {
             }
         }
     };
+
+    ActionListener roadOptionsActionListener = new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent actionEvent) {
+            if (syncingRoadOptions) {
+                return;
+            }
+            bRoad.setDivider(jcDivider.getSelectedItem() == null ? "" : jcDivider.getSelectedItem().toString());
+            bRoad.setLaneMarkings(jcLaneMarkingsNo.isSelected() ? "no" : "");
+            turnSelectionUnidirectional.refreshPreview();
+            turnSelectionBidirectional.refreshPreview();
+            firePropertyChange(ROADCHANGED, null, bRoad);
+        }
+    };
+
+    /**
+     * Synchronises the divider and lane-marking controls with a road without
+     * firing their change listeners.
+     *
+     * @param road the road whose options should be reflected in the controls
+     */
+    private void syncRoadOptions(BRoad road) {
+        syncingRoadOptions = true;
+        try {
+            jcDivider.setSelectedItem(road.getDivider() == null ? "" : road.getDivider());
+            jcLaneMarkingsNo.setSelected("no".equals(road.getLaneMarkings()));
+        } finally {
+            syncingRoadOptions = false;
+        }
+    }
 
     public List<BRoad> getListLastEditsRoads() {
         return listLastEditsRoads;

@@ -15,6 +15,8 @@ public class BRoad implements Serializable {
     private BLanes lanesB = new BLanes();
     private BLanes lanesC = new BLanes();
     private boolean none;
+    private String divider = "";
+    private String laneMarkings = "";
 
     public BRoad() {
     }
@@ -86,9 +88,32 @@ public class BRoad implements Serializable {
         this.none = none;
     }
 
+    public String getDivider() {
+        return divider;
+    }
+
+    public void setDivider(String divider) {
+        this.divider = divider;
+    }
+
+    public String getLaneMarkings() {
+        return laneMarkings;
+    }
+
+    public void setLaneMarkings(String laneMarkings) {
+        this.laneMarkings = laneMarkings;
+    }
+
     public String turns() {
         return lanesA.getLanes().size() + "-" + lanesA.getTagturns() + "-" +
                lanesB.getLanes().size() + "-" + lanesB.getTagturns() + "-" +
                lanesC.getLanes().size() + "-" + lanesC.getTagturns();
+    }
+
+    public String changes() {
+        return lanesA.getLanes().size() + "-" + lanesA.getTagchanges() + "-" +
+               lanesB.getLanes().size() + "-" + lanesB.getTagchanges() + "-" +
+               lanesC.getLanes().size() + "-" + lanesC.getTagchanges() + "-" +
+               divider + "-" + laneMarkings;
     }
 }

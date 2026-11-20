@@ -69,6 +69,7 @@ public class TurnSelectionBidirectional extends JPanel {
     JSpinner spinnerC = null;
     //Jtext
     private final JTextField jtfChangeLanes = new JTextField();
+    private final LanePreviewPanel preview = new LanePreviewPanel();
     //Values road
     BRoad valBRoad = new BRoad();
     BLanes bLanesA = new BLanes();
@@ -98,6 +99,7 @@ public class TurnSelectionBidirectional extends JPanel {
         jsp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         jsp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
         add(jsp, BorderLayout.CENTER);
+        add(preview, BorderLayout.SOUTH);
         //add(jtfChangeLanes, BorderLayout.SOUTH);
         jtfChangeLanes.getDocument().addDocumentListener(new SetLanesChangeListener());
         jpnlturnsA.addMouseWheelListener(new MouseWheelListener() {
@@ -329,7 +331,8 @@ public class TurnSelectionBidirectional extends JPanel {
                                     || evt.getPropertyName().equals(TurnSelection.Slight_left_CHANGED)
                                     || evt.getPropertyName().equals(TurnSelection.Merge_to_right_CHANGED)
                                     || evt.getPropertyName().equals(TurnSelection.Merge_to_left_CHANGED)
-                                    || evt.getPropertyName().equals(TurnSelection.Reverse_CHANGED)) {
+                                    || evt.getPropertyName().equals(TurnSelection.Reverse_CHANGED)
+                                    || evt.getPropertyName().equals(TurnSelection.CHANGE_CHANGED)) {
                                 listBLanes.add((BLane) evt.getNewValue());
                                 bLanesA.setLanes(listBLanes);
                                 printChageLanes();
@@ -360,7 +363,8 @@ public class TurnSelectionBidirectional extends JPanel {
                                     || evt.getPropertyName().equals(TurnSelection.Slight_left_CHANGED)
                                     || evt.getPropertyName().equals(TurnSelection.Merge_to_right_CHANGED)
                                     || evt.getPropertyName().equals(TurnSelection.Merge_to_left_CHANGED)
-                                    || evt.getPropertyName().equals(TurnSelection.Reverse_CHANGED)) {
+                                    || evt.getPropertyName().equals(TurnSelection.Reverse_CHANGED)
+                                    || evt.getPropertyName().equals(TurnSelection.CHANGE_CHANGED)) {
                                 listBLanes.add((BLane) evt.getNewValue());
                                 bLanesA.setLanes(listBLanes);
                                 printChageLanes();
@@ -401,7 +405,8 @@ public class TurnSelectionBidirectional extends JPanel {
                     public void propertyChange(PropertyChangeEvent evt) {
                         if (evt.getPropertyName().equals(TurnSelection.Left_CHANGED)
                                 || evt.getPropertyName().equals(TurnSelection.Right_CHANGED)
-                                || evt.getPropertyName().equals(TurnSelection.Reversible_CHANGED)) {
+                                || evt.getPropertyName().equals(TurnSelection.Reversible_CHANGED)
+                                || evt.getPropertyName().equals(TurnSelection.CHANGE_CHANGED)) {
                             listBLanes.add((BLane) evt.getNewValue());
                             bLanesB.setLanes(listBLanes);
                             printChageLanes();
@@ -451,7 +456,8 @@ public class TurnSelectionBidirectional extends JPanel {
                                     || evt.getPropertyName().equals(TurnSelection.Slight_left_CHANGED)
                                     || evt.getPropertyName().equals(TurnSelection.Merge_to_right_CHANGED)
                                     || evt.getPropertyName().equals(TurnSelection.Merge_to_left_CHANGED)
-                                    || evt.getPropertyName().equals(TurnSelection.Reverse_CHANGED)) {
+                                    || evt.getPropertyName().equals(TurnSelection.Reverse_CHANGED)
+                                    || evt.getPropertyName().equals(TurnSelection.CHANGE_CHANGED)) {
                                 listBLanes.add((BLane) evt.getNewValue());
                                 bLanesC.setLanes(listBLanes);
                                 printChageLanes();
@@ -482,7 +488,8 @@ public class TurnSelectionBidirectional extends JPanel {
                                     || evt.getPropertyName().equals(TurnSelection.Slight_left_CHANGED)
                                     || evt.getPropertyName().equals(TurnSelection.Merge_to_right_CHANGED)
                                     || evt.getPropertyName().equals(TurnSelection.Merge_to_left_CHANGED)
-                                    || evt.getPropertyName().equals(TurnSelection.Reverse_CHANGED)) {
+                                    || evt.getPropertyName().equals(TurnSelection.Reverse_CHANGED)
+                                    || evt.getPropertyName().equals(TurnSelection.CHANGE_CHANGED)) {
                                 listBLanes.add((BLane) evt.getNewValue());
                                 bLanesC.setLanes(listBLanes);
                                 printChageLanes();
@@ -505,6 +512,38 @@ public class TurnSelectionBidirectional extends JPanel {
         valBRoad.setLanesB(bLanesB);
         valBRoad.setLanesC(bLanesC);
         jtfChangeLanes.setText(bLanesA.getTagturns() + "==" + bLanesB.getTagturns() + "==" + bLanesC.getTagturns());
+        preview.setRoad(valBRoad);
+        warnIfIncompleteChange();
+    }
+
+    private String lastChangeSignature = "";
+
+    /**
+     * Warns once per distinct change-lane state when some lanes have a change
+     * restriction and others are empty, which produces empty pipe-separated
+     * values that JOSM does not handle well.
+     */
+    private void warnIfIncompleteChange() {
+        String signature = bLanesA.getTagchanges() + "|" + bLanesB.getTagchanges() + "|" + bLanesC.getTagchanges();
+        if (signature.equals(lastChangeSignature)) {
+            return;
+        }
+        lastChangeSignature = signature;
+        if (Util.hasEmptyChangeLane(bLanesA.getTagchanges())
+                || Util.hasEmptyChangeLane(bLanesB.getTagchanges())
+                || Util.hasEmptyChangeLane(bLanesC.getTagchanges())) {
+            Util.notification(tr("Lane change restriction is empty for some lanes. Fill in a value for every lane."));
+        }
+    }
+
+    /**
+     * Repaints the lane preview after road-level options (divider, lane markings)
+     * change without a full lane rebuild.
+     */
+    public void refreshPreview() {
+        valBRoad.setDivider(BuildTurnLanes.bRoad.getDivider());
+        valBRoad.setLaneMarkings(BuildTurnLanes.bRoad.getLaneMarkings());
+        preview.setRoad(valBRoad);
     }
 
     public void setDefault(BRoad bRoad) {
@@ -515,6 +554,8 @@ public class TurnSelectionBidirectional extends JPanel {
         valBRoad.setLanesA(bLanesA);
         valBRoad.setLanesB(bLanesB);
         valBRoad.setLanesC(bLanesC);
+        valBRoad.setDivider(bRoad.getDivider());
+        valBRoad.setLaneMarkings(bRoad.getLaneMarkings());
         jtfChangeLanes.setText(bLanesA.getTagturns() + "==" + bLanesB.getTagturns() + "==" + bLanesC.getTagturns());
         lanesA(bRoad.getLanesA());
         lanesB(bRoad.getLanesB());
