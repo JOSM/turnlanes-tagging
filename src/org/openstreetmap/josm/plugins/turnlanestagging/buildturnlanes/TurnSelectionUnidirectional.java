@@ -50,8 +50,9 @@ public class TurnSelectionUnidirectional extends JPanel {
     JSpinner spinner = null;
 
     private final JTextField jtfChangeLanes = new JTextField();
-    private final LanePreviewPanel preview = new LanePreviewPanel();
     private final List<LaneBoundaryStrip> strips = new ArrayList<>();
+    private final LaneBoundaryStrip bikeLeft = new LaneBoundaryStrip();
+    private final LaneBoundaryStrip bikeRight = new LaneBoundaryStrip();
 
     // Event Changed
     public static final String LINESCHANGED = "LinesChanged";
@@ -84,6 +85,8 @@ public class TurnSelectionUnidirectional extends JPanel {
         jpanelContentLane = new JPanel(new GridLayout(1, 1));
         jpanelContentLane.setBorder(new SoftBevelBorder(BevelBorder.RAISED));
         jpanelcontentTurns = new JPanel();
+        bikeLeft.setBike();
+        bikeRight.setBike();
 
         jpanelcontentTurns.setBorder(BorderFactory.createTitledBorder(null, tr("Lanes"),
                 TitledBorder.CENTER, TitledBorder.CENTER, null, new Color(102, 102, 102)));
@@ -92,7 +95,6 @@ public class TurnSelectionUnidirectional extends JPanel {
         jsp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
         jpanelContentLane.add(jsp);
         add(jpanelContentLane, BorderLayout.CENTER);
-        add(preview, BorderLayout.SOUTH);
         //add(jtfChangeLanes, BorderLayout.SOUTH);
         //Event Road Listenr
         jtfChangeLanes.getDocument().addDocumentListener(new SetLanesChangeListener());
@@ -162,6 +164,7 @@ public class TurnSelectionUnidirectional extends JPanel {
         int numLanes = bLanes.getLanes().size();
         jpanelcontentTurns.setLayout(new BoxLayout(jpanelcontentTurns, BoxLayout.X_AXIS));
         strips.clear();
+        jpanelcontentTurns.add(bikeLeft);
 
         eventSpiner = false;
         spinner.setValue(numLanes);
@@ -193,7 +196,6 @@ public class TurnSelectionUnidirectional extends JPanel {
                         listBLines.add((BLane) evt.getNewValue());
                         valBRoad.getLanesUnid().setLanes(listBLines);
                         jtfChangeLanes.setText(valBRoad.getLanesUnid().getTagturns());
-                        preview.setRoad(valBRoad);
                         refreshBoundaries();
                         if (evt.getPropertyName().equals(TurnSelection.CHANGE_CHANGED)) {
                             warnIfIncompleteChange();
@@ -203,8 +205,8 @@ public class TurnSelectionUnidirectional extends JPanel {
             });
             jpanelcontentTurns.add(turnSelection);
         }
+        jpanelcontentTurns.add(bikeRight);
         jtfChangeLanes.setText(valBRoad.getLanesUnid().getTagturns());
-        preview.setRoad(valBRoad);
         refreshBoundaries();
         jpanelcontentTurns.revalidate();
         jpanelcontentTurns.repaint();
@@ -214,6 +216,7 @@ public class TurnSelectionUnidirectional extends JPanel {
         lanes(bRoad.getLanesUnid());
         valBRoad.setDivider(bRoad.getDivider());
         valBRoad.setLaneMarkings(bRoad.getLaneMarkings());
+        valBRoad.setCycleway(bRoad.getCycleway());
         refreshPreview();
     }
 
@@ -222,13 +225,13 @@ public class TurnSelectionUnidirectional extends JPanel {
     }
 
     /**
-     * Repaints the lane preview and the boundary strips after road-level
-     * options (divider, lane markings) change without a full lane rebuild.
+     * Repaints the boundary strips after road-level options (divider, lane
+     * markings, bicycle lanes) change without a full lane rebuild.
      */
     public void refreshPreview() {
         valBRoad.setDivider(BuildTurnLanes.bRoad.getDivider());
         valBRoad.setLaneMarkings(BuildTurnLanes.bRoad.getLaneMarkings());
-        preview.setRoad(valBRoad);
+        valBRoad.setCycleway(BuildTurnLanes.bRoad.getCycleway());
         refreshBoundaries();
     }
 
@@ -246,6 +249,10 @@ public class TurnSelectionUnidirectional extends JPanel {
             strips.get(i).setState(Util.blocksLargerOffsetSide(left),
                     Util.blocksSmallerOffsetSide(right), false, divider, laneMarkings);
         }
+        boolean bike = valBRoad.getCycleway() != null && !valBRoad.getCycleway().isEmpty()
+                && !"no".equals(valBRoad.getCycleway());
+        bikeLeft.setVisible(bike);
+        bikeRight.setVisible(bike);
     }
 
     private void warnIfIncompleteChange() {

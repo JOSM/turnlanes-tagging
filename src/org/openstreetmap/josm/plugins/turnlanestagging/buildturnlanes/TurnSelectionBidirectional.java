@@ -71,12 +71,13 @@ public class TurnSelectionBidirectional extends JPanel {
     JSpinner spinnerC = null;
     //Jtext
     private final JTextField jtfChangeLanes = new JTextField();
-    private final LanePreviewPanel preview = new LanePreviewPanel();
     private final List<LaneBoundaryStrip> stripsA = new ArrayList<>();
     private final List<LaneBoundaryStrip> stripsB = new ArrayList<>();
     private final List<LaneBoundaryStrip> stripsC = new ArrayList<>();
     private LaneBoundaryStrip stripAB = null;
     private LaneBoundaryStrip stripBC = null;
+    private final LaneBoundaryStrip bikeLeft = new LaneBoundaryStrip();
+    private final LaneBoundaryStrip bikeRight = new LaneBoundaryStrip();
     //Values road
     BRoad valBRoad = new BRoad();
     BLanes bLanesA = new BLanes();
@@ -106,7 +107,8 @@ public class TurnSelectionBidirectional extends JPanel {
         jsp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         jsp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
         add(jsp, BorderLayout.CENTER);
-        add(preview, BorderLayout.SOUTH);
+        bikeLeft.setBike();
+        bikeRight.setBike();
         //add(jtfChangeLanes, BorderLayout.SOUTH);
         jtfChangeLanes.getDocument().addDocumentListener(new SetLanesChangeListener());
         jpnlturnsA.addMouseWheelListener(new MouseWheelListener() {
@@ -264,11 +266,13 @@ public class TurnSelectionBidirectional extends JPanel {
         jpanelcontentTurns.setBorder(new SoftBevelBorder(BevelBorder.RAISED));
         stripAB = new LaneBoundaryStrip();
         stripBC = new LaneBoundaryStrip();
+        jpanelcontentTurns.add(bikeLeft);
         jpanelcontentTurns.add(jpnlturnsA);
         jpanelcontentTurns.add(stripAB);
         jpanelcontentTurns.add(jpnlturnsB);
         jpanelcontentTurns.add(stripBC);
         jpanelcontentTurns.add(jpnlturnsC);
+        jpanelcontentTurns.add(bikeRight);
         return jpanelcontentTurns;
     }
 
@@ -553,7 +557,6 @@ public class TurnSelectionBidirectional extends JPanel {
         valBRoad.setLanesB(bLanesB);
         valBRoad.setLanesC(bLanesC);
         jtfChangeLanes.setText(bLanesA.getTagturns() + "==" + bLanesB.getTagturns() + "==" + bLanesC.getTagturns());
-        preview.setRoad(valBRoad);
         refreshBoundaries();
         warnIfIncompleteChange();
     }
@@ -579,13 +582,13 @@ public class TurnSelectionBidirectional extends JPanel {
     }
 
     /**
-     * Repaints the lane preview and the boundary strips after road-level
-     * options (divider, lane markings) change without a full lane rebuild.
+     * Repaints the boundary strips after road-level options (divider, lane
+     * markings, bicycle lanes) change without a full lane rebuild.
      */
     public void refreshPreview() {
         valBRoad.setDivider(BuildTurnLanes.bRoad.getDivider());
         valBRoad.setLaneMarkings(BuildTurnLanes.bRoad.getLaneMarkings());
-        preview.setRoad(valBRoad);
+        valBRoad.setCycleway(BuildTurnLanes.bRoad.getCycleway());
         refreshBoundaries();
     }
 
@@ -646,6 +649,10 @@ public class TurnSelectionBidirectional extends JPanel {
         } else if (!a.isEmpty() && !c.isEmpty()) {
             setCentre(stripAB, a.get(a.size() - 1), c.get(0), divider);
         }
+        boolean bike = valBRoad.getCycleway() != null && !valBRoad.getCycleway().isEmpty()
+                && !"no".equals(valBRoad.getCycleway());
+        bikeLeft.setVisible(bike);
+        bikeRight.setVisible(bike);
         jpanelcontentTurns.revalidate();
         jpanelcontentTurns.repaint();
     }
@@ -665,6 +672,7 @@ public class TurnSelectionBidirectional extends JPanel {
         valBRoad.setLanesC(bLanesC);
         valBRoad.setDivider(bRoad.getDivider());
         valBRoad.setLaneMarkings(bRoad.getLaneMarkings());
+        valBRoad.setCycleway(bRoad.getCycleway());
         jtfChangeLanes.setText(bLanesA.getTagturns() + "==" + bLanesB.getTagturns() + "==" + bLanesC.getTagturns());
         lanesA(bRoad.getLanesA());
         lanesB(bRoad.getLanesB());
