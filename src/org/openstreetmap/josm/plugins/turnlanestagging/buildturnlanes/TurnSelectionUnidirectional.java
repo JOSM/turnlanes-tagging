@@ -253,6 +253,8 @@ public class TurnSelectionUnidirectional extends JPanel {
                 && !"no".equals(valBRoad.getCycleway());
         bikeLeft.setVisible(bike);
         bikeRight.setVisible(bike);
+        jpanelcontentTurns.revalidate();
+        jpanelcontentTurns.repaint();
     }
 
     private void warnIfIncompleteChange() {
