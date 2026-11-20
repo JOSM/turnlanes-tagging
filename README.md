@@ -14,6 +14,25 @@ Styles window and clicking on the settings (two vertical sliders) icon.
 * Select the "Lane and road attributes" from the list of "Available styles" and add to the list of "Active styles".
 * Activate the "Lane and road attributes" style by selecting its checkbox in the list of "Active styles".
 This should be selected in addition to your usual map style.
+
+## Installing a custom build (jar file)
+
+A locally built jar (e.g. with `ant dist`, or a jar downloaded from a GitHub
+release) can be installed manually without the plugin manager:
+
+1. Close JOSM.
+2. Copy the jar to the JOSM plugins directory, e.g.:
+   * Linux: `~/.local/share/JOSM/plugins/`
+   * macOS: `~/Library/JOSM/plugins/`
+   * Windows: `%APPDATA%\JOSM\plugins\`
+   * Flatpak: `~/.var/app/org.openstreetmap.josm/data/JOSM/plugins/`
+3. Name it `turnlanes-tagging.jar` (this replaces the official version, if present).
+4. Start JOSM; if necessary, enable the plugin in Preferences - Plugins.
+
+The jar is self-contained (classes, icons and translations), so no other
+files are needed. Note that the JOSM plugin updater may reinstall the
+official version when plugins are updated; repeat the steps above to go
+back to the custom build.
  
 ## How does it work?
 
