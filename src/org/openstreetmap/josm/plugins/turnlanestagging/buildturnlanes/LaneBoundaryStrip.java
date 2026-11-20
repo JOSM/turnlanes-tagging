@@ -21,14 +21,12 @@ public class LaneBoundaryStrip extends JPanel {
 
     private static final Color COLOR_DIVIDER = new Color(255, 205, 0);
     private static final Color COLOR_LANE_LINE = new Color(70, 70, 70);
-    private static final Color COLOR_BIKE = new Color(70, 190, 70);
 
     private boolean leftBlocked;
     private boolean rightBlocked;
     private boolean centre;
     private String divider = "";
     private boolean laneMarkings = true;
-    private boolean bike;
 
     public LaneBoundaryStrip() {
         setOpaque(false);
@@ -55,18 +53,6 @@ public class LaneBoundaryStrip extends JPanel {
         repaint();
     }
 
-    /**
-     * Marks this strip as a green bicycle-lane edge marker.
-     */
-    public void setBike() {
-        this.bike = true;
-        setPreferredSize(new Dimension(14, 60));
-        setMinimumSize(new Dimension(8, 40));
-        setMaximumSize(new Dimension(14, Integer.MAX_VALUE));
-        setToolTipText("cycleway");
-        repaint();
-    }
-
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -76,14 +62,7 @@ public class LaneBoundaryStrip extends JPanel {
             int x = getWidth() / 2;
             int y1 = 4;
             int y2 = getHeight() - 4;
-            if (bike) {
-                g2.setColor(COLOR_BIKE);
-                g2.fillRoundRect(x - 5, y1, 10, y2 - y1, 6, 6);
-                g2.setColor(new Color(235, 255, 235));
-                g2.setStroke(new BasicStroke(1.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL,
-                        0f, new float[] {3f, 3f}, 0f));
-                g2.drawLine(x, y1 + 2, x, y2 - 2);
-            } else if (centre) {
+            if (centre) {
                 drawCentre(g2, x, y1, y2);
             } else if (laneMarkings) {
                 drawLaneBoundary(g2, x, y1, y2);

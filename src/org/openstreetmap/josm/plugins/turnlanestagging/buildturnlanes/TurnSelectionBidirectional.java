@@ -5,6 +5,7 @@ import static org.openstreetmap.josm.tools.I18n.tr;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -76,8 +77,12 @@ public class TurnSelectionBidirectional extends JPanel {
     private final List<LaneBoundaryStrip> stripsC = new ArrayList<>();
     private LaneBoundaryStrip stripAB = null;
     private LaneBoundaryStrip stripBC = null;
-    private final LaneBoundaryStrip bikeLeft = new LaneBoundaryStrip();
-    private final LaneBoundaryStrip bikeRight = new LaneBoundaryStrip();
+    private final BikeLanePanel bikeLeftPanel = new BikeLanePanel();
+    private final BikeLanePanel bikeRightPanel = new BikeLanePanel();
+    private final LaneBoundaryStrip stripBikeLeft = new LaneBoundaryStrip();
+    private final LaneBoundaryStrip stripBikeRight = new LaneBoundaryStrip();
+    private final JPanel curbLeft = new JPanel();
+    private final JPanel curbRight = new JPanel();
     //Values road
     BRoad valBRoad = new BRoad();
     BLanes bLanesA = new BLanes();
@@ -107,8 +112,14 @@ public class TurnSelectionBidirectional extends JPanel {
         jsp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         jsp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
         add(jsp, BorderLayout.CENTER);
-        bikeLeft.setBike();
-        bikeRight.setBike();
+        curbLeft.setOpaque(true);
+        curbLeft.setBackground(new Color(175, 175, 175));
+        curbLeft.setPreferredSize(new Dimension(8, 60));
+        curbLeft.setMaximumSize(new Dimension(8, Integer.MAX_VALUE));
+        curbRight.setOpaque(true);
+        curbRight.setBackground(new Color(175, 175, 175));
+        curbRight.setPreferredSize(new Dimension(8, 60));
+        curbRight.setMaximumSize(new Dimension(8, Integer.MAX_VALUE));
         //add(jtfChangeLanes, BorderLayout.SOUTH);
         jtfChangeLanes.getDocument().addDocumentListener(new SetLanesChangeListener());
         jpnlturnsA.addMouseWheelListener(new MouseWheelListener() {
@@ -266,13 +277,17 @@ public class TurnSelectionBidirectional extends JPanel {
         jpanelcontentTurns.setBorder(new SoftBevelBorder(BevelBorder.RAISED));
         stripAB = new LaneBoundaryStrip();
         stripBC = new LaneBoundaryStrip();
-        jpanelcontentTurns.add(bikeLeft);
+        jpanelcontentTurns.add(bikeLeftPanel);
+        jpanelcontentTurns.add(curbLeft);
+        jpanelcontentTurns.add(stripBikeLeft);
         jpanelcontentTurns.add(jpnlturnsA);
         jpanelcontentTurns.add(stripAB);
         jpanelcontentTurns.add(jpnlturnsB);
         jpanelcontentTurns.add(stripBC);
         jpanelcontentTurns.add(jpnlturnsC);
-        jpanelcontentTurns.add(bikeRight);
+        jpanelcontentTurns.add(stripBikeRight);
+        jpanelcontentTurns.add(curbRight);
+        jpanelcontentTurns.add(bikeRightPanel);
         return jpanelcontentTurns;
     }
 
@@ -649,10 +664,28 @@ public class TurnSelectionBidirectional extends JPanel {
         } else if (!a.isEmpty() && !c.isEmpty()) {
             setCentre(stripAB, a.get(a.size() - 1), c.get(0), divider);
         }
-        boolean bike = valBRoad.getCycleway() != null && !valBRoad.getCycleway().isEmpty()
-                && !"no".equals(valBRoad.getCycleway());
-        bikeLeft.setVisible(bike);
-        bikeRight.setVisible(bike);
+        boolean laneMarkings = !"no".equals(valBRoad.getLaneMarkings());
+        String cycleway = valBRoad.getCycleway() == null ? "" : valBRoad.getCycleway();
+        boolean bike = !cycleway.isEmpty() && !"no".equals(cycleway);
+        boolean track = "track".equals(cycleway);
+        bikeLeftPanel.setVisible(bike);
+        bikeRightPanel.setVisible(bike);
+        stripBikeLeft.setVisible(bike);
+        stripBikeRight.setVisible(bike);
+        curbLeft.setVisible(track);
+        curbRight.setVisible(track);
+        if (bike) {
+            bikeLeftPanel.setMode(cycleway);
+            bikeRightPanel.setMode(cycleway);
+            if (!a.isEmpty()) {
+                stripBikeLeft.setState(false, Util.blocksSmallerOffsetSide(a.get(0)),
+                        false, divider, laneMarkings);
+            }
+            if (!c.isEmpty()) {
+                stripBikeRight.setState(Util.blocksLargerOffsetSide(c.get(c.size() - 1)), false,
+                        false, divider, laneMarkings);
+            }
+        }
         jpanelcontentTurns.revalidate();
         jpanelcontentTurns.repaint();
     }
