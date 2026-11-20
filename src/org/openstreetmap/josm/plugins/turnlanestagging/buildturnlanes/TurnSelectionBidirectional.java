@@ -683,13 +683,13 @@ public class TurnSelectionBidirectional extends JPanel {
         curbRight.setVisible("track".equals(cyclewayRight));
         if (bikeLeft && !a.isEmpty()) {
             bikeLeftPanel.setMode(cyclewayLeft);
-            stripBikeLeft.setState(false, Util.blocksSmallerOffsetSide(a.get(0)),
-                    false, divider, laneMarkings);
+            // A cycleway lane is always separated from the general traffic
+            // lanes by a solid line, independent of change:lanes.
+            stripBikeLeft.setState(true, true, false, divider, laneMarkings);
         }
         if (bikeRight && !c.isEmpty()) {
             bikeRightPanel.setMode(cyclewayRight);
-            stripBikeRight.setState(Util.blocksLargerOffsetSide(c.get(c.size() - 1)), false,
-                    false, divider, laneMarkings);
+            stripBikeRight.setState(true, true, false, divider, laneMarkings);
         }
         jpanelcontentTurns.revalidate();
         jpanelcontentTurns.repaint();
