@@ -368,6 +368,8 @@ public class TurnLanesEditorDialog extends ExtendedDialog {
                 bRoad.setDivider(element.get(key));
             } else if (key.equals("lane_markings")) {
                 bRoad.setLaneMarkings(element.get(key));
+            } else if (key.equals("cycleway")) {
+                bRoad.setCycleway(element.get(key));
             }
         }
 
@@ -526,6 +528,9 @@ public class TurnLanesEditorDialog extends ExtendedDialog {
         }
         if (bRoad.getLaneMarkings() != null && !bRoad.getLaneMarkings().isEmpty()) {
             tagEditor.getModel().applyKeyValuePair(new Tag("lane_markings", bRoad.getLaneMarkings()));
+        }
+        if (bRoad.getCycleway() != null && !bRoad.getCycleway().isEmpty()) {
+            tagEditor.getModel().applyKeyValuePair(new Tag("cycleway", bRoad.getCycleway()));
         }
         tagEditor.repaint();
 

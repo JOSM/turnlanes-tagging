@@ -14,9 +14,11 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -70,6 +72,11 @@ public class TurnSelectionBidirectional extends JPanel {
     //Jtext
     private final JTextField jtfChangeLanes = new JTextField();
     private final LanePreviewPanel preview = new LanePreviewPanel();
+    private final List<LaneBoundaryStrip> stripsA = new ArrayList<>();
+    private final List<LaneBoundaryStrip> stripsB = new ArrayList<>();
+    private final List<LaneBoundaryStrip> stripsC = new ArrayList<>();
+    private LaneBoundaryStrip stripAB = null;
+    private LaneBoundaryStrip stripBC = null;
     //Values road
     BRoad valBRoad = new BRoad();
     BLanes bLanesA = new BLanes();
@@ -253,11 +260,15 @@ public class TurnSelectionBidirectional extends JPanel {
 
     public JPanel buildturn() {
         jpanelcontentTurns = new JPanel();
-        jpanelcontentTurns.setLayout(new BorderLayout());
+        jpanelcontentTurns.setLayout(new BoxLayout(jpanelcontentTurns, BoxLayout.X_AXIS));
         jpanelcontentTurns.setBorder(new SoftBevelBorder(BevelBorder.RAISED));
-        jpanelcontentTurns.add(jpnlturnsA, BorderLayout.WEST);
-        jpanelcontentTurns.add(jpnlturnsB, BorderLayout.CENTER);
-        jpanelcontentTurns.add(jpnlturnsC, BorderLayout.EAST);
+        stripAB = new LaneBoundaryStrip();
+        stripBC = new LaneBoundaryStrip();
+        jpanelcontentTurns.add(jpnlturnsA);
+        jpanelcontentTurns.add(stripAB);
+        jpanelcontentTurns.add(jpnlturnsB);
+        jpanelcontentTurns.add(stripBC);
+        jpanelcontentTurns.add(jpnlturnsC);
         return jpanelcontentTurns;
     }
 
@@ -316,7 +327,8 @@ public class TurnSelectionBidirectional extends JPanel {
                         TitledBorder.CENTER, TitledBorder.CENTER, null, new Color(102, 102, 102)));
                 jpnlturnsA.removeAll();
                 int numLanes = bLanesA.getLanes().size();
-                jpnlturnsA.setLayout(new GridLayout(1, numLanes));
+                jpnlturnsA.setLayout(new BoxLayout(jpnlturnsA, BoxLayout.X_AXIS));
+                stripsA.clear();
                 final List<BLane> listBLanes = bLanesA.getLanes();
                 for (int i = numLanes - 1; i >= 0; i--) {
                     BLane bLine = listBLanes.get(i);
@@ -339,6 +351,11 @@ public class TurnSelectionBidirectional extends JPanel {
                             }
                         }
                     });
+                    if (jpnlturnsA.getComponentCount() > 0) {
+                        LaneBoundaryStrip strip = new LaneBoundaryStrip();
+                        stripsA.add(strip);
+                        jpnlturnsA.add(strip);
+                    }
                     jpnlturnsA.add(turnSelection);
                 }
             } else {
@@ -348,7 +365,8 @@ public class TurnSelectionBidirectional extends JPanel {
                         TitledBorder.CENTER, TitledBorder.CENTER, null, new Color(102, 102, 102)));
                 jpnlturnsA.removeAll();
                 int numLanes = bLanesA.getLanes().size();
-                jpnlturnsA.setLayout(new GridLayout(1, numLanes));
+                jpnlturnsA.setLayout(new BoxLayout(jpnlturnsA, BoxLayout.X_AXIS));
+                stripsA.clear();
                 final List<BLane> listBLanes = bLanesA.getLanes();
                 for (int i = 0; i < numLanes; i++) {
                     BLane bLine = listBLanes.get(i);
@@ -371,6 +389,11 @@ public class TurnSelectionBidirectional extends JPanel {
                             }
                         }
                     });
+                    if (jpnlturnsA.getComponentCount() > 0) {
+                        LaneBoundaryStrip strip = new LaneBoundaryStrip();
+                        stripsA.add(strip);
+                        jpnlturnsA.add(strip);
+                    }
                     jpnlturnsA.add(turnSelection);
                 }
 
@@ -395,7 +418,8 @@ public class TurnSelectionBidirectional extends JPanel {
                     TitledBorder.CENTER, TitledBorder.CENTER, null, new Color(102, 102, 102)));
             bLanesB.setType(bLanes.getType());
             int numLanes = bLanesB.getLanes().size();
-            jpnlturnsB.setLayout(new GridLayout(1, numLanes));
+            jpnlturnsB.setLayout(new BoxLayout(jpnlturnsB, BoxLayout.X_AXIS));
+            stripsB.clear();
             final List<BLane> listBLanes = bLanesB.getLanes();
             for (int i = 0; i < numLanes; i++) {
                 BLane bLine = listBLanes.get(i);
@@ -413,6 +437,11 @@ public class TurnSelectionBidirectional extends JPanel {
                         }
                     }
                 });
+                if (jpnlturnsB.getComponentCount() > 0) {
+                    LaneBoundaryStrip strip = new LaneBoundaryStrip();
+                    stripsB.add(strip);
+                    jpnlturnsB.add(strip);
+                }
                 jpnlturnsB.add(turnSelection);
             }
             printChageLanes();
@@ -441,7 +470,8 @@ public class TurnSelectionBidirectional extends JPanel {
                         TitledBorder.CENTER, TitledBorder.CENTER, null, new Color(102, 102, 102)));
                 jpnlturnsC.removeAll();
                 int numLanes = bLanesC.getLanes().size();
-                jpnlturnsC.setLayout(new GridLayout(1, numLanes));
+                jpnlturnsC.setLayout(new BoxLayout(jpnlturnsC, BoxLayout.X_AXIS));
+                stripsC.clear();
                 final List<BLane> listBLanes = bLanesC.getLanes();
                 for (int i = 0; i < numLanes; i++) {
                     BLane bLine = listBLanes.get(i);
@@ -464,6 +494,11 @@ public class TurnSelectionBidirectional extends JPanel {
                             }
                         }
                     });
+                    if (jpnlturnsC.getComponentCount() > 0) {
+                        LaneBoundaryStrip strip = new LaneBoundaryStrip();
+                        stripsC.add(strip);
+                        jpnlturnsC.add(strip);
+                    }
                     jpnlturnsC.add(turnSelection);
                 }
             } else {
@@ -473,7 +508,8 @@ public class TurnSelectionBidirectional extends JPanel {
                         TitledBorder.CENTER, TitledBorder.CENTER, null, new Color(102, 102, 102)));
                 jpnlturnsC.removeAll();
                 int numLanes = bLanesC.getLanes().size();
-                jpnlturnsC.setLayout(new GridLayout(1, numLanes));
+                jpnlturnsC.setLayout(new BoxLayout(jpnlturnsC, BoxLayout.X_AXIS));
+                stripsC.clear();
                 final List<BLane> listBLanes = bLanesC.getLanes();
                 for (int i = numLanes - 1; i >= 0; i--) {
                     BLane bLine = listBLanes.get(i);
@@ -496,6 +532,11 @@ public class TurnSelectionBidirectional extends JPanel {
                             }
                         }
                     });
+                    if (jpnlturnsC.getComponentCount() > 0) {
+                        LaneBoundaryStrip strip = new LaneBoundaryStrip();
+                        stripsC.add(strip);
+                        jpnlturnsC.add(strip);
+                    }
                     jpnlturnsC.add(turnSelection);
                 }
             }
@@ -513,6 +554,7 @@ public class TurnSelectionBidirectional extends JPanel {
         valBRoad.setLanesC(bLanesC);
         jtfChangeLanes.setText(bLanesA.getTagturns() + "==" + bLanesB.getTagturns() + "==" + bLanesC.getTagturns());
         preview.setRoad(valBRoad);
+        refreshBoundaries();
         warnIfIncompleteChange();
     }
 
@@ -537,13 +579,80 @@ public class TurnSelectionBidirectional extends JPanel {
     }
 
     /**
-     * Repaints the lane preview after road-level options (divider, lane markings)
-     * change without a full lane rebuild.
+     * Repaints the lane preview and the boundary strips after road-level
+     * options (divider, lane markings) change without a full lane rebuild.
      */
     public void refreshPreview() {
         valBRoad.setDivider(BuildTurnLanes.bRoad.getDivider());
         valBRoad.setLaneMarkings(BuildTurnLanes.bRoad.getLaneMarkings());
         preview.setRoad(valBRoad);
+        refreshBoundaries();
+    }
+
+    /**
+     * Returns the lanes of one block in screen order (left to right). Lanes
+     * travelling backward are laid out right-to-left, so their list order is
+     * reversed, matching both the editor panels and the preview.
+     */
+    private List<BLane> screenLanes(BLanes block) {
+        List<BLane> result = new ArrayList<>();
+        List<BLane> lanes = block.getLanes();
+        if ("backward".equals(block.getType())) {
+            for (int i = lanes.size() - 1; i >= 0; i--) {
+                result.add(lanes.get(i));
+            }
+        } else {
+            result.addAll(lanes);
+        }
+        return result;
+    }
+
+    /**
+     * Updates the boundary strips inside one lane block from the given lanes
+     * in screen order.
+     */
+    private void refreshBlockStrips(List<LaneBoundaryStrip> strips, List<BLane> lanes) {
+        String divider = valBRoad.getDivider();
+        boolean laneMarkings = !"no".equals(valBRoad.getLaneMarkings());
+        for (int i = 0; i < strips.size() && i + 1 < lanes.size(); i++) {
+            strips.get(i).setState(Util.blocksLargerOffsetSide(lanes.get(i)),
+                    Util.blocksSmallerOffsetSide(lanes.get(i + 1)), false, divider, laneMarkings);
+        }
+    }
+
+    /**
+     * Updates all boundary strips (inside the blocks and the centre dividers
+     * between the directions of travel) from the current road state.
+     */
+    private void refreshBoundaries() {
+        List<BLane> a = screenLanes(bLanesA);
+        List<BLane> b = screenLanes(bLanesB);
+        List<BLane> c = screenLanes(bLanesC);
+        refreshBlockStrips(stripsA, a);
+        refreshBlockStrips(stripsB, b);
+        refreshBlockStrips(stripsC, c);
+
+        String divider = valBRoad.getDivider();
+        boolean bVisible = !b.isEmpty();
+        jpnlturnsB.setVisible(bVisible);
+        stripBC.setVisible(bVisible);
+        if (bVisible) {
+            if (!a.isEmpty()) {
+                setCentre(stripAB, a.get(a.size() - 1), b.get(0), divider);
+            }
+            if (!c.isEmpty()) {
+                setCentre(stripBC, b.get(b.size() - 1), c.get(0), divider);
+            }
+        } else if (!a.isEmpty() && !c.isEmpty()) {
+            setCentre(stripAB, a.get(a.size() - 1), c.get(0), divider);
+        }
+        jpanelcontentTurns.revalidate();
+        jpanelcontentTurns.repaint();
+    }
+
+    private void setCentre(LaneBoundaryStrip strip, BLane left, BLane right, String divider) {
+        strip.setState(Util.blocksLargerOffsetSide(left), Util.blocksSmallerOffsetSide(right),
+                true, divider, true);
     }
 
     public void setDefault(BRoad bRoad) {
@@ -593,7 +702,7 @@ public class TurnSelectionBidirectional extends JPanel {
     private void listenerB() {
         BLanes bLanes = presetsData.defaultLanes("both_ways", 1);
         if (jchbothwayB.isSelected()) {
-            jpanelcontentTurns.add(jpnlturnsB, BorderLayout.CENTER);
+            jpnlturnsB.setVisible(true);
             bLanesB = bLanes;
             lanesB(bLanesB);
         } else {

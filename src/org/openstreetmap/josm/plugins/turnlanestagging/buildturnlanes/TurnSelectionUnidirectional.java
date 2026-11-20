@@ -10,9 +10,11 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -49,6 +51,7 @@ public class TurnSelectionUnidirectional extends JPanel {
 
     private final JTextField jtfChangeLanes = new JTextField();
     private final LanePreviewPanel preview = new LanePreviewPanel();
+    private final List<LaneBoundaryStrip> strips = new ArrayList<>();
 
     // Event Changed
     public static final String LINESCHANGED = "LinesChanged";
@@ -154,10 +157,11 @@ public class TurnSelectionUnidirectional extends JPanel {
 
     public void lanes(BLanes bLanes) {
         jpanelcontentTurns.removeAll();
-        //Clone objtects
+        //Clone objects
         valBRoad.setName("Unidirectional");
         int numLanes = bLanes.getLanes().size();
-        jpanelcontentTurns.setLayout(new GridLayout(1, numLanes));
+        jpanelcontentTurns.setLayout(new BoxLayout(jpanelcontentTurns, BoxLayout.X_AXIS));
+        strips.clear();
 
         eventSpiner = false;
         spinner.setValue(numLanes);
@@ -168,6 +172,11 @@ public class TurnSelectionUnidirectional extends JPanel {
         final List<BLane> listBLines = valBRoad.getLanesUnid().getLanes();
         for (int i = 0; i < numLanes; i++) {
             BLane bLine = listBLines.get(i);
+            if (i > 0) {
+                LaneBoundaryStrip strip = new LaneBoundaryStrip();
+                strips.add(strip);
+                jpanelcontentTurns.add(strip);
+            }
             final TurnSelection turnSelection = new TurnSelection(bLine, numLanes, false);
             turnSelection.addPropertyChangeListener(new PropertyChangeListener() {
                 @Override
@@ -185,6 +194,7 @@ public class TurnSelectionUnidirectional extends JPanel {
                         valBRoad.getLanesUnid().setLanes(listBLines);
                         jtfChangeLanes.setText(valBRoad.getLanesUnid().getTagturns());
                         preview.setRoad(valBRoad);
+                        refreshBoundaries();
                         if (evt.getPropertyName().equals(TurnSelection.CHANGE_CHANGED)) {
                             warnIfIncompleteChange();
                         }
@@ -195,6 +205,7 @@ public class TurnSelectionUnidirectional extends JPanel {
         }
         jtfChangeLanes.setText(valBRoad.getLanesUnid().getTagturns());
         preview.setRoad(valBRoad);
+        refreshBoundaries();
         jpanelcontentTurns.revalidate();
         jpanelcontentTurns.repaint();
     }
@@ -211,13 +222,30 @@ public class TurnSelectionUnidirectional extends JPanel {
     }
 
     /**
-     * Repaints the lane preview after road-level options (divider, lane markings)
-     * change without a full lane rebuild.
+     * Repaints the lane preview and the boundary strips after road-level
+     * options (divider, lane markings) change without a full lane rebuild.
      */
     public void refreshPreview() {
         valBRoad.setDivider(BuildTurnLanes.bRoad.getDivider());
         valBRoad.setLaneMarkings(BuildTurnLanes.bRoad.getLaneMarkings());
         preview.setRoad(valBRoad);
+        refreshBoundaries();
+    }
+
+    /**
+     * Updates the boundary strips between the lane panels from the current
+     * lane-change restrictions and road options.
+     */
+    private void refreshBoundaries() {
+        List<BLane> lanes = valBRoad.getLanesUnid().getLanes();
+        String divider = valBRoad.getDivider();
+        boolean laneMarkings = !"no".equals(valBRoad.getLaneMarkings());
+        for (int i = 0; i < strips.size() && i + 1 < lanes.size(); i++) {
+            BLane left = lanes.get(i);
+            BLane right = lanes.get(i + 1);
+            strips.get(i).setState(Util.blocksLargerOffsetSide(left),
+                    Util.blocksSmallerOffsetSide(right), false, divider, laneMarkings);
+        }
     }
 
     private void warnIfIncompleteChange() {

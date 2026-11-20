@@ -17,6 +17,7 @@ public class BRoad implements Serializable {
     private boolean none;
     private String divider = "";
     private String laneMarkings = "";
+    private String cycleway = "";
 
     public BRoad() {
     }
@@ -102,6 +103,14 @@ public class BRoad implements Serializable {
 
     public void setLaneMarkings(String laneMarkings) {
         this.laneMarkings = laneMarkings;
+    }
+
+    public String getCycleway() {
+        return cycleway;
+    }
+
+    public void setCycleway(String cycleway) {
+        this.cycleway = cycleway;
     }
 
     public String turns() {
