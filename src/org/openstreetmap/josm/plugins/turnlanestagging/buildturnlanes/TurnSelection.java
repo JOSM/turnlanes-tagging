@@ -151,6 +151,8 @@ public class TurnSelection extends JPanel {
 
         jPOptions.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Lane " + bLine.getPosition(),
                 TitledBorder.CENTER, TitledBorder.DEFAULT_POSITION, new Font("Abyssinica SIL", 0, 11), Color.gray));
+        lblChange = new JLabel(" ", JLabel.CENTER);
+        lblChange.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 10));
         setTurn();
         setChange();
         // Tint the whole panel by travel direction, like the old road preview did.
@@ -165,8 +167,6 @@ public class TurnSelection extends JPanel {
         }
         add(buildChangePanel(tint), BorderLayout.NORTH);
         add(jPOptions, BorderLayout.CENTER);
-        lblChange = new JLabel(" ", JLabel.CENTER);
-        lblChange.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 10));
         add(lblChange, BorderLayout.SOUTH);
         updateChangeLabel();
     }
@@ -183,6 +183,9 @@ public class TurnSelection extends JPanel {
      * Updates the coloured label showing the lane's {@code change:lanes} value.
      */
     private void updateChangeLabel() {
+        if (lblChange == null) {
+            return;
+        }
         String c = bLine.getChange();
         if (c == null || c.isEmpty()) {
             lblChange.setText(" ");
